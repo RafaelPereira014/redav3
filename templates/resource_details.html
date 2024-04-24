@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/resources_details.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/apps">Aplicações</a></li>
+                    <li><a href="/tools">Ferramentas</a></li>
+                    <li><a href="/resources">Recursos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <div class="resource-details">
+                <div class="resource-info">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Resource Image">
+                    <h2>Titulo recurso</h2>
+                    <div class="mini-fields">
+                        <div>
+                            <span>Formato:</span>
+                            <span>PDF</span>
+                        </div>
+                        <div>
+                            <span>Submetido por:</span>
+                            <span>John Doe</span>
+                        </div>
+                        <div>
+                            <span>Criado a:</span>
+                            <span>April 24, 2024</span>
+                        </div>
+                        <div>
+                            <span>Autor:</span>
+                            <span>Jane Doe</span>
+                        </div>
+                        <div>
+                            <span>Organização:</span>
+                            <span>ABC Organization</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span>
+                            Vídeo sobre a fome e a importância da partilha e da solidariedade para a superação da crise alimentar.
+                            Este vídeo faz parte da campanha “One Human Family, Food for All”, da Cáritas Internationalis, que tem como objetivo acabar com a fome até 2025.
+                        </span>
+                    </div>
+                    <div class="ficha-tecnica">
+                        <h3>Ficha Técnica</h3>
+                        <div>
+                            <span>Idioma:</span>
+                            <span>English</span>
+                        </div>
+                        <div>
+                            <span>Modos de utilização:</span>
+                            <span>Educational</span>
+                        </div>
+                        <div>
+                            <span>Requisitos técnicos:</span>
+                            <span>PDF Reader</span>
+                        </div>
+                    </div>
+                    <div class="proposta-op">
+                        <h3>Proposta de operacionalização</h3>
+                        <div>
+                            <span>Autor:</span>
+                            <span>English</span>
+                        </div>
+                        <div>
+                            <span>Organização:</span>
+                            <span>Educational</span>
+                        </div>
+                        <div>
+                            <span>Criado a:</span>
+                            <span>kmasdkd</span>
+                        </div>
+                        <div>
+                            <span>Proposta de operacionalização:</span>
+                            <span>Esta é uma proposta de operacionalização</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="comments">
+                    <h3>Comentários</h3>
+                    <div class="comment-form">
+                        <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
+                        <button>Submeter comentário</button>
+                    </div>
+                    <div class="comment-list">
+                        <div class="comment">
+                            <div class="comment-info">
+                                <span class="comment-author">John Doe:</span>
+                                <span class="comment-date">April 25, 2024</span>
+                            </div>
+                            <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-info">
+                                <span class="comment-author">Jane Doe:</span>
+                                <span class="comment-date">April 26, 2024</span>
+                            </div>
+                            <p>Another comment here. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
