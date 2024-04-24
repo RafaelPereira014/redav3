@@ -10,7 +10,7 @@ REDA Education Platform is a web application developed with Flask that provides 
 - Tools page
 - My Account page
 - Admin page
-- 
+  
 ## Installation
 
 1. Clone the repository:
