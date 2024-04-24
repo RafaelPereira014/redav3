@@ -28,7 +28,7 @@ REDA Education Platform is a web application developed with Flask that provides 
     pip install -r requirements.txt
    ```
 4. Run the app:
-  ```bash
-    python3 app.py
-   ```   
+     ```bash
+       python3 app.py
+      ```   
   
