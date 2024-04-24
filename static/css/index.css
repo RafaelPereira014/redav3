@@ -12,6 +12,9 @@ body {
     width: 80%;
     margin: auto;
 }
+.container h2 {
+    text-align: center;
+}
 
 header {
     background-color: #48A9A6;
