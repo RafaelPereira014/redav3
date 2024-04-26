@@ -2,14 +2,111 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/my_account.css') }}">
-
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <!-- Add other necessary CSS links -->
 </head>
 <body>
-    <h1>My Account</h1>
-    <p>Welcome to your account page.</p>
+    
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/apps">Apps</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/resources">Resources</a></li>
+
+                </ul>
+            </nav>
+            <!-- Top Right Navigation -->
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+
+
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            
+            <!-- My Resources Section -->
+            <section id="my-resources" class="my-resources">
+                <!-- Display user's resources here -->
+                <h2>My Resources</h2>
+                <!-- Example: Display a list of user's resources -->
+                <!-- Example resource rectangle -->
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Resource Image">
+                    <div class="buttons">
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Delete</button>
+                    </div>
+                </div>
+                <!-- Repeat the above rectangle for each resource -->
+            </section>
+
+           
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        // Get the login modal
+        var loginModal = document.getElementById("loginModal");
+
+        // When the user clicks the button, open the login modal
+        function openLoginModal() {
+            loginModal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the login modal
+        function closeLoginModal() {
+            loginModal.style.display = "none";
+        }
+
+        // Toggle hamburger menu
+        function toggleMenu() {
+            var menuItems = document.querySelector('.menu-items');
+            menuItems.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>

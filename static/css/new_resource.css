@@ -1,0 +1,56 @@
+/* Add your custom CSS styles here */
+
+.details {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    margin-bottom: 5px;
+}
+
+.input-group input[type="text"],
+.input-group textarea {
+    width: calc(50% - 5px); /* Set input fields to 50% width with a small margin between them */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.input-group textarea {
+    height: 100px; /* Set a fixed height for textarea */
+}
+
+.button-group {
+    display: flex;
+}
+
+button {
+    flex: 1; /* Take up equal space */
+    padding: 10px 20px;
+    background-color: #48A9A6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px; /* Add a small margin between buttons */
+}
+
+button:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+}
+
+button:hover {
+    background-color: #1E4B5B;
+}

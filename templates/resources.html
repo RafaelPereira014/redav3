@@ -2,19 +2,208 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resources</title>
+    <title>Recursos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resources.css') }}">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    
 </head>
 <body>
-    <h1>Resources</h1>
-    <p>Here are the available resources:</p>
-    <ul>
-        <li><a href="/resources/details">Resource 1</a></li>
-        <li><a href="/resources/details">Resource 2</a></li>
-        <li><a href="/resources/details">Resource 3</a></li>
-    </ul>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            <!-- Search bar -->
+            <div class="search-container">
+                <input type="text" placeholder="Pesquisar..." name="search">
+                <button type="submit">Pesquisar</button>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/apps">Apps</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/resources">Resources</a></li>
+                </ul>
+            </nav>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <h2>Recursos</h2>
+            <div class="rectangles">
+               
+                <!-- Resource 1 -->
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
+                    <div class="buttons">
+                        <i class="gg-heart"></i>
+                        <a href="/resources/details"><button>View</button></a>
+                        <button>Edit</button>
+                        <button>Add</button>
+                    </div>
+                </div>
+                
+                <!-- Resource 2 -->
+                <!-- Duplicate the above resource div for each additional resource -->
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <!-- Add more pagination links as needed -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+    <!-- Register Modal -->
+    <div id="RegisterModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <h2>Register</h2>
+            <form>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        // Get the login modal
+        var loginModal = document.getElementById("loginModal");
+
+        // When the user clicks the button, open the login modal
+        function openLoginModal() {
+            loginModal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the login modal
+        function closeLoginModal() {
+            loginModal.style.display = "none";
+        }
+        // Get the login modal
+        var RegisterModal = document.getElementById("RegisterModal");
+
+        // When the user clicks the button, open the login modal
+        function openRegisterModal() {
+            RegisterModal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the login modal
+        function closeRegisterModal() {
+            RegisterModal.style.display = "none";
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource.css') }}">
+
+    <title>Criar Recurso</title>
+    <!-- Link to TinyMCE CDN -->
+    <script src="https://cdn.tiny.cloud/1/hcsdmgk5ojfti5cengfoxv1zfkb2t21ei6ue2obbe85k8lst/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        // Initialize TinyMCE editor
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
+            menubar: false
+        });
+    </script>
+    
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+
+            <!-- second div , above the header div with background image-->
+            <div class="container2">
+                <img src="" alt="">
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/apps">Apps</a></li>
+                    <li><a href="/tools">Tools</a></li>
+                    <li><a href="/resources">Resources</a></li>
+                    <li><a href="/myaccount">profile</a></li>
+                    <li><a href="/novorecurso">Novo Recurso</a></li>
+
+
+                </ul>
+            </nav>
+            <nav class="top-nav">
+                <ul>
+                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Criar Recurso</h1>
+        <div class="input-group">
+            <label for="titulo">Título:</label>
+            <textarea id="titulo" name="titulo" rows="3" class="tinymce"></textarea>
+        </div>
+        <div class="input-group">
+            <label for="autor">Autor/Fonte:</label>
+            <input type="text" id="autor" name="autor" required>
+        </div>
+        <div class="input-group">
+            <label for="organizacao">Organização:</label>
+            <input type="text" id="organizacao" name="organizacao" required>
+        </div>
+        <div class="input-group">
+            <label for="formato">Formato:</label>
+            <input type="radio" id="formato1" name="formato" value="Opção 1">
+            <label for="formato1">Opção 1</label>
+            <input type="radio" id="formato2" name="formato" value="Opção 2">
+            <label for="formato2">Opção 2</label>
+            <!-- Add more radio options as needed -->
+        </div>
+        <div class="input-group">
+            <label for="localizacao">Localização do Recurso:</label>
+            <input type="radio" id="localizacao1" name="localizacao" value="Opção 1">
+            <label for="localizacao1">Endereço e/ou código de incorporação</label>
+            <input type="radio" id="localizacao2" name="localizacao" value="Opção 2">
+            <label for="localizacao2">Ficheiro</label>
+            <!-- Add more radio options as needed -->
+        </div>
+        <div class="input-group">
+            <label for="modo-utilizacao">Modo de Utilização:</label>
+            <input type="radio" id="utilizacao1" name="modo-utilizacao" value="Opção 1">
+            <label for="utilizacao1">Opção 1</label>
+            <input type="radio" id="utilizacao2" name="modo-utilizacao" value="Opção 2">
+            <label for="utilizacao2">Opção 2</label>
+            <!-- Add more radio options as needed -->
+        </div>
+        <div class="input-group">
+            <label for="requisitos">Requisitos:</label>
+            <input type="radio" id="requisitos1" name="requisitos" value="Opção 1">
+            <label for="requisitos1">Opção 1</label>
+            <input type="radio" id="requisitos2" name="requisitos" value="Opção 2">
+            <label for="requisitos2">Opção 2</label>
+            <!-- Add more radio options as needed -->
+        </div>
+        <div class="input-group">
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
+        </div>
+        <div class="input-group">
+            <label for="idiomas">Idiomas:</label>
+            <input type="radio" id="idiomas1" name="idiomas" value="Opção 1">
+            <label for="idiomas1">Opção 1</label>
+            <input type="radio" id="idiomas2" name="idiomas" value="Opção 2">
+            <label for="idiomas2">Opção 2</label>
+            <!-- Add more radio options as needed -->
+        </div>
+
+        <button type="submit">Criar Recurso</button>
+    </div>
+</body>
+</html>

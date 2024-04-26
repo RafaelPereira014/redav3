@@ -66,15 +66,12 @@ nav ul li a:hover {
     overflow: hidden;
 }
 
-.carousel-item img {
-    max-height: 200px; /* Adjust the maximum height of the carousel images */
-    text-align: center;
-}
-
-.carousel-control-prev,
-.carousel-control-next {
-    font-size: 16px; /* Reduce the font size of the carousel control buttons */
-    padding: 5px 10px; /* Adjust the padding of the carousel control buttons */
+.carousel-item {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex: 1 0 100%;
+    transition: transform 0.5s ease-in-out;
 }
 
 .carousel-item.active {
@@ -83,11 +80,28 @@ nav ul li a:hover {
 
 .carousel-item p {
     font-style: italic;
-    text-align: center;
 }
 
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.4);
+    border: none;
+    font-size: 20px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 1;
+}
 
+.carousel-control-prev {
+    left: 10px;
+}
 
+.carousel-control-next {
+    right: 10px;
+}
 
 .rectangles {
     display: flex;
@@ -98,7 +112,7 @@ nav ul li a:hover {
 .rectangle {
     width: calc(23% - 20px);
     margin: 1%;
-    background-color: #cfe1e1;
+    background-color: #48A9A6;
     padding: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;

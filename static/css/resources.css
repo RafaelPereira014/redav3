@@ -1,36 +1,80 @@
-/* resources.css */
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f0f0;
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
 }
 
-.container {
-    width: 80%;
-    margin: auto;
-}
-
-h1 {
+.pagination a {
     color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    border-radius: 5px;
 }
 
-ul {
+.pagination a.active {
+    background-color: #48A9A6;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.search-container input[type=text] {
+    padding: 10px;
+    margin-right: 10px; /* Adjust spacing between input and button */
+    width: 50%; /* Adjust width of input */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.search-container button {
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #48A9A6;
+    color: white;
+    font-size: 14px;
+}
+
+.search-container button:hover {
+    background-color: #2D728F;
+}
+.top-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+}
+
+.top-nav ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
-li {
-    margin-bottom: 10px;
+.top-nav ul li {
+    display:inline-flex;
+    margin-left: 20px; /* Adjust spacing between buttons */
 }
 
-a {
+.top-nav ul li a {
     text-decoration: none;
-    color: #007bff;
+    color: #fff;
+    font-size: 14px;
 }
 
-a:hover {
+.top-nav ul li a:hover {
     text-decoration: underline;
-    color: #0056b3;
 }
