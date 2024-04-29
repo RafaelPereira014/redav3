@@ -15,6 +15,13 @@ body {
     overflow: hidden; /* Clearfix for floating elements */
 }
 
+.sub-container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden; /* Clearfix for floating elements */
+    background-color: #48a9a6;
+}
+
 h1 {
     text-align: center;
     margin-top: 0;

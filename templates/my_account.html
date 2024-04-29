@@ -55,19 +55,22 @@
 
             <!-- Options Menu -->
             <div class="options-menu">
-                <a href="#my-resources">Meus Recursos</a>
-                <a href="#my-proposals">Minhas Propostas</a>
-                <a href="#my-apps">Minhas Aplicações</a>
-                <a href="#my-tools">Minhas Ferramentas</a>
+                <a href="#my-resources">Meus recursos</a>
+                <a href="#my-proposals">Minhas propostas de op.</a>
+                <a href="#my-apps">Minhas aplicações</a>
+                <a href="#my-tools">Minhas ferramentas</a>
             </div>
 
             <!-- Content Sections -->
             <section id="my-resources" class="content-section">
                 <!-- Content for "Meus Recursos" section -->
                 <!-- Display user's resources here -->
-                <h2>Meus Recursos</h2>
-                <!-- Example: Display a list of user's resources -->
-                <!-- Example resource rectangle -->
+                <h2>Meus recursos</h2>
+                <button> + Novo recurso </button>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search...">
+                    <button onclick="searchResources()">Search</button>
+                </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Resource Image">
                     <div class="buttons">
@@ -76,12 +79,26 @@
                         <button>Delete</button>
                     </div>
                 </div>
+                <div class="pagination">
+                    <button-pag onclick="previousPage()">Previous</button-pag>
+                    <button-pag onclick="nextPage()">Next</button-pag>
+                </div>
                 <!-- Repeat the above rectangle for each resource -->
             </section>
             <section id="my-proposals" class="content-section" style="display: none;">
                 <!-- Content for "Minhas Propostas" section -->
-                <h2>Minhas Propostas</h2>
+                <h2>Minhas propostas de op.</h2>
                 <p>This is the content for Minhas Propostas...</p>
+            </section>
+            <section id="my-apps" class="content-section" style="display: none;">
+                <!-- Content for "Minhas Propostas" section -->
+                <h2>minhas apps</h2>
+                <p>This is the content for apps...</p>
+            </section>
+            <section id="my-tools" class="content-section" style="display: none;">
+                <!-- Content for "Minhas Propostas" section -->
+                <h2>minhas ferramentas.</h2>
+                <p>This is the content for ferramentas...</p>
             </section>
 
             <!-- Repeat similar content sections for other options -->

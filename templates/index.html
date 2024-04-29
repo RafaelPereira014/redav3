@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    <style>
+        header {
+            background-image: url('static/images/home-bg.jpg'); /* Replace 'path_to_your_image.jpg' with the path to your image */
+            background-size: cover;
+            background-position: center;
+            height: 300px; /* Adjust the height as needed */
+            position: relative;
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
+    
     <header>
         <div class="container">
             <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
@@ -28,16 +38,7 @@
                 <button class="carousel-control-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
                 <button class="carousel-control-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
             </div>
-            <!--- <div class="menu">
-                <div class="title" onclick="f()">John Doe <span class="fa fa-bars"></span>
-                  <div class="arrow"></div>
-                </div>
-                <div class="dropdown">
-                  <p>Inbox <span class="fa fa-inbox"></span></p>
-                  <p>Settings <span class="fa fa-gear"></span></p>
-                  <p>Sign Out <span class="fa fa-sign-out"></span></p>
-                </div>
-              </div> -->
+            
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>

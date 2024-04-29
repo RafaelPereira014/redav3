@@ -4,7 +4,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #F0F4F8;
+    background-color: #f1f0f0;
     color: #333;
 }
 
@@ -17,7 +17,7 @@ body {
 }
 
 header {
-    background-color: #48A9A6;
+    background-color: #a49b9bf0;
     color: #fff;
     padding: 20px 0;
     display: flex;
@@ -98,7 +98,7 @@ nav ul li a:hover {
 .rectangle {
     width: calc(23% - 20px);
     margin: 1%;
-    background-color: #cfe1e1;
+    background-color: #f1f0f0;
     padding: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
@@ -106,6 +106,7 @@ nav ul li a:hover {
     overflow: hidden;
     position: relative;
     border-radius: 10px;
+    border-color: #333;
 }
 
 .rectangle:hover {
@@ -130,15 +131,15 @@ nav ul li a:hover {
     width: 100%;
     margin-bottom: 5px;
     padding: 5px;
-    background-color: #2D728F;
-    color: #fff;
+    color: #aec03f;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .rectangle .buttons button:hover {
-    background-color: #1E4B5B;
+    background-color: #aec03f;
+    color: #fff;
 }
 
 .rectangle .buttons i {
@@ -148,7 +149,7 @@ nav ul li a:hover {
 }
 
 footer {
-    background-color: #48A9A6;
+    background-color: #aec03f;
     color: #fff;
     padding: 10px 0;
     text-align: center;
