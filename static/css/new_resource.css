@@ -1,56 +1,216 @@
 /* Add your custom CSS styles here */
 
-.details {
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden; /* Clearfix for floating elements */
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+/* Form styling */
+.input-group {
     margin-bottom: 20px;
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
-}
-
-.input-group {
-    margin-bottom: 15px;
-}
-
-.input-group label {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
 .input-group input[type="text"],
 .input-group textarea {
-    width: calc(50% - 5px); /* Set input fields to 50% width with a small margin between them */
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     resize: vertical;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
 .input-group textarea {
-    height: 100px; /* Set a fixed height for textarea */
+    height: 120px;
 }
 
+.input-group input[type="text"]:focus,
+.input-group textarea:focus {
+    border-color: #48a9a6;
+}
+
+/* Button group styling */
 .button-group {
     display: flex;
+    justify-content: center;
 }
 
 button {
-    flex: 1; /* Take up equal space */
-    padding: 10px 20px;
-    background-color: #48A9A6;
+    padding: 12px 30px;
+    background-color: #48a9a6;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
-    margin-right: 5px; /* Add a small margin between buttons */
-}
-
-button:last-child {
-    margin-right: 0; /* Remove margin from the last button */
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #1E4B5B;
+    background-color: #1e4b5b;
+}
+
+/* Checkbox and radio button styling */
+.checkbox-group,
+.radio-group {
+    margin-bottom: 20px;
+}
+
+.checkbox-group label,
+.radio-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.checkbox-group input[type="checkbox"],
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.checkbox-group label,
+.radio-group label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.checkbox-group label:before,
+.radio-group label:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #48a9a6;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.checkbox-group input[type="checkbox"]:checked + label:before,
+.radio-group input[type="radio"]:checked + label:before {
+    background-color: #48a9a6;
+}
+
+/* Specific input group styling */
+.input-group-aut,
+.input-group-org {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group-aut label,
+.input-group-org label {
+    width: 20%;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.input-group-aut input,
+.input-group-org input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.input-group-aut input:focus,
+.input-group-org input:focus {
+    border-color: #48a9a6;
+}
+
+/* Additional styling for new classes */
+.input-group-format,
+.input-group-local,
+.input-group-use,
+.input-group-req,
+.input-group-lang {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.input-group-format label,
+.input-group-local label,
+.input-group-use label,
+.input-group-req label,
+.input-group-lang label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    flex: 0 0 calc(33.33% - 20px); /* Adjust the width to fit three items in a row */
+    margin-top: 10px;
+}
+
+.input-group-format input[type="checkbox"],
+.input-group-local input[type="radio"],
+.input-group-use input[type="checkbox"],
+.input-group-req input[type="checkbox"],
+.input-group-lang input[type="radio"] {
+    display: none;
+}
+
+.input-group-format label,
+.input-group-local label,
+.input-group-use label,
+.input-group-req label,
+.input-group-lang label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+}
+
+.input-group-format label:before,
+.input-group-local label:before,
+.input-group-use label:before,
+.input-group-req label:before,
+.input-group-lang label:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #48a9a6;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.input-group-format input[type="checkbox"]:checked + label:before,
+.input-group-local input[type="radio"]:checked + label:before,
+.input-group-use input[type="checkbox"]:checked + label:before,
+.input-group-req input[type="checkbox"]:checked + label:before,
+.input-group-lang input[type="radio"]:checked + label:before {
+    background-color: #48a9a6;
 }

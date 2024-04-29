@@ -54,59 +54,72 @@
     <div class="container">
         <h1>Criar Recurso</h1>
         <div class="input-group">
-            <label for="titulo">Título:</label>
+            <h2>Título:</h2>
             <textarea id="titulo" name="titulo" rows="3" class="tinymce"></textarea>
         </div>
-        <div class="input-group">
-            <label for="autor">Autor/Fonte:</label>
+        <div class="input-group-aut">
+            <h2>Autor/fonte:</h2>
             <input type="text" id="autor" name="autor" required>
         </div>
-        <div class="input-group">
-            <label for="organizacao">Organização:</label>
+        <div class="input-group-org">
+            <h2>Organização:</h2>
             <input type="text" id="organizacao" name="organizacao" required>
         </div>
-        <div class="input-group">
-            <label for="formato">Formato:</label>
-            <input type="radio" id="formato1" name="formato" value="Opção 1">
+        <div class="input-group-format">
+            <h2>Formato:</h2>
+            <input type="checkbox" id="formato1" name="formato" value="Opção 1">
             <label for="formato1">Opção 1</label>
-            <input type="radio" id="formato2" name="formato" value="Opção 2">
+            <input type="checkbox" id="formato2" name="formato" value="Opção 2">
             <label for="formato2">Opção 2</label>
+            <input type="checkbox" id="formato3" name="formato" value="Opção 3">
+            <label for="formato3">Opção 3</label>
+            <input type="checkbox" id="formato4" name="formato" value="Opção 4">
+            <label for="formato4">Opção 4</label>
+            <input type="checkbox" id="formato5" name="formato" value="Opção 5">
+            <label for="formato5">Opção 5</label>
             <!-- Add more radio options as needed -->
         </div>
-        <div class="input-group">
-            <label for="localizacao">Localização do Recurso:</label>
+        <div class="input-group-local">
+            <h2>Localização do recurso:</h2>
             <input type="radio" id="localizacao1" name="localizacao" value="Opção 1">
             <label for="localizacao1">Endereço e/ou código de incorporação</label>
             <input type="radio" id="localizacao2" name="localizacao" value="Opção 2">
             <label for="localizacao2">Ficheiro</label>
             <!-- Add more radio options as needed -->
         </div>
-        <div class="input-group">
-            <label for="modo-utilizacao">Modo de Utilização:</label>
-            <input type="radio" id="utilizacao1" name="modo-utilizacao" value="Opção 1">
+        <div class="input-group-use">
+            <h2>Modo de utilização:</h2>
+            <input type="checkbox" id="utilizacao1" name="modo-utilizacao" value="Opção 1">
             <label for="utilizacao1">Opção 1</label>
-            <input type="radio" id="utilizacao2" name="modo-utilizacao" value="Opção 2">
+            <input type="checkbox" id="utilizacao2" name="modo-utilizacao" value="Opção 2">
             <label for="utilizacao2">Opção 2</label>
             <!-- Add more radio options as needed -->
         </div>
-        <div class="input-group">
-            <label for="requisitos">Requisitos:</label>
-            <input type="radio" id="requisitos1" name="requisitos" value="Opção 1">
+        <div class="input-group-req">
+            <h2>Requisitos:</h2>
+            <input type="checkbox" id="requisitos1" name="requisitos" value="Opção 1">
             <label for="requisitos1">Opção 1</label>
-            <input type="radio" id="requisitos2" name="requisitos" value="Opção 2">
+            <input type="checkbox" id="requisitos2" name="requisitos" value="Opção 2">
             <label for="requisitos2">Opção 2</label>
             <!-- Add more radio options as needed -->
         </div>
         <div class="input-group">
-            <label for="descricao">Descrição:</label>
+            <h2>Descrição:</h2>
+
             <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
         </div>
-        <div class="input-group">
-            <label for="idiomas">Idiomas:</label>
+        <div class="input-group-lang">
+            <h2>Idiomas:</h2>
             <input type="radio" id="idiomas1" name="idiomas" value="Opção 1">
             <label for="idiomas1">Opção 1</label>
             <input type="radio" id="idiomas2" name="idiomas" value="Opção 2">
             <label for="idiomas2">Opção 2</label>
+            <!-- Add more radio options as needed -->
+        </div>
+        <div class="input-group-fich">
+            <h2>Ficheiro:</h2>
+            <input type="file" id="ficheiro" name="ficheiro" >
+           
             <!-- Add more radio options as needed -->
         </div>
 

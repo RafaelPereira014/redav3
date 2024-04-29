@@ -6,20 +6,22 @@
     <title>My Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <!-- Add other necessary CSS links -->
+   
 </head>
 <body>
-    
+
     <!-- Header -->
     <header>
         <div class="container">
-            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            <div class="profile-info">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </div>
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/apps">Apps</a></li>
                     <li><a href="/tools">Tools</a></li>
                     <li><a href="/resources">Resources</a></li>
-
                 </ul>
             </nav>
             <!-- Top Right Navigation -->
@@ -33,17 +35,37 @@
         </div>
     </header>
 
-
-
-
     <!-- Main Content -->
     <main>
         <div class="container">
-            
-            <!-- My Resources Section -->
-            <section id="my-resources" class="my-resources">
+            <!-- Profile Header -->
+            <div class="header-profile">
+                <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Header Image" >
+                <div class="profile-icon">
+                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Profile Icon">
+                </div>
+                <div class="profile-details">
+                    <div class="profile-counts">
+                        <p>100 Resources</p>
+                        <p>50 Apps</p>
+                        <p>20 Tools</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options Menu -->
+            <div class="options-menu">
+                <a href="#my-resources">Meus Recursos</a>
+                <a href="#my-proposals">Minhas Propostas</a>
+                <a href="#my-apps">Minhas Aplicações</a>
+                <a href="#my-tools">Minhas Ferramentas</a>
+            </div>
+
+            <!-- Content Sections -->
+            <section id="my-resources" class="content-section">
+                <!-- Content for "Meus Recursos" section -->
                 <!-- Display user's resources here -->
-                <h2>My Resources</h2>
+                <h2>Meus Recursos</h2>
                 <!-- Example: Display a list of user's resources -->
                 <!-- Example resource rectangle -->
                 <div class="rectangle">
@@ -56,8 +78,14 @@
                 </div>
                 <!-- Repeat the above rectangle for each resource -->
             </section>
+            <section id="my-proposals" class="content-section" style="display: none;">
+                <!-- Content for "Minhas Propostas" section -->
+                <h2>Minhas Propostas</h2>
+                <p>This is the content for Minhas Propostas...</p>
+            </section>
 
-           
+            <!-- Repeat similar content sections for other options -->
+
         </div>
     </main>
 
@@ -107,6 +135,32 @@
             var menuItems = document.querySelector('.menu-items');
             menuItems.classList.toggle('active');
         }
+
+        // Get all menu options
+        const menuOptions = document.querySelectorAll('.options-menu a');
+
+        // Add click event listeners to menu options
+        menuOptions.forEach(option => {
+            option.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default anchor behavior
+                console.log("Menu option clicked"); // Log a message to the console
+                // Get the target section from the href attribute
+                const targetSectionId = option.getAttribute('href').substring(1); // Remove the # from the href
+                console.log("Target section:", targetSectionId); // Log the target section ID
+                // Get all content sections inside the event listener function
+                const contentSections = document.querySelectorAll('.content-section');
+                // Hide all content sections
+                contentSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                // Show the target section
+                document.getElementById(targetSectionId).style.display = 'block';
+            });
+        });
+
+
+
+
     </script>
 </body>
 </html>

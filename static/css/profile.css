@@ -282,3 +282,132 @@ button[type=submit]:hover {
 .top-nav ul li a:hover {
     text-decoration: underline;
 }
+/* New Left Dashboard Menu CSS */
+
+.left-menu {
+    position:absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.menu-toggle {
+    padding: 20px;
+    text-align: center;
+}
+
+.menu-toggle-button {
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+}
+
+.menu-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-items li {
+    margin-bottom: 10px;
+}
+
+.menu-items a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.menu-items a:hover {
+    background-color: #f5f5f5;
+}
+ /* Main content styles */
+ main {
+    padding: 20px;
+}
+
+.options-menu {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.options-menu a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    margin-right: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.options-menu a:hover {
+    border-bottom-color: #48A9A6;
+}
+/* Add custom CSS styles */
+
+/* Header styles */
+header-profile {
+    background-color: #48A9A6;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    position: relative; /* Add position relative to the header */
+}
+
+header-profile .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header-profile img {
+    height: 10px !important;
+    
+}
+
+/* Profile image styles */
+.profile-icon {
+    position: absolute; /* Position the profile icon */
+    top: 50%; /* Position it in the center vertically */
+    left: 50%; /* Position it in the center horizontally */
+    transform: translate(-50%, -50%); /* Center it precisely */
+    width: 100px; /* Set the width and height */
+    height: 100px;
+    border-radius: 50%; /* Make it round */
+    overflow: hidden; /* Hide any overflow */
+    box-shadow: 0 0 0 5px #fff; /* Add a white border */
+    margin-top: 80px;
+}
+
+.profile-icon img {
+    width: 100%; /* Make the image fill the container */
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the container */
+}
+.profile-details {
+    text-align: center;
+}
+
+.profile-counts {
+    display: flex; /* Display counts horizontally */
+    justify-content: center; /* Center counts horizontally */
+    align-items: center; /* Center counts vertically */
+    margin-top: 50px; /* Add some margin */
+}
+
+.profile-counts p {
+    margin: 0 10px; /* Add spacing between counts */
+
+}
+
+
