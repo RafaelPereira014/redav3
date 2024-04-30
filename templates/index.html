@@ -23,22 +23,6 @@
     <header>
         <div class="container">
             <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-            <div id="carousel" class="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <p>Learning is fun with us!</p>
-                    </div>
-                    <div class="carousel-item">
-                        <p>Explore, Learn, and Play!</p>
-                    </div>
-                    <div class="carousel-item">
-                        <p>Discover a world of knowledge!</p>
-                    </div>
-                </div>
-                <button class="carousel-control-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-control-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            
             <nav>
                 <ul>
                     <li><a href="/">Home</a></li>
@@ -51,6 +35,23 @@
 
                 </ul>
             </nav>
+            <div id="carousel" class="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <p>Learning is fun with us!</p>
+                    </div>
+                    <div class="carousel-item active">
+                        <p>Explore, Learn, and Play!</p>
+                    </div>
+                    <div class="carousel-item active">
+                        <p>Discover a world of knowledge!</p>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-control-next" onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            
             <nav class="top-nav">
                 <ul>
                     <li><a href="#" onclick="openLoginModal()">Login</a></li>
@@ -67,9 +68,9 @@
             <h2>Últimos recursos</h2>
             <div class="rectangles">
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
-                    <h2>Titulo</h2>
-                    <p>Descricao</p>
+                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <h2>Diferença entre clima e estado de tempo</h2>
+                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                     <div class="buttons">
                         <i class="gg-heart"></i>
                         <a href="/resources/details"><button>Ver recurso</button></a>
@@ -80,7 +81,7 @@
                     <p>Simulação</p>
                 </div>
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 2">
+                    <img src="{{ url_for('static', filename='images/apps-bg.jpg') }}" alt="Image 2">
                     <div class="buttons">
                         <i class="gg-heart"></i>
                         <button>View</button>
@@ -89,7 +90,7 @@
                     </div>
                 </div>
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 3">
+                    <img src="{{ url_for('static', filename='images/hints-bg.jpg') }}" alt="Image 3">
                     <div class="buttons">
                         <i class="gg-heart"></i>
                         <button>View</button>
@@ -145,6 +146,10 @@
             </div>
         </div>
     </main>
+
+    <div class="testimonial">
+        <p>ajnsdjdansjdn</p>
+    </div>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">

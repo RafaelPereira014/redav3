@@ -13,10 +13,10 @@ body {
     width: 80%;
     margin: auto;
 }
-.container h2 {
+/* .container h2 {
     text-align: center;
-}
-button {
+} */
+/* button {
     width: 15%;
     background-color: #aec03f;
     color: white;
@@ -28,13 +28,13 @@ button {
     font-size: 12px;
     text-align: center;
 
-}
+} */
 button-pag {
     width: 15%;
     background-color: #aec03f;
     color: white;
     padding: 10px 20px;
-    margin-top: 10px;
+    margin-top: 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -201,25 +201,7 @@ nav ul li a:hover {
     border: 1px solid #aec03f;
 }
 
-button[type=submit] {
-    width: 60%;
-    background-color: #aec03f;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    text-align: center;
 
-}
-
-button[type=submit]:hover {
-    background-color: #1E4B5B;
-    text-align: center;
-
-}
 .top-nav {
     position: absolute;
     top: 0;
@@ -284,16 +266,20 @@ header-profile {
     padding: 20px 0;
     text-align: center;
     position: relative; /* Add position relative to the header */
+    
+    
 }
 
 header-profile .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    
+    align-items: center; /* Align items vertically in the center */
+    justify-content: center; /* Center items horizontally */
+    
 }
 
 header-profile img {
     height: 10px !important;
+    
     
 }
 
@@ -332,4 +318,11 @@ header-profile img {
 
 }
 
+footer {
+    background-color: #aec03f;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    margin-top: 20px;
+}
 

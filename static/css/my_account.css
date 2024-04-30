@@ -15,3 +15,10 @@ body {
 h1 {
     color: #333;
 }
+
+.content-container {
+    max-width: 800px; /* Adjust the maximum width as needed */
+    margin: 0 auto; /* Center the container horizontally */
+    padding: 20px; /* Add padding for spacing */
+}
+

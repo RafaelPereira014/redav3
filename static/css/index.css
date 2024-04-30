@@ -26,7 +26,9 @@ header {
 }
 header .container img {
     height: 80px;
+    align-items: center;
 }
+
 
 header h1 {
     margin: 0;
@@ -54,39 +56,60 @@ nav ul li a {
 nav ul li a:hover {
     text-decoration: underline;
 }
-
 .carousel {
-    position: relative;
+    text-align: center;
+    margin: 20px auto; /* Center the carousel horizontally */
+    width: 80%; /* Set the width of the carousel */
 }
 
 .carousel-inner {
     display: flex;
     width: 100%;
     overflow: hidden;
+    border-radius: 10px; /* Add rounded corners to the carousel */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.carousel-item {
+    flex: 0 0 100%; /* Ensure each item takes up the full width */
 }
 
 .carousel-item img {
-    max-height: 200px; /* Adjust the maximum height of the carousel images */
-    text-align: center;
+    width: 100%; /* Ensure images fill the carousel item width */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: cover; /* Cover the entire area of the carousel item */
+    border-radius: 10px; /* Add rounded corners to the images */
 }
 
 .carousel-control-prev,
 .carousel-control-next {
-    font-size: 16px; /* Reduce the font size of the carousel control buttons */
-    padding: 5px 10px; /* Adjust the padding of the carousel control buttons */
+    font-size: 20px; /* Increase the font size of the carousel control buttons */
+    padding: 10px; /* Adjust the padding of the carousel control buttons */
+    background-color: rgba(0, 0, 0, 0.3); /* Add a semi-transparent background */
+    border: none; /* Remove border */
+    border-radius: 60%; /* Make the control buttons circular */
+    color: white; /* Set the color of the control button icons */
+    align-items: center;
+}
+
+.carousel-control-prev {
+    left: 40px; /* Adjust the position of the previous button */
+}
+
+.carousel-control-next {
+    right: 20px; /* Adjust the position of the next button */
 }
 
 .carousel-item.active {
     display: flex;
+    justify-content: center; /* Center the active item horizontally */
 }
 
 .carousel-item p {
     font-style: italic;
     text-align: center;
+    color: #fffcfc; /* Adjust the color of the text */
 }
-
-
-
 
 .rectangles {
     display: flex;
@@ -120,7 +143,6 @@ nav ul li a:hover {
     width: 100%;
     height: 150px;
     object-fit: cover;
-    border-radius: 10px;
     margin-bottom: 10px;
 }
 
@@ -273,3 +295,11 @@ button[type=submit]:hover {
 .top-nav ul li a:hover {
     text-decoration: underline;
 }
+
+.testimonial{
+    background-color: #1E4B5B;
+    width: auto;
+    height: 100%;
+}
+
+

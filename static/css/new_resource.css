@@ -1,5 +1,6 @@
 /* Add your custom CSS styles here */
 
+
 /* General styling */
 body {
     font-family: Arial, sans-serif;
@@ -15,11 +16,14 @@ body {
     overflow: hidden; /* Clearfix for floating elements */
 }
 
+
 .sub-container {
     width: 80%;
     margin: auto;
     overflow: hidden; /* Clearfix for floating elements */
     background-color: #48a9a6;
+    padding: 20px;
+    border-radius: 5px;
 }
 
 h1 {
@@ -31,12 +35,16 @@ h1 {
 /* Form styling */
 .input-group {
     margin-bottom: 20px;
+    text-align: left;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 9px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
+    margin-top: 8px;
 }
 
 .input-group input[type="text"],
@@ -60,6 +68,15 @@ label {
 .input-group textarea:focus {
     border-color: #48a9a6;
 }
+.text-danger {
+    color: red;
+    font-size: 90%; /* Adjust the font size as needed */
+}
+
+.small-text {
+    font-size: 90%; /* Adjust the font size as needed */
+    color: #b4b4b4;
+}
 
 /* Button group styling */
 .button-group {
@@ -69,17 +86,18 @@ label {
 
 button {
     padding: 12px 30px;
-    background-color: #48a9a6;
+    background-color: #aec03f;
     color: white;
     border: none;
     border-radius: 25px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    margin-top: 50px;
 }
 
 button:hover {
-    background-color: #1e4b5b;
+    background-color: #9dad39;
 }
 
 /* Checkbox and radio button styling */
@@ -126,35 +144,53 @@ button:hover {
     background-color: #48a9a6;
 }
 
+
+
+
 /* Specific input group styling */
 .input-group-aut,
 .input-group-org {
-    display: flex;
-    align-items: center;
+    display: inline-block;
+    vertical-align: top; /* Align them to the top */
+    width: calc(50% - 5px); /* Adjust the width to fit side by side with some spacing */
     margin-bottom: 10px;
+    text-align: left;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 9px;
 }
 
 .input-group-aut label,
 .input-group-org label {
-    width: 20%;
-    margin-right: 10px;
-    font-size: 16px;
+    width: 30%; /* Adjust label width if needed */
+    margin-right: 5%; /* Add some space between the label and input */
+    text-align: right; /* Align label text to the right */
+    
 }
 
 .input-group-aut input,
 .input-group-org input {
     flex: 1;
     padding: 10px;
+    width: 80%;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-sizing: border-box;
     font-size: 16px;
     transition: border-color 0.3s ease;
+    
 }
+
 
 .input-group-aut input:focus,
 .input-group-org input:focus {
     border-color: #48a9a6;
+}
+.input-group-aut input::placeholder {
+    color: #999; /* Adjust placeholder text color */
+    font-style: italic; /* Optionally, apply italic style to placeholder text */
+    /* Add any other styles you want for the placeholder */
 }
 
 /* Additional styling for new classes */
@@ -166,17 +202,28 @@ button:hover {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    margin-bottom: 20px;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 9px;
 }
 
-.input-group-format label,
+.input-group-format label{
+    clear: both;
+}
 .input-group-local label,
 .input-group-use label,
 .input-group-req label,
 .input-group-lang label {
-    font-size: 16px;
-    margin-bottom: 5px;
-    flex: 0 0 calc(33.33% - 20px); /* Adjust the width to fit three items in a row */
-    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 9px;
 }
 
 .input-group-format input[type="checkbox"],
@@ -221,3 +268,5 @@ button:hover {
 .input-group-lang input[type="radio"]:checked + label:before {
     background-color: #48a9a6;
 }
+
+
