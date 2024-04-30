@@ -25,7 +25,7 @@ header .container img {
 
 
 header {
-    background-color: #48A9A6;
+    background-color: #f9f9f9;
     color: #fff;
     padding: 20px 0;
     display: flex;
@@ -53,11 +53,38 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #fff;
+    color: #313131;
     font-size: 18px;
 }
 
 nav ul li a:hover {
+    text-decoration: underline;
+}
+.top-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px;
+}
+
+.top-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-nav ul li {
+    display:inline-flex;
+    margin-left: 20px; /* Adjust spacing between buttons */
+}
+
+.top-nav ul li a {
+    text-decoration: none;
+    color: #313131;
+    font-size: 14px;
+}
+
+.top-nav ul li a:hover {
     text-decoration: underline;
 }
 
@@ -154,7 +181,7 @@ nav ul li a:hover {
 
 .mini-fields span:first-child {
     font-weight: bold;
-    color: #48A9A6;
+    color: #aec03f;
 }
 
 .ficha-tecnica {
@@ -225,7 +252,7 @@ nav ul li a:hover {
 }
 
 .comment-form button {
-    background-color: #48A9A6;
+    background-color: #aec03f;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -270,7 +297,7 @@ nav ul li a:hover {
 }
 
 footer {
-    background-color: #48A9A6;
+    background-color: #aec03f;
     color: #fff;
     padding: 10px 0;
     text-align: center;

@@ -25,7 +25,6 @@
 .search-container {
     display: flex;
     align-items: center;
-    margin-top: 20px;
 }
 
 .search-container input[type=text] {
@@ -35,21 +34,25 @@
     box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 12px;
+    margin-left: 250px;
+    margin-bottom: 10px;
 }
 
 .search-container button {
-    padding: 10px 10px;
+    padding: 10px;
     border: none;
     cursor: pointer;
+    width: 30%;
     border-radius: 5px;
-    background-color: #48A9A6;
+    background-color: #aec03f;
     color: white;
-    font-size: 14px;
+    font-size: 12px;
+    margin-bottom: 20px;
 }
 
 .search-container button:hover {
-    background-color: #2D728F;
+    background-color: #a0af3b;
 }
 .top-nav {
     position: absolute;
@@ -71,7 +74,7 @@
 
 .top-nav ul li a {
     text-decoration: none;
-    color: #fff;
+    color: #313131;
     font-size: 14px;
 }
 
