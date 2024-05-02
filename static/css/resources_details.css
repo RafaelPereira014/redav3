@@ -23,6 +23,37 @@ header .container img {
     height: 80px;
 }
 
+.actions button {
+    background-color: #aec03f; /* Change the background color */
+    color: white; /* Change the text color */
+    padding: 10px 20px; /* Adjust the padding */
+    border: none; /* Remove the border */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-right: 10px; /* Adjust the right margin between buttons */
+    cursor: pointer; /* Add cursor pointer on hover */
+    margin-top: 10px;
+    display: inline;
+}
+.actions button.Contact {
+    background-color: #fff; /* Change the background color */
+    color: #aec03f; /* Change the text color */
+    padding: 10px 20px; /* Adjust the padding */
+    border-radius: 5px; /* Add border radius for rounded corners */
+    margin-right: 10px; /* Adjust the right margin between buttons */
+    cursor: pointer; /* Add cursor pointer on hover */
+    margin-top: 10px;
+}
+
+
+.actions button:hover {
+    background-color: white; /* Change the background color on hover */
+    color: #aec03f;
+}
+.actions button:hover.Contact {
+    background-color: #aec03f; /* Change the background color on hover */
+    color: white;
+}
+
 
 header {
     background-color: #f9f9f9;

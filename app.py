@@ -37,6 +37,11 @@ def my_account():
 def novo_recurso():
     return render_template('new_resource.html')
 
+@app.route('/novorecurso2')
+def novo_recurso2():
+    return render_template('new_resource2.html')
+
+
 # Admin Page
 @app.route('/admin')
 def admin():

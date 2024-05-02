@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplicações - REDA</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/apps.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>Aplicações - REDA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/apps.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
@@ -15,7 +16,7 @@
             background-image: url('static/images/apps-bg.jpg'); /* Replace 'path_to_your_image.jpg' with the path to your image */
             background-size: cover;
             background-position: center;
-            height: 200px; /* Adjust the height as needed */
+            height: 250px; /* Adjust the height as needed */
             position: relative;
         }
     </style>
@@ -29,15 +30,21 @@
             <!-- Search bar -->
             <nav>
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/apps">Apps</a></li>
-                    <li><a href="/tools">Tools</a></li>
-                    <li><a href="/resources">Resources</a></li>
+                    
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/apps">Aplicações</a></li>
+                    <li><a href="/tools">Ferramentas</a></li>
+                    <li><a href="/resources">Recursos</a></li>
+                    <li><a href="/myaccount">Minha conta</a></li>
+                    <li><a href="/novorecurso">Novo Recurso</a></li>
                 </ul>
             </nav>
-            <h2>Aplicações</h2>
-            <p>Descubra as aplicações para dispositivos móveis que encontrámos sobre educação, gestão de trabalho, jogos, formação, ciências, matemática, português, física e química.</p>
-            <button>Nova aplicação</button>
+            <div class="container2">
+                <h2>Aplicações</h2>
+                <p>Descubra as aplicações para dispositivos móveis que encontrámos sobre educação, gestão de trabalho, jogos, formação, ciências, matemática, português, física e química.</p>
+                <button>Introduzir aplicação</button>
+                
+            </div>
            
             <nav class="top-nav">
                 <ul>
@@ -58,42 +65,30 @@
                 <!-- Resource 1 -->
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <h2>Titulo</h2>
-                    <p>Descricao</p>
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>Ver recurso</button></a>
-                        <button>Editar recurso</button>
-                        <button>Adicionar propostas de operacionalização</button>
-                    </div>
-                    <p>21 de Março 2024</p>
-                    <p>Simulação</p>
+                    <p>Titulo</p>
+                    <p><i class="fab fa-android"></i></p> <!-- Android Icon -->
+
+                    
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
                     <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
+                        <p>Titulo</p>
+                        <p><i class="fab fa-android"></i></p> <!-- Android Icon -->
                     </div>
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
                     <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
+                        <p>Titulo</p>
+                        <p><i class="fab fa-android"></i></p> <!-- Android Icon -->
                     </div>
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
                     <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
+                        <p>Titulo</p>
+                        <p><i class="fab fa-android"></i></p> <!-- Android Icon -->
                     </div>
                 </div>
                 <div class="rectangle">
