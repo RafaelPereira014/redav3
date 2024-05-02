@@ -133,13 +133,14 @@ nav ul li a:hover {
     position: relative;
     border-radius: 10px;
     border: 1px solid #b4b4b4;
+    transition: box-shadow 0.3s ease; /* Add transition for smoothness */
+
 }
 
 .rectangle:hover {
-    transform: scale(1.1);
-    z-index: 1;
-    
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Add a shadow effect */
 }
+
 
 .rectangle img {
     width: 100%;
@@ -171,6 +172,11 @@ nav ul li a:hover {
 .rectangle .buttons i {
     font-size: 24px;
     color: #fff;
+    margin-bottom: 5px;
+}
+.rectangle p {
+    font-size: 14px;
+    color: #000000;
     margin-bottom: 5px;
 }
 
@@ -303,5 +309,6 @@ button[type=submit]:hover {
     width: auto;
     height: 100%;
 }
+
 
 
