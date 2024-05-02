@@ -13,27 +13,44 @@ body {
     width: 80%;
     margin: auto;
 }
-/* .container h2 {
-    text-align: center;
-} */
-/* button {
-    width: 15%;
-    background-color: #aec03f;
-    color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    text-align: center;
+.search-container {
+    display: flex;
+    align-items: center;
+}
 
-} */
+.search-container input[type=text] {
+    padding: 10px;
+    margin-right: 10px; /* Adjust spacing between input and button */
+    width: 50%; /* Adjust width of input */
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-left: 250px;
+    margin-bottom: 10px;
+}
+
+.search-container button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 30%;
+    border-radius: 5px;
+    background-color: #aec03f;
+    color: white;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+
+.search-container button:hover {
+    background-color: #a0af3b;
+}
 button-pag {
-    width: 15%;
+    width: 5%;
     background-color: #aec03f;
     color: white;
     padding: 10px 20px;
+    margin-right: 5px;
     margin-top: 40px;
     border: none;
     border-radius: 5px;
@@ -42,6 +59,28 @@ button-pag {
     text-align: center;
 
 }
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+}
+.pagination a {
+    color: #333;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    border: 1px solid #ccc;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.pagination a.active {
+    background-color: #aec03f;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
 
 header {
     background-color: #f9f9f9;
@@ -255,13 +294,14 @@ nav ul li a:hover {
 }
 
 .options-menu a:hover {
-    border-bottom-color: #48A9A6;
+    border-bottom-color: #afc03f;
 }
 /* Add custom CSS styles */
 
 /* Header styles */
-header-profile {
-    background-color: #aec03f;
+.header-profile {
+    background-color: #afc03f95;
+    background-image: none;
     color: #fff;
     padding: 20px 0;
     text-align: center;
@@ -270,18 +310,14 @@ header-profile {
     
 }
 
-header-profile .container {
+.header-profile .container {
     
     align-items: center; /* Align items vertically in the center */
     justify-content: center; /* Center items horizontally */
     
 }
 
-header-profile img {
-    height: 10px !important;
-    
-    
-}
+
 
 /* Profile image styles */
 .profile-icon {
@@ -294,7 +330,7 @@ header-profile img {
     border-radius: 50%; /* Make it round */
     overflow: hidden; /* Hide any overflow */
     box-shadow: 0 0 0 5px #fff; /* Add a white border */
-    margin-top: 80px;
+    margin-top: -200px;
 }
 
 .profile-icon img {
@@ -310,7 +346,7 @@ header-profile img {
     display: flex; /* Display counts horizontally */
     justify-content: center; /* Center counts horizontally */
     align-items: center; /* Center counts vertically */
-    margin-top: 50px; /* Add some margin */
+    margin-top: 70px; /* Add some margin */
 }
 
 .profile-counts p {

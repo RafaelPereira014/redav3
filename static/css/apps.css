@@ -164,3 +164,21 @@ nav ul li a {
 .top-nav ul li a:hover {
     text-decoration: underline;
 }
+
+.filter-bar {
+    margin-bottom: 20px; /* Add margin to separate from rectangles */
+    text-align: center;
+}
+
+.platform-btn {
+    background-color: #83ae03;
+    color: #fff;
+    border: 1px solid #83ae03;
+
+}
+
+/* Style for the active button */
+.platform-btn.active {
+    background-color: #aec03f;
+    color: white;
+}

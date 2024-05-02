@@ -134,14 +134,14 @@ button:hover {
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
-    border: 2px solid #48a9a6;
+    border: 2px solid #aec03f;;
     border-radius: 5px;
     box-sizing: border-box;
 }
 
 .checkbox-group input[type="checkbox"]:checked + label:before,
 .radio-group input[type="radio"]:checked + label:before {
-    background-color: #48a9a6;
+    background-color: #aec03f;;
 }
 
 
@@ -256,7 +256,7 @@ button:hover {
     transform: translateY(-50%);
     width: 20px;
     height: 20px;
-    border: 2px solid #48a9a6;
+    border: 2px solid #aec03f;;
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -266,7 +266,7 @@ button:hover {
 .input-group-use input[type="checkbox"]:checked + label:before,
 .input-group-req input[type="checkbox"]:checked + label:before,
 .input-group-lang input[type="radio"]:checked + label:before {
-    background-color: #48a9a6;
+    background-color: #aec03f;;
 }
 
 

@@ -6,6 +6,7 @@
     <title>Homepage</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
         header {
@@ -69,10 +70,13 @@
             <div class="rectangles">
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-flag"></i>
                     <h2>Diferença entre clima e estado de tempo</h2>
                     <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                     <div class="buttons">
-                        <i class="gg-heart"></i>
+                        
+
                         <a href="/resources/details"><button>Ver recurso</button></a>
                         <button>Editar recurso</button>
                         <button>Adicionar propostas de operacionalização</button>
@@ -81,22 +85,36 @@
                     <p>Simulação</p>
                 </div>
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/apps-bg.jpg') }}" alt="Image 2">
+                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-flag"></i>
+                    <h2>Diferença entre clima e estado de tempo</h2>
+                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                     <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
+                        
+
+                        <a href="/resources/details"><button>Ver recurso</button></a>
+                        <button>Editar recurso</button>
+                        <button>Adicionar propostas de operacionalização</button>
                     </div>
+                    <p>21 de Março 2024</p>
+                    <p>Simulação</p>
                 </div>
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/hints-bg.jpg') }}" alt="Image 3">
+                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-flag"></i>
+                    <h2>Diferença entre clima e estado de tempo</h2>
+                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                     <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
+                        
+
+                        <a href="/resources/details"><button>Ver recurso</button></a>
+                        <button>Editar recurso</button>
+                        <button>Adicionar propostas de operacionalização</button>
                     </div>
+                    <p>21 de Março 2024</p>
+                    <p>Simulação</p>
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 4">
@@ -183,6 +201,12 @@
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
+        document.querySelectorAll('.rectangle i').forEach(icon => {
+            icon.addEventListener('click', () => {
+                icon.classList.toggle('clicked');
+            });
+        });
+        
         // Get the login modal
         var loginModal = document.getElementById("loginModal");
 

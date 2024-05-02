@@ -149,6 +149,29 @@ nav ul li a:hover {
     margin-bottom: 10px;
 }
 
+.rectangle i {
+    font-size: 20px;
+    color: white;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border: 1px solid #aec03f; /* Add border */
+    border-radius: 50%; /* Make border circular */
+    padding: 5px; /* Add padding to the icon */
+    margin-left: 5px;
+}
+
+.rectangle i:hover {
+    color: #aec03f; /* Change icon color on hover */
+    background-color: rgba(174, 192, 63, 0.2); /* Add background color on hover */
+}
+
+.rectangle i.clicked {
+    color:#aec03f; /* Change icon color when clicked */
+    background-color: rgba(174, 192, 63, 0.2); /* Add background color when clicked */
+}
+
+
+
+
 .rectangle .buttons {
     display: flex;
     flex-direction: column;
@@ -170,9 +193,8 @@ nav ul li a:hover {
 }
 
 .rectangle .buttons i {
-    font-size: 24px;
-    color: #fff;
-    margin-bottom: 5px;
+    font-size: 14px;
+    color: #ffffff;
 }
 .rectangle p {
     font-size: 14px;

@@ -40,12 +40,12 @@
 
     <!-- Main Content -->
     <main>
-        <div class="content-container">
+        <div class="container">
             <!-- Profile Header -->
             <div class="header-profile">
-                <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Header Image" >
+                
                 <div class="profile-icon">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Profile Icon">
+                    <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="Profile Icon">
                 </div>
                 <div class="profile-details">
                     <div class="profile-counts">
@@ -54,23 +54,24 @@
                         <p>20 Tools</p>
                     </div>
                 </div>
+                 <!-- Options Menu -->
+                <div class="options-menu">
+                    <a href="#my-resources">Meus recursos</a>
+                    <a href="#my-proposals">Minhas propostas de op.</a>
+                    <a href="#my-apps">Minhas aplicações</a>
+                    <a href="#my-tools">Minhas ferramentas</a>
+                </div>
             </div>
 
-            <!-- Options Menu -->
-            <div class="options-menu">
-                <a href="#my-resources">Meus recursos</a>
-                <a href="#my-proposals">Minhas propostas de op.</a>
-                <a href="#my-apps">Minhas aplicações</a>
-                <a href="#my-tools">Minhas ferramentas</a>
-            </div>
+           
 
             <!-- Content Sections -->
             <section id="my-resources" class="content-section">
                 <!-- Content for "Meus Recursos" section -->
                 <!-- Display user's resources here -->
                 <h2>Meus recursos</h2>
-                <button> + Novo recurso </button>
-                <div class="search-bar">
+                <button-pag href="/novorecurso"> + Novo recurso </button-pag>
+                <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Search...">
                     <button onclick="searchResources()">Search</button>
                 </div>
@@ -80,7 +81,6 @@
                         <h2>Titulo</h2>
                         <p>Descricao</p>
                         <div class="buttons">
-                            <i class="gg-heart"></i>
                             <a href="/resources/details"><button>Ver recurso</button></a>
                             <button>Editar recurso</button>
                             <button>Adicionar propostas de operacionalização</button>
@@ -93,7 +93,6 @@
                         <h2>Titulo</h2>
                         <p>Descricao</p>
                         <div class="buttons">
-                            <i class="gg-heart"></i>
                             <a href="/resources/details"><button>Ver recurso</button></a>
                             <button>Editar recurso</button>
                             <button>Adicionar propostas de operacionalização</button>
@@ -106,7 +105,6 @@
                         <h2>Titulo</h2>
                         <p>Descricao</p>
                         <div class="buttons">
-                            <i class="gg-heart"></i>
                             <a href="/resources/details"><button>Ver recurso</button></a>
                             <button>Editar recurso</button>
                             <button>Adicionar propostas de operacionalização</button>
@@ -119,7 +117,6 @@
                         <h2>Titulo</h2>
                         <p>Descricao</p>
                         <div class="buttons">
-                            <i class="gg-heart"></i>
                             <a href="/resources/details"><button>Ver recurso</button></a>
                             <button>Editar recurso</button>
                             <button>Adicionar propostas de operacionalização</button>
@@ -130,7 +127,12 @@
                     
                 </div>
                 
-                
+                <div class="pagination">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <!-- Add more pagination links as needed -->
+                </div>
                 <div class="pagination">
                     <button-pag onclick="previousPage()">Previous</button-pag>
                     <button-pag onclick="nextPage()">Next</button-pag>
