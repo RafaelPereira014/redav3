@@ -76,7 +76,6 @@
                     <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                     <div class="buttons">
                         
-
                         <a href="/resources/details"><button>Ver recurso</button></a>
                         <button>Editar recurso</button>
                         <button>Adicionar propostas de operacionalização</button>
@@ -164,14 +163,7 @@
             </div>
         </div>
     </main>
-
-    <div class="testimonial">
-        <p>teste 1o2keo12ok3 </p>
     
-    </div>
-
-    
-
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -196,8 +188,15 @@
     <footer>
         <div class="container">
             <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+            <div class="footer-buttons">
+                <a href="/sobre">Sobre</a>
+                <a href="#">Ajuda</a>
+                <a href="#">Ficha Técnica</a>
+                <a href="#">Política de Privacidade</a>
+            </div>
         </div>
     </footer>
+    
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
@@ -232,6 +231,19 @@
                 loginModal.style.display = "none";
             }
         }
+        const slides = document.querySelectorAll('.testimonial-slide');
+
+        let currentIndex = 0;
+
+        function nextSlide() {
+            slides[currentIndex].style.transform = 'translateX(-100%)';
+            currentIndex = (currentIndex + 1) % slides.length;
+            slides[currentIndex].style.transform = 'translateX(0)';
+        }
+
+        setInterval(nextSlide, 4000); // Change slide every 4 seconds
+
+
         
     </script>
 </body>

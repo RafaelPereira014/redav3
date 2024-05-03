@@ -22,10 +22,18 @@ def resource_details():
 def apps():
     return render_template('apps.html')
 
+@app.route('/novaapp')
+def novaapp():
+    return render_template('novaapp.html')
+
 # Tools
 @app.route('/tools')
 def tools():
     return render_template('tools.html')
+
+@app.route('/novaferramenta')
+def newtool():
+    return render_template('novaferramenta.html')
 
 # My Account
 @app.route('/myaccount')
@@ -40,6 +48,11 @@ def novo_recurso():
 @app.route('/novorecurso2')
 def novo_recurso2():
     return render_template('new_resource2.html')
+
+# about page
+@app.route('/sobre')
+def about():
+    return render_template('sobre.html')
 
 
 # Admin Page
