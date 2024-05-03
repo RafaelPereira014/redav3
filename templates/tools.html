@@ -71,7 +71,10 @@
                 <!-- Resource 1 -->
                 <div class="rectangle">
                     <h2>Titulo</h2>
-                    <p>Descrição</p>
+                    <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
+                        Obrigado por nos visitar e volte sempre!</p>
+                    <button onclick="openModal('modal1')">Ler mais</button>
+                    <button> Abrir endereço </button>
 
                     
                 </div>
@@ -91,38 +94,7 @@
                         <p>Titulo</p>
                     </div>
                 </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <a href="/resources/details"><button>View</button></a>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
+               
                 
                 <!-- Resource 2 -->
                 <!-- Duplicate the above resource div for each additional resource -->
@@ -174,6 +146,16 @@
             </form>
         </div>
     </div>
+    <!-- Modal popup -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>Titulo</h2>
+            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
+                Obrigado por nos visitar e volte sempre!</p>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     <footer>
@@ -184,6 +166,17 @@
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
+        // Function to open the modal
+        function openModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeModal(modalId) {
+            var modal = document.getElementById(modalId);
+            modal.style.display = "none";
+        }
         // Get the login modal
         var loginModal = document.getElementById("loginModal");
 

@@ -198,7 +198,10 @@ button:hover {
 .input-group-local,
 .input-group-use,
 .input-group-req,
-.input-group-lang {
+.input-group-lang,
+.input-group-tema,
+.input-group-categ,
+.input-group-system {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -215,11 +218,15 @@ button:hover {
 .input-group-local label,
 .input-group-use label,
 .input-group-req label,
-.input-group-lang label {
+.input-group-lang label,
+.input-group-tema label,
+.input-group-categ label ,
+.input-group-system label {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
+    margin-top: 10px;
     font-family: "Lato", sans-serif;
     font-weight: 400;
     text-transform: uppercase;
@@ -230,7 +237,10 @@ button:hover {
 .input-group-local input[type="radio"],
 .input-group-use input[type="checkbox"],
 .input-group-req input[type="checkbox"],
-.input-group-lang input[type="radio"] {
+.input-group-lang input[type="radio"],
+.input-group-tema input[type="checkbox"],
+.input-group-categ input[type="checkbox"],
+.input-group-system input[type="checkbox"] {
     display: none;
 }
 
@@ -238,17 +248,24 @@ button:hover {
 .input-group-local label,
 .input-group-use label,
 .input-group-req label,
-.input-group-lang label {
-    position: relative;
+.input-group-lang label,
+.input-group-tema label, 
+.input-group-categ label ,
+.input-group-system label{
+    position:relative;
     padding-left: 30px;
     cursor: pointer;
+
 }
 
 .input-group-format label:before,
 .input-group-local label:before,
 .input-group-use label:before,
 .input-group-req label:before,
-.input-group-lang label:before {
+.input-group-lang label:before,
+.input-group-tema label:before,
+.input-group-categ label:before ,
+.input-group-system label:before {
     content: '';
     position: absolute;
     top: 50%;
@@ -265,7 +282,10 @@ button:hover {
 .input-group-local input[type="radio"]:checked + label:before,
 .input-group-use input[type="checkbox"]:checked + label:before,
 .input-group-req input[type="checkbox"]:checked + label:before,
-.input-group-lang input[type="radio"]:checked + label:before {
+.input-group-lang input[type="radio"]:checked + label:before,
+.input-group-tema input[type="checkbox"]:checked + label:before,
+.input-group-categ input[type="checkbox"]:checked + label:before,
+.input-group-system input[type="checkbox"]:checked + label:before {
     background-color: #aec03f;;
 }
 

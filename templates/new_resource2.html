@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource2.css') }}">
 
     <title>Criar Recurso</title>
     <!-- Link to TinyMCE CDN -->
@@ -79,77 +80,29 @@
     <main>
         <div class="container">
             <h1>Detalhes</h1>
-            <div class="input-group required">
+            <div class="input-group-escolaridade required">
                 <h2>Ano de Escolaridade:</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">7º</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">8º</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">9º</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">10º</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">11º</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">12º</label>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/escolaridade.js') }}"></script>
+
             </div>
-            <div class="input-group-aut required">
+            <div class="input-group-disci required">
                 <h2>Disciplinas:</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">Opção 1</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">Opção 2</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">Opção 3</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">Opção 4</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">Opção 5</label>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/disciplinas.js') }}"></script>
             </div>
-            <div class="input-group-org required">
+            <div class="input-group-domain required">
                 <h2>Dominios:</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">Opção 1</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">Opção 2</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">Opção 3</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">Opção 4</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">Opção 5</label>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
             </div>
-            <div class="input-group-format required">
+            <div class="input-group-subdomain required">
                 <h2>Subdominios:</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">Opção 1</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">Opção 2</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">Opção 3</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">Opção 4</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">Opção 5</label>
-                <!-- Add more radio options as needed -->
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/subdominios.js') }}"></script>
             </div>
-            <div class="input-group-local required">
+            <div class="input-group-concept required">
                 <h2>Conceitos:</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">Opção 1</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">Opção 2</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">Opção 3</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">Opção 4</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">Opção 5</label>
-                <!-- Add more radio options as needed -->
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/conceitos.js') }}"></script>
             </div>
            
-            <div class="input-group-fich">
+            <div class="input-group-helpfile">
                 <h2>Documento de apoio:</h2>
                 <input type="file" id="ficheiro" name="ficheiro" >
                
@@ -160,7 +113,7 @@
                 Campo obrigatório
             </small>
             
-            <button type="submit">Continuar</button>
+            <button type="submit">Criar recurso</button>
             <button type="submit">Cancelar</button>
 
         </div>

@@ -107,10 +107,19 @@
             </div>
             <div class="input-group-local required">
                 <h2>Localização do recurso:</h2>
-                <input type="radio" id="localizacao1" name="localizacao" value="Opção 1">
-                <label for="localizacao1">Endereço e/ou código de incorporação</label>
-                <input type="radio" id="localizacao2" name="localizacao" value="Opção 2">
-                <label for="localizacao2">Ficheiro</label>
+                    <input type="radio" id="localizacao1" name="localizacao" value="Opção 1">
+                    <label for="localizacao1">Endereço e/ou código de incorporação</label>
+                    <input type="radio" id="localizacao2" name="localizacao" value="Opção 2">
+                    <label for="localizacao2">Ficheiro</label>
+
+                    <div id="enderecoInput" style="display: none;">
+                        <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço">
+                    </div>
+
+                    <div id="fileInput" style="display: none;">
+                        <input type="file" id="file" name="file">
+                    </div>
+
                 <!-- Add more radio options as needed -->
             </div>
             <div class="input-group-use required">
@@ -153,8 +162,8 @@
                 Campo obrigatório
             </small>
             
-            <button type="submit">Continuar</button>
-            <button type="submit">Cancelar</button>
+            <button onclick="window.location.href='/novorecurso2'">Continuar</button>
+            <button onclick="window.location.href='/'">Cancelar</button>
 
         </div>
     </main>
@@ -164,5 +173,27 @@
             <p>&copy; 2024 Your Company Name. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        const localizacao1 = document.getElementById('localizacao1');
+        const localizacao2 = document.getElementById('localizacao2');
+        const enderecoInput = document.getElementById('enderecoInput');
+        const fileInput = document.getElementById('fileInput');
+
+        localizacao1.addEventListener('change', function() {
+            if (this.checked) {
+                enderecoInput.style.display = 'block';
+                fileInput.style.display = 'none';
+            }
+        });
+
+        localizacao2.addEventListener('change', function() {
+            if (this.checked) {
+                enderecoInput.style.display = 'none';
+                fileInput.style.display = 'block';
+            }
+        });
+
+    </script>
 </body>
 </html>

@@ -89,7 +89,6 @@
                 <div class="tags-container" id="tags-container"></div>
             </div>
             
-            
             <div class="input-group-categ required">
                 <h2>Categorias:</h2>
                 <input type="checkbox" id="categoria1" name="categoria" value="Opção 1">
@@ -109,18 +108,17 @@
                 <label for="sistema3">Windows</label>
             </div>
             <div class="input-group-tema required">
-                <h2>Sistemas:</h2>
-                <input type="checkbox" id="tema1" name="tema" value="Opção 1">
-                <label for="tema1">Biologia</label>
-                <input type="checkbox" id="tema2" name="tema" value="Opção 2">
-                <label for="tema2">Ciência</label>
-                <input type="checkbox" id="tema3" name="tema" value="Opção 3">
-                <label for="tema3">Cultura Geral</label>
+                <h2>Temas:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/tema.js') }}"></script>
+
             </div>
             
             <div class="input-group-fich">
                 <h2>Imagem de destaque:</h2>
                 <input type="file" id="ficheiro" name="ficheiro" >
+                <small class="small-text">
+                    Tamanho máximo do ficheiro é de 716KB.
+                </small>
                
                 <!-- Add more radio options as needed -->
             </div>
@@ -142,6 +140,30 @@
     </footer>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Number of checkboxes and labels
+            const numberOfCheckboxes = 15;
+            const labels = ["Biologia", "Ciência", "Cultura Geral", "Educação", "Educação Ambiental","Física","Formação","Geologia","Gestão de Trabalho","Língua Portuguesa","Línguas","Literatura","Matemática","Notícias","Química"];
+        
+            for (let i = 0; i < numberOfCheckboxes; i++) {
+                // Create checkbox element
+                const checkbox = document.createElement("input");
+                checkbox.setAttribute("type", "checkbox");
+                checkbox.setAttribute("id", "tema" + (i + 1));
+                checkbox.setAttribute("name", "tema");
+                checkbox.setAttribute("value", "Opção " + (i + 1));
+        
+                // Create label element
+                const label = document.createElement("label");
+                label.setAttribute("for", "tema" + (i + 1));
+                label.textContent = labels[i];
+        
+                // Append checkbox and label to container
+                document.querySelector(".input-group-tema").appendChild(checkbox);
+                document.querySelector(".input-group-tema").appendChild(label);
+            }
+        });
+        
         // Get the input element
         var input = document.getElementById("tags-input");
 
