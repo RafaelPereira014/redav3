@@ -132,7 +132,6 @@ nav ul li a:hover {
     cursor: pointer;
     overflow: hidden;
     position: relative;
-    border-radius: 10px;
     border: 1px solid #b4b4b4;
     transition: box-shadow 0.3s ease; /* Add transition for smoothness */
 
