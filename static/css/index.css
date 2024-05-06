@@ -12,6 +12,7 @@ body {
     width: 80%;
     margin: auto;
 }
+
 .container h2 {
     text-align: center;
 }
@@ -341,32 +342,11 @@ button[type=submit]:hover {
     text-decoration: underline;
 }
 
-.testimonial-carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+.testimonial{
+    background-color: #1E4B5B;
+    width: auto;
+    height: 100%;
 }
-
-.testimonial-slide {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    width: 300px; /* Adjust width as needed */
-    padding: 20px;
-    margin-right: 20px; /* Space between slides */
-    background-color: #f0f0f0;
-    border-radius: 10px;
-}
-
-.testimonial-text {
-    font-size: 16px;
-}
-
-.testimonial-author {
-    font-style: italic;
-    font-size: 14px;
-}
-
 
 
 

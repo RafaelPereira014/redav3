@@ -88,3 +88,47 @@ nav ul li a {
 .top-nav ul li a:hover {
     text-decoration: underline;
 }
+.order-resources{
+    text-align: right;
+    margin-bottom: 15px;
+}
+/* CSS for Advanced Search */
+#advancedSearchOptions {
+    margin-top: 10px; /* Adjust spacing between search bar and advanced search options */
+    display: none; /* Initially hide advanced search options */
+}
+
+#advancedSearchOptions label {
+    display: inline-block; /* Display labels horizontally */
+    margin-right: 10px; /* Adjust spacing between labels */
+    font-weight: bold;
+    color: black;
+}
+
+#advancedSearchOptions select, 
+#advancedSearchOptions input[type="text"] {
+    margin-bottom: 10px;
+    width: calc(80% - 10px); /* Adjust width of input elements */
+    padding: 8px; /* Adjust padding for input elements */
+    border: 1px solid #ccc; /* Add border to input elements */
+    border-radius: 5px; /* Add border radius to input elements */
+}
+
+#advancedSearchOptions select {
+    width: calc(20% - 10px); /* Adjust width of select dropdowns */
+}
+
+#advancedSearchOptions button {
+    padding: 10px 20px; /* Adjust padding for button */
+    background-color: #83ae03; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Add border radius to button */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    margin-top: 10px; /* Adjust spacing between button and input elements */
+}
+
+#advancedSearchOptions button:hover {
+    background-color: #6f9802; /* Button background color on hover */
+}
+
