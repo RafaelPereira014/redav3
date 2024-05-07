@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-form.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
@@ -171,11 +172,11 @@
             <span class="close" onclick="closeLoginModal()">&times;</span>
             <h2>Login</h2>
             <form>
-                <div class="input-group">
+                <div class="login-input">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>
                 </div>
-                <div class="input-group">
+                <div class="login-input">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>

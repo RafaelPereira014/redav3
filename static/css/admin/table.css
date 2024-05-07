@@ -109,3 +109,23 @@ button:hover {
 .panel p {
     color: #666;
 }
+/* CSS for Font Awesome eye icon */
+td .fas.fa-eye {
+    color: #45a049; /* Change color as needed */
+    font-size: 18px; /* Change size as needed */
+    /* Add any other styles as needed */
+    margin-right: 10px;
+}
+
+td .fas.fa-trash {
+    color: #ec0c0c; /* Change color as needed */
+    font-size: 18px; /* Change size as needed */
+    /* Add any other styles as needed */
+    margin-right: 10px;
+}
+td .fa.fa-pencil{
+    color: #45a049; /* Change color as needed */
+    font-size: 18px; /* Change size as needed */
+    /* Add any other styles as needed */
+    margin-right: 10px;
+}
