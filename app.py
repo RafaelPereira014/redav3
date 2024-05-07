@@ -54,11 +54,63 @@ def novo_recurso2():
 def about():
     return render_template('sobre.html')
 
-
+########---------------------------------_################
 # Admin Page
-@app.route('/admin')
+@app.route('/dashboard')
 def admin():
-    return render_template('admin.html')
+    return render_template('admin/admin.html')
+
+@app.route('/dashboard/recursos/pendentes')
+def rec_pendentes():
+    return render_template('admin/recursos/pendentes.html')
+
+@app.route('/dashboard/recursos/po/pendentes')
+def po_pendentes():
+    return render_template('admin/recursos/po_pendentes.html')
+
+@app.route('/dashboard/aplicacoes')
+def admin_apps():
+    return render_template('admin/aplicacoes/aplicacoes.html')
+
+@app.route('/dashboard/aplicacoes/pendentes')
+def admin_apps_pendentes():
+    return render_template('admin/aplicacoes/pendentes.html')
+
+@app.route('/dashboard/ferramentas')
+def admin_tools():
+    return render_template('admin/ferramentas/ferramentas.html')
+
+@app.route('/dashboard/ferramentas')
+def admin_tools_pendentes():
+    return render_template('admin/ferramentas/pendentes.html')
+
+@app.route('/dashboard/comentarios/pendentes')
+def admin_comments():
+    return render_template('admin/comentarios/pendentes.html')
+
+@app.route('/dashboard/comentarios/palavras-proibidas')
+def admin_comments_prohi():
+    return render_template('admin/comentarios/palavras-proibidas.html')
+
+@app.route('/dashboard/taxonomias')
+def admin_taxonomies():
+    return render_template('admin/taxonomias/taxonomias.html')
+
+@app.route('/dashboard/taxonomias/relacoes')
+def admin_taxonomies_rel():
+    return render_template('admin/taxonomias/relacoes.html')
+
+@app.route('/dashboard/utilizadores')
+def admin_users():
+    return render_template('admin/utilizadoes/utilizadores.html')
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

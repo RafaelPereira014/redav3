@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - REDA</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
+
+    
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Painel de administração</h1>
+        </div>
+    </header>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="static/images/REDA_logo.png" alt="Logo">
+        </div>
+    
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li>
+                <a>Recursos</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/recursos/pendentes">Pendentes</a></li>
+                    <li><a href="/dashboard/recursos/po/pendentes">Operacionalizações pendentes</a></li>
+                    <li><a href="/dashboard/recursos/ocultos">Ocultos</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/dashboard/aplicacoes">Aplicações</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/aplicacoes/pendentes">Pendentes</a></li>
+                    
+                </ul>
+            </li>
+            <li>
+                <a href="/dashboard/ferramentas">Ferramentas</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/ferramentas/pendentes">Pendentes</a></li>
+                   
+                </ul>
+            </li>
+            <li>
+                <a>Comentários</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/comentarios/pendentes">Pendentes</a></li>
+                    <li><a href="/dashboard/comentarios/palavras-proibidas">Palavras proibidas</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/dashboard/taxonomias">Taxonomias</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/taxonomias/relacoes">Relações</a></li>
+                </ul>
+            </li>
+            <li><a href="/dashboard/utilizadores">Utilizadores</a></li>
+            <li><a href="#">Mensagens</a></li>
+            <li><a href="#">Artigos</a></li>
+        </ul>
+    </div>
+    
+    <div class="content">
+        <h2>Todas as ferramentas</h2>
+        <div>
+            <input type="text" id="search" placeholder="Pesquisar...">
+        </div>
+
+        <hr></hr>
+
+       
+
+        <table>
+            <tr>
+              <th>Título</th>
+              <th>Lojas</th>
+              <th>Data de criação</th>
+              <th>Submetido por</th>
+              <th>Ações</th>
+            </tr>
+            <tr>
+              <td>Alfreds Futterkiste</td>
+              <td>Maria Anders</td>
+              <td>Germany</td>
+              <td>Germany</td>
+            </tr>
+            <tr>
+              <td>Centro comercial Moctezuma</td>
+              <td>Francisco Chang</td>
+              <td>Mexico</td>
+              <td>Mexico</td>
+            </tr>
+          </table>
+       
+    </div>
+
+    <script>
+        function toggleSubmenu(submenuId) {
+            var submenu = document.getElementById(submenuId);
+            if (submenu.style.display === "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+
+        function displayTodos() {
+            // Logic to display all data in the table
+        }
+
+        function displayCientifica() {
+            // Logic to display only cientifica data in the table
+        }
+
+        function displayLinguistica() {
+            // Logic to display only linguistica data in the table
+        }
+    </script>
+</body>
+</html>
