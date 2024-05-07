@@ -102,7 +102,7 @@ def admin_taxonomies_rel():
 
 @app.route('/dashboard/utilizadores')
 def admin_users():
-    return render_template('admin/utilizadoes/utilizadores.html')
+    return render_template('admin/utilizadores/utilizadores.html')
 
 
 
