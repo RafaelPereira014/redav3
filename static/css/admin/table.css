@@ -84,3 +84,28 @@ button:hover {
         width: 100%;
     }
 }
+/* CSS for panels */
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.panel {
+    background: linear-gradient(to bottom, #3c781d, #e0e0e0);
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: calc(30% - 10px); /* Adjust width based on the number of panels */
+    box-sizing:content-box;
+}
+
+.panel h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.panel p {
+    color: #666;
+}

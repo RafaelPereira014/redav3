@@ -8,60 +8,62 @@
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 
     
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Painel de administração</h1>
-        </div>
-    </header>
+    
     <div class="sidebar">
         <div class="logo">
-            <img src="static/images/REDA_logo.png" alt="Logo">
+            <img src="/static/images/REDA_logo.png" alt="Logo">
         </div>
     
         <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+
             <li>
-                <a>Recursos</a>
+                <a><i class="fas fa-database"></i> Recursos </a>
                 <ul class="submenu">
-                    <li><a href="/dashboard/recursos/pendentes">Pendentes</a></li>
-                    <li><a href="/dashboard/recursos/po/pendentes">Operacionalizações pendentes</a></li>
-                    <li><a href="/dashboard/recursos/ocultos">Ocultos</a></li>
+                    <li><a href="/dashboard/recursos/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                    <li><a href="/dashboard/recursos/po/pendentes"><i class="far fa-clock"></i> Operacionalizações pendentes</a></li>
+                    <li><a href="/dashboard/recursos/ocultos" >Ocultos</a></li>
+                </ul>
+            </li>
+            
+            
+            <li>
+                <a href="/dashboard/aplicacoes"><i class="fas fa-layer-group"></i> Aplicações</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/aplicações/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="/dashboard/ferramentas"><i class="fas fa-tools"></i> Ferramentas</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/ferramentas/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
                 </ul>
             </li>
             <li>
-                <a href="/dashboard/aplicacoes">Aplicações</a>
+                <a><i class="fas fa-comments"></i> Comentários</a>
                 <ul class="submenu">
-                    <li><a href="/dashboard/aplicacoes/pendentes">Pendentes</a></li>
-                    
+                    <li><a href="/dashboard/comentarios/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                    <li><a href="/dashboard/comentarios/palavras-proibidas"><i class="fas fa-ban"></i> Palavras proibidas</a></li>
                 </ul>
             </li>
             <li>
-                <a href="/dashboard/ferramentas">Ferramentas</a>
+                <a href="/dashboard/taxonomias"><i class="fas fa-sitemap"></i> Taxonomias</a>
                 <ul class="submenu">
-                    <li><a href="/dashboard/ferramentas/pendentes">Pendentes</a></li>
-                   
+                    <li><a href="/dashboard/taxonomias/relacoes"><i class="fas fa-link"></i> Relações</a></li>
                 </ul>
             </li>
-            <li>
-                <a>Comentários</a>
-                <ul class="submenu">
-                    <li><a href="/dashboard/comentarios/pendentes">Pendentes</a></li>
-                    <li><a href="/dashboard/comentarios/palavras-proibidas">Palavras proibidas</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="/dashboard/taxonomias">Taxonomias</a>
-                <ul class="submenu">
-                    <li><a href="/dashboard/taxonomias/relacoes">Relações</a></li>
-                </ul>
-            </li>
-            <li><a href="/dashboard/utilizadores">Utilizadores</a></li>
-            <li><a href="#">Mensagens</a></li>
-            <li><a href="#">Artigos</a></li>
+            <li><a href="/dashboard/utilizadores"><i class="fas fa-users"></i> Utilizadores</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> Mensagens</a></li>
+            <li><a href="#"><i class="fas fa-file-alt"></i> Artigos</a></li>
         </ul>
     </div>
     

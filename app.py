@@ -80,7 +80,7 @@ def admin_apps_pendentes():
 def admin_tools():
     return render_template('admin/ferramentas/ferramentas.html')
 
-@app.route('/dashboard/ferramentas')
+@app.route('/dashboard/ferramentas/pendentes')
 def admin_tools_pendentes():
     return render_template('admin/ferramentas/pendentes.html')
 
