@@ -25,14 +25,13 @@
     position: relative;
     width: calc(23% - 20px);
     margin: 0.5%;
-    height: 300px;
+    height: 250px;
     background-color: #f1f0f0;
-    padding: 10px;
+    padding: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
     overflow: hidden;
-    border-radius: 10px;
     border: 1px solid #b4b4b4;
     transition: box-shadow 0.3s ease;
 }

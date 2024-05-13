@@ -8,6 +8,23 @@
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    <style>
+
+        .checked {
+            color: orange;
+        }
+        .rating {
+            color: #ffc107; /* Color of the stars */
+            font-size: 10px; /* Adjust the size of the stars */
+            margin-left: 170px;
+
+        }
+    </style>
     <!-- Add other necessary CSS links -->
    
 </head>
@@ -79,16 +96,28 @@
                 </div>
                 <div class="rectangles">
                     <div class="rectangle">
-                        <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
-                        <h2>Titulo</h2>
-                        <p>Descricao</p>
+                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                        <span class="image-meta">Geografia</span>
+    
+                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-flag"></i>
+                        <h2>Diferença entre clima e estado de tempo</h2>
+                        <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
                         <div class="buttons">
                             <a href="/resources/details"><button>Ver recurso</button></a>
                             <button>Editar recurso</button>
                             <button>Adicionar propostas de operacionalização</button>
                         </div>
                         <p>21 de Março 2024</p>
+                        <div class="rating">
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
                         <p>Simulação</p>
+                        
                     </div>
                     <div class="rectangle">
                         <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">

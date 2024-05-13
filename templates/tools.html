@@ -90,6 +90,30 @@
                 </div>
                 <div class="rectangle">
                     <div class="buttons">
+                        <h2>Titulo</h2>
+                        <p>Descrição</p>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <div class="buttons">
+                        <h2>Titulo</h2>
+                        <p>Descrição</p>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <div class="buttons">
+                        <h2>Titulo</h2>
+                        <p>Descrição</p>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <div class="buttons">
+                        <h2>Titulo</h2>
+                        <p>Descrição</p>
+                    </div>
+                </div>
+                <div class="rectangle">
+                    <div class="buttons">
                         <p>Titulo</p>
                     </div>
                 </div>
@@ -174,12 +198,16 @@
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "block";
+            document.body.style.overflow = "hidden"; // Prevent scrolling
+
         }
 
         // Function to close the modal
         function closeModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Allow scrolling
+
         }
         // Get the login modal
         var loginModal = document.getElementById("loginModal");

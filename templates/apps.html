@@ -66,6 +66,7 @@
             
                 <!-- Search bar and platform filter buttons -->
             <div class="filter-bar">
+                <h2>Filtrar por...</h2>
                 <input type="text" placeholder="Palavras-chave...">
                 <button class="platform-btn" data-platform="android">Android</button>
                 <button class="platform-btn" data-platform="ios">iOS</button>
@@ -80,12 +81,12 @@
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
                     <div class="text">
-                        <h2>Title</h2>
+                        <h2>Sound Meter & Noise </h2>
                         <small class="small-text " style="text-align: center;">
-                            Teste
+                            android
                         </small>
                     </div>
-                    <p>Descricao</p>
+                    <p>Ferramenta gratis que permite criar questionarios, jogos educatiovs e outras atividades lúdicas.</p>
                     <button class="readmore">Ler mais</button>
                     <p class="android-icon"><i class="fab fa-android" onclick="openModal('modal1')"></i></p>
    
@@ -93,9 +94,9 @@
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
                     <div class="text">
-                        <h2>Title</h2>
+                        <h2>Kahoot</h2>
                         <small class="small-text " style="text-align: center;">
-                            Teste
+                            android
                         </small>
                     </div>
                     <p>Descricao</p>
@@ -200,8 +201,8 @@
             <span class="close" onclick="closeModal('modal1')">&times;</span>
             <h2>Está a sair do sítio REDA!</h2>
             <p id="modalDescription"></p>
-            <button id="button1" class="button">Button 1</button>
-            <button id="button2">Button 2</button>
+            <button id="button1" class="button">Compreendi</button>
+            <button id="button2">Não, obrigado!</button>
         </div>
     </div>
     <!-- Register Modal -->
@@ -235,7 +236,8 @@
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "block";
-
+            document.body.style.overflow = "hidden"; // Prevent scrolling
+    
             // Set modal description and button actions
             document.getElementById("modalDescription").textContent = "Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.Obrigado por nos visitar e volte sempre!";
             document.getElementById("button1").onclick = function() {
@@ -247,36 +249,49 @@
                 alert("Button 2 clicked");
             };
         }
-
+    
         // Function to close the modal
         function closeModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Allow scrolling
         }
+    
         // Get the login modal
         var loginModal = document.getElementById("loginModal");
-
+    
         // When the user clicks the button, open the login modal
         function openLoginModal() {
             loginModal.style.display = "block";
         }
-
+    
         // When the user clicks on <span> (x), close the login modal
         function closeLoginModal() {
             loginModal.style.display = "none";
         }
-        // Get the login modal
+    
+        // Get the register modal
         var RegisterModal = document.getElementById("RegisterModal");
-
-        // When the user clicks the button, open the login modal
+    
+        // When the user clicks the button, open the register modal
         function openRegisterModal() {
             RegisterModal.style.display = "block";
         }
-
-        // When the user clicks on <span> (x), close the login modal
+    
+        // When the user clicks on <span> (x), close the register modal
         function closeRegisterModal() {
             RegisterModal.style.display = "none";
         }
+    
+        // Close the modal if the user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == loginModal || event.target == RegisterModal) {
+                closeModal("loginModal");
+                closeModal("RegisterModal");
+            }
+        };
     </script>
+    
+    
 </body>
 </html>
