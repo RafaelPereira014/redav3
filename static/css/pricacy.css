@@ -1,0 +1,9 @@
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+.container h2 {
+    text-align: left;
+    font-size: 18px;
+}

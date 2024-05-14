@@ -54,6 +54,20 @@ def novo_recurso2():
 def about():
     return render_template('sobre.html')
 
+# privacy page 
+@app.route('/politica-privacidade')
+def privacy():
+    return render_template('privacy.html')
+
+# help page
+
+@app.route('/ajuda')
+def help():
+    return render_template('help.html')
+
+
+
+
 ########---------------------------------_################
 # Admin Page
 @app.route('/dashboard')
