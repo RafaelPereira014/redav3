@@ -103,11 +103,28 @@
                 <h2>Conceitos:</h2>
                 <script src="{{ url_for('static', filename='js/scripts/new_resource/conceitos.js') }}"></script>
             </div>
+
+            <div class="input-group-conceitos ">
+                <h2>Outros conceitos:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/conceitos.js') }}"></script>
+            </div>
+
+            <div class="input-group-descricao-proposta required">
+                <h2>Descrição da proposta de operacionalização:</h2>
+    
+                <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
+            </div>
            
             <div class="input-group-helpfile">
                 <h2>Documento de apoio:</h2>
                 <input type="file" id="ficheiro" name="ficheiro" >
                
+                <!-- Add more radio options as needed -->
+            </div>
+            <div class="input-group-destinatario">
+                <h2>Destinatarios:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
+
                 <!-- Add more radio options as needed -->
             </div>
             <small class="small-text">

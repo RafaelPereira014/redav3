@@ -6,6 +6,7 @@
     <title>Detalhes de recurso - REDA</title>
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
     <link rel="stylesheet" href="{{ url_for('static', filename='css/resources_details.css') }}">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
@@ -197,10 +198,60 @@
           <button onclick="copyLink()">Copy Link</button>
         </div>
       </div>
-      
-      <!-- Add a button with an onclick event to open the modal -->
 
-    <!-- Footer -->
+    <div class="related">
+        <h2>Outros recursos relacionados</h2>
+            <div class="rectangles">
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <span class="image-meta">Multidisciplinar</span>
+
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-flag"></i>
+                    <h2>Diferença entre clima e estado de tempo</h2>
+                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
+                    <div class="buttons">
+                        
+                        <a href="/resources/details"><button>Ver recurso</button></a>
+                        
+                    </div>
+                    <p>21 de Março 2024</p>
+                    <div class="rating">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <p>Simulação</p>
+                </div>
+                <div class="rectangle">
+                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                    <span class="image-meta">Geografia</span>
+
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-flag"></i>
+                    <h2>Diferença entre clima e estado de tempo</h2>
+                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
+                    <div class="buttons">
+                        <a href="/resources/details"><button>Ver recurso</button></a>
+                        
+                    </div>
+                    <p>21 de Março 2024</p>
+                    <div class="rating">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <p>Simulação</p>
+                    
+                </div>
+            </div>
+
+    </div>
+     <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; 2024 Your Company Name. All rights reserved.</p>
