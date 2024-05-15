@@ -7,6 +7,22 @@ body {
     background-color: #F0F4F8;
     color: #333;
 }
+
+.resource-info button {
+    background-color: #aec03f; /* Button background color */
+    color: #fff; /* Button text color */
+    padding: 10px 20px; /* Padding for the button */
+    border: none; /* Remove button border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Add transition for hover effect */
+    margin-bottom: 5px;
+}
+
+.resource-info button:hover {
+    background-color: #899631; /* Change background color on hover */
+}
+
 .logo-reda img {
     width: 20%;
     height: 10px;
@@ -293,7 +309,7 @@ nav ul li a:hover {
 }
 
 .comment-form button:hover {
-    background-color: #2D728F;
+    background-color: #899631;
 }
 
 .comment-list {
@@ -456,10 +472,6 @@ footer {
     color:#aec03f; /* Change icon color when clicked */
     background-color: rgba(174, 192, 63, 0.2); /* Add background color when clicked */
 }
-
-
-
-
 .rectangle .buttons {
     display: flex;
     flex-direction: column;
@@ -507,4 +519,13 @@ footer {
     margin-bottom: 5px;
     margin-top: 10px;
     text-align: center;
+}
+
+.button-container {
+    display: flex;
+}
+
+.button-container button {
+    flex: 1; /* Adjusted button width */
+    margin-right: 5px; /* Adjusted margin between buttons */
 }

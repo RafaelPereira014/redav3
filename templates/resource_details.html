@@ -102,6 +102,7 @@
                     
                     </div>
                     <div class="ficha-tecnica">
+                        
                         <h3>Ficha Técnica</h3>
                         <div>
                             <span>Idioma:</span>
@@ -118,42 +119,89 @@
                     </div>
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
-                        <div>
-                            <span>Autor:</span>
-                            <span>English</span>
+
+                        <div class="button-container">
+                            <button onclick="showProposta(1)">Proposta 1</button>
+                            <button onclick="showProposta(2)">Proposta 2</button>
                         </div>
-                        <div>
-                            <span>Organização:</span>
-                            <span>Educational</span>
+                        <div id="proposta1" style="display: block;">
+                            <div>
+                                <span>Autor:</span>
+                                <span>English</span>
+                            </div>
+                            <div>
+                                <span>Organização:</span>
+                                <span>Educational</span>
+                            </div>
+                            <div>
+                                <span>Criado a:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Anos de escolaridade:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Disciplinas:</span>
+                                <span>kmasdkd,ashdbas,ahsdh,hasd,.hasd,ahsd,hnas</span>
+                            </div>
+                            <div>
+                                <span>Dominios:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Subdominios:</span>
+                                <span>kmasdkd</span>
+                            </div><div>
+                                <span>Conceitos:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Proposta de operacionalização:</span>
+                                <span>Esta é uma proposta de operacionalização</span>
+                            </div>
                         </div>
-                        <div>
-                            <span>Criado a:</span>
-                            <span>kmasdkd</span>
+                        <div id="proposta2" style="display: none;">
+                            <div>
+                                <span>Autor:</span>
+                                <span>LALALALALALLALA</span>
+                            </div>
+                            <div>
+                                <span>Organização:</span>
+                                <span>KAMSDKMADSKMSD</span>
+                            </div>
+                            <div>
+                                <span>Criado a:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Anos de escolaridade:</span>
+                                <span>01293I123M</span>
+                            </div>
+                            <div>
+                                <span>Disciplinas:</span>
+                                <span>kmasdkd,ashdbas,ahsdh,hasd,.hasd,ahsd,hnas</span>
+                            </div>
+                            <div>
+                                <span>Dominios:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Subdominios:</span>
+                                <span>kmasdkd</span>
+                            </div><div>
+                                <span>Conceitos:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                            <div>
+                                <span>Proposta de operacionalização:</span>
+                                <span>Esta é uma proposta de operacionalização</span>
+                            </div>
+
                         </div>
-                        <div>
-                            <span>Anos de escolaridade:</span>
-                            <span>kmasdkd</span>
-                        </div>
-                        <div>
-                            <span>Disciplinas:</span>
-                            <span>kmasdkd,ashdbas,ahsdh,hasd,.hasd,ahsd,hnas</span>
-                        </div>
-                        <div>
-                            <span>Dominios:</span>
-                            <span>kmasdkd</span>
-                        </div>
-                        <div>
-                            <span>Subdominios:</span>
-                            <span>kmasdkd</span>
-                        </div><div>
-                            <span>Conceitos:</span>
-                            <span>kmasdkd</span>
-                        </div>
-                        <div>
-                            <span>Proposta de operacionalização:</span>
-                            <span>Esta é uma proposta de operacionalização</span>
-                        </div>
+                       
                     </div>
+                    
                 </div>
                 
                 <div class="comments">
@@ -274,8 +322,8 @@
             </div>
             
             <div class="additional-images">
-                <img src="static/images/dre_transparent.png" alt="Image 1">
-                <img src="static/images/gov_acores_transparent.png" alt="Image 2">
+                <img src="/static/images/dre_transparent.png" alt="Image 1">
+                <img src="/static/images/gov_acores_transparent.png" alt="Image 2">
             </div>
         </div>
     </footer>
@@ -302,6 +350,16 @@
             document.execCommand("Copiar");
             alert("Link copiado para o clipboard!");
         }
+        function showProposta(num) {
+            if (num === 1) {
+                document.getElementById('proposta1').style.display = 'block';
+                document.getElementById('proposta2').style.display = 'none';
+            } else if (num === 2) {
+                document.getElementById('proposta1').style.display = 'none';
+                document.getElementById('proposta2').style.display = 'block';
+            }
+        }
+        
     </script>
 </body>
 </html>
