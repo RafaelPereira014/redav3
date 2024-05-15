@@ -13,6 +13,31 @@ body {
     margin: auto;
 }
 
+.carousel {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  
+.carousel-inner {
+display: flex;
+transition: transform 0.5s ease-in-out; /* Ensure this transition property is present */
+}
+
+.carousel-item {
+flex: 0 0 100%;
+}
+
+.prev {
+left: 0;
+}
+
+.next {
+right: 0;
+}
+  
+
 
 
 .container h2 {
@@ -46,7 +71,7 @@ header h1 {
 nav ul {
     list-style-type: none;
     padding: 0px;
-    margin: 0;
+    margin-top: -60px;
     text-align: center;
 }
 
@@ -64,60 +89,7 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: underline;
-}
-.carousel {
-    text-align: center;
-    margin: 20px auto; /* Center the carousel horizontally */
-    width: 80%; /* Set the width of the carousel */
-}
-
-.carousel-inner {
-    display: flex;
-    width: 100%;
-    overflow: hidden;
-    border-radius: 10px; /* Add rounded corners to the carousel */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-}
-
-.carousel-item {
-    flex: 0 0 100%; /* Ensure each item takes up the full width */
-}
-
-.carousel-item img {
-    width: 100%; /* Ensure images fill the carousel item width */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: cover; /* Cover the entire area of the carousel item */
-    border-radius: 10px; /* Add rounded corners to the images */
-}
-
-.carousel-control-prev,
-.carousel-control-next {
-    font-size: 20px; /* Increase the font size of the carousel control buttons */
-    padding: 10px; /* Adjust the padding of the carousel control buttons */
-    background-color: rgba(0, 0, 0, 0.3); /* Add a semi-transparent background */
-    border: none; /* Remove border */
-    border-radius: 60%; /* Make the control buttons circular */
-    color: white; /* Set the color of the control button icons */
-    align-items: center;
-}
-
-.carousel-control-prev {
-    left: 40px; /* Adjust the position of the previous button */
-}
-
-.carousel-control-next {
-    right: 20px; /* Adjust the position of the next button */
-}
-
-.carousel-item.active {
-    display: flex;
-    justify-content: center; /* Center the active item horizontally */
-}
-
-.carousel-item p {
-    font-style: italic;
-    text-align: center;
-    color: #fffcfc; /* Adjust the color of the text */
+    color: #aec03f;
 }
 
 .rectangles {

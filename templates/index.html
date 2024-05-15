@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login-form.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-9Lf9+4Mjcjy5uDZ4AdK6GhpOj76lwhVbl2+uYvs1zLoXgRUeGNCZXz0aTl+1S9NpBUrKb9ICbpZMWZ3BhHrT7w==" crossorigin="anonymous" />
@@ -22,7 +23,7 @@
             background-image: url('static/images/home-bg.jpg'); /* Replace 'path_to_your_image.jpg' with the path to your image */
             background-size: cover;
             background-position: center;
-            height: 200px; /* Adjust the height as needed */
+            height: 250px; /* Adjust the height as needed */
             position: relative;
         }
         .checked {
@@ -54,6 +55,32 @@
                     <li><a href="/novorecurso">Novo Recurso</a></li>
                 </ul>
             </nav>
+
+            <div class="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="carousel-caption">
+                      <h3>Os simbolos Europeus</h3>
+                      <p>Sitio da Internet sobre os simbolos europeus: hino europeu, dia da Europa, bandeira europeia e divisa da Uniao Europeia</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-caption">
+                      <h3>Title 2</h3>
+                      <p>Description 2</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-caption">
+                      <h3>Title 3</h3>
+                      <p>Description 3</p>
+                    </div>
+                  </div>
+                </div>
+                <button class="prev" onclick="moveSlide(-1)">❮</button>
+                <button class="next" onclick="moveSlide(1)">❯</button>
+              </div>
+              
         
             <nav class="top-nav">
                 <ul>
@@ -63,6 +90,8 @@
                 </ul>
             </nav>
         </div>
+
+        
     </header>
 
     <!-- Main Content -->
@@ -242,6 +271,7 @@
     
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
     <script>
         document.querySelectorAll('.rectangle i').forEach(icon => {
             icon.addEventListener('click', () => {
@@ -274,20 +304,6 @@
                 loginModal.style.display = "none";
             }
         }
-        const slides = document.querySelectorAll('.testimonial-slide');
-
-        let currentIndex = 0;
-
-        function nextSlide() {
-            slides[currentIndex].style.transform = 'translateX(-100%)';
-            currentIndex = (currentIndex + 1) % slides.length;
-            slides[currentIndex].style.transform = 'translateX(0)';
-        }
-
-        setInterval(nextSlide, 4000); // Change slide every 4 seconds
-
-
-        
     </script>
 </body>
 </html>

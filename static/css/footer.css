@@ -19,13 +19,13 @@
 }
 
 .footer-nav a {
-    color: #333;
+    color: #ffffff;
     text-decoration: none;
     margin-right: 20px;
 }
 
 .footer-nav a:hover {
-    color: #666;
+    text-decoration: underline;
 }
 
 /* Social icons */
@@ -35,13 +35,13 @@
 }
 
 .social-icons a {
-    margin-right: 10px;
-    color: #333;
-    font-size: 20px;
+    margin-right: 30px;
+    color: #fdfdfd;
+    font-size: 35px;
 }
 
 .social-icons a:hover {
-    color: #4267B2; /* Change color on hover */
+    font-size: 300%;
 }
 
 /* Additional images */

@@ -13,7 +13,6 @@ body {
     color: #fff; /* Button text color */
     padding: 10px 20px; /* Padding for the button */
     border: none; /* Remove button border */
-    border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Change cursor to pointer on hover */
     transition: background-color 0.3s ease; /* Add transition for hover effect */
     margin-bottom: 5px;
@@ -26,7 +25,6 @@ body {
 .logo-reda img {
     width: 20%;
     height: 10px;
-    border-radius: 5px;
     margin-bottom: 5px;
 }
 
@@ -44,7 +42,6 @@ header .container img {
     color: white; /* Change the text color */
     padding: 10px 20px; /* Adjust the padding */
     border: none; /* Remove the border */
-    border-radius: 5px; /* Add border radius for rounded corners */
     margin-right: 10px; /* Adjust the right margin between buttons */
     cursor: pointer; /* Add cursor pointer on hover */
     margin-top: 10px;
@@ -54,7 +51,6 @@ header .container img {
     background-color: #fff; /* Change the background color */
     color: #aec03f; /* Change the text color */
     padding: 10px 20px; /* Adjust the padding */
-    border-radius: 5px; /* Add border radius for rounded corners */
     margin-right: 10px; /* Adjust the right margin between buttons */
     cursor: pointer; /* Add cursor pointer on hover */
     margin-top: 10px;
@@ -192,14 +188,12 @@ nav ul li a:hover {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 30px;
-    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .resource-info img {
     width: 100%;
     height: auto;
-    border-radius: 10px;
     margin-bottom: 20px;
 }
 
@@ -236,7 +230,6 @@ nav ul li a:hover {
     padding: 20px;
     margin-top: 10px;
     margin-bottom: 30px;
-    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -260,7 +253,6 @@ nav ul li a:hover {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 30px;
-    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -293,7 +285,6 @@ nav ul li a:hover {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
-    border-radius: 5px;
     border: 1px solid #ccc;
     resize: none;
 }
@@ -303,7 +294,6 @@ nav ul li a:hover {
     color: #fff;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
     cursor: pointer;
     margin-bottom: 10px;
 }
@@ -321,7 +311,6 @@ nav ul li a:hover {
     margin-bottom: 20px;
     padding: 10px;
     background-color: #fff;
-    border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
