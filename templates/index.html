@@ -8,8 +8,11 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login-form.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-9Lf9+4Mjcjy5uDZ4AdK6GhpOj76lwhVbl2+uYvs1zLoXgRUeGNCZXz0aTl+1S9NpBUrKb9ICbpZMWZ3BhHrT7w==" crossorigin="anonymous" />
+
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
 
@@ -210,18 +213,32 @@
     </div>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            
-            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
-            <div class="footer-buttons">
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-nav">
                 <a href="/sobre">Sobre</a>
                 <a href="/ajuda">Ajuda</a>
                 <a href="#">Ficha Técnica</a>
                 <a href="/politica-privacidade">Política de Privacidade</a>
+                <button>Click me </button>
+
+            </div>
+            
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+            
+            <div class="additional-images">
+                <img src="static/images/dre_transparent.png" alt="Image 1">
+                <img src="static/images/gov_acores_transparent.png" alt="Image 2">
             </div>
         </div>
     </footer>
+    
     
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>

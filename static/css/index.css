@@ -231,27 +231,6 @@ nav ul li a:hover {
     text-align: center;
 }
 
-footer {
-    background-color: #aec03f;
-    color: #fff;
-    padding: 10px 0;
-    text-align: center;
-    margin-top: 20px;
-}
-
-.footer-buttons a {
-    display: inline-block;
-    margin-right: 20px;
-    padding: 10px 20px;
-    text-decoration: none;
-    color: #fff;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.footer-buttons a:hover {
-    text-decoration: underline;
-}
 
 
 
@@ -375,6 +354,8 @@ button[type=submit]:hover {
     width: auto;
     height: 100%;
 }
+
+
 
 
 

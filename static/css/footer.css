@@ -1,0 +1,62 @@
+/* Styles for the footer */
+.footer {
+    background-color:#aec03f;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+/* Container for the footer content */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+}
+
+/* Navigation links */
+.footer-nav {
+    margin-bottom: 10px;
+}
+
+.footer-nav a {
+    color: #333;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+.footer-nav a:hover {
+    color: #666;
+}
+
+/* Social icons */
+.social-icons {
+    display: flex;
+    align-items: center;
+}
+
+.social-icons a {
+    margin-right: 10px;
+    color: #333;
+    font-size: 20px;
+}
+
+.social-icons a:hover {
+    color: #4267B2; /* Change color on hover */
+}
+
+/* Additional images */
+.additional-images {
+    display: flex;
+    align-items: center;
+}
+
+.additional-images img {
+    width: 100px; /* Increase the width of the images */
+    height: 100px; /* Increase the height of the images */
+    margin-right: 15px; /* Add some space between images */
+    transition: transform 0.3s ease; /* Add transition for hover effect */
+}
+
+.additional-images img:hover {
+    transform: scale(1.1); /* Scale up the image on hover */
+}

@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+
 
     <title>Novo/Editar recurso - REDA</title>
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
@@ -138,9 +140,29 @@
         </div>
     </main>
      <!-- Footer -->
-     <footer>
-        <div class="container">
-            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-nav">
+                <a href="/sobre">Sobre</a>
+                <a href="/ajuda">Ajuda</a>
+                <a href="#">Ficha Técnica</a>
+                <a href="/politica-privacidade">Política de Privacidade</a>
+                <button>Click me </button>
+
+            </div>
+            
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+            
+            <div class="additional-images">
+                <img src="static/images/dre_transparent.png" alt="Image 1">
+                <img src="static/images/gov_acores_transparent.png" alt="Image 2">
+            </div>
         </div>
     </footer>
 </body>
