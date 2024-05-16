@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
+
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
 
@@ -99,96 +100,42 @@
                 <p>1729 resultados </p>
                 <button-pag href="/novorecurso"> + Novo recurso </button-pag>
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search...">
-                    <button onclick="searchResources()">Search</button>
+                    <input type="text" placeholder="Palavras-chave...">
+                    <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
+                    <button class="clear-button"> Limpar Filtros </button>
                 </div>
-                <div class="rectangles">
-                    <div class="rectangle">
-                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                        <span class="image-meta">Geografia</span>
-    
-                        <i class="fas fa-heart"></i>
+                <div class="resource-card">
+                    <h3>"C'est ma terre", de Christophe Maé"
+                    </h3>
+                    <p>Criado a 7 maio 2024 18:00</p>
+                    <p>Esta canção poderá ser útil para introdução,de temas relacionados com o ambiente e a ecologia ou para consolidação ou revisão de aprendizagens que sobre eles incidam.</p>
+                    <div class="icon-bar">
+                        <!-- Flag Icon -->
                         <i class="fas fa-flag"></i>
-                        <h2>Diferença entre clima e estado de tempo</h2>
-                        <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                        <div class="buttons">
-                            <a href="/resources/details"><button>Ver recurso</button></a>
-                            <button>Editar recurso</button>
-                            <button>Adicionar propostas de operacionalização</button>
-                        </div>
-                        <p>21 de Março 2024</p>
-                        <div class="rating">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
-                        <p>Simulação</p>
-                        
-                    </div>
-                    <div class="rectangle">
-                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                        <span class="image-meta">Geografia</span>
-    
+                        <!-- Heart Icon -->
                         <i class="fas fa-heart"></i>
-                        <i class="fas fa-flag"></i>
-                        <h2>Diferença entre clima e estado de tempo</h2>
-                        <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                        <div class="buttons">
-                            <a href="/resources/details"><button>Ver recurso</button></a>
-                            <button>Editar recurso</button>
-                            <button>Adicionar propostas de operacionalização</button>
-                        </div>
-                        <p>21 de Março 2024</p>
-                        <div class="rating">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
-                        <p>Simulação</p>
-                        
                     </div>
-                    <div class="rectangle">
-                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                        <span class="image-meta">Geografia</span>
-    
-                        <i class="fas fa-heart"></i>
-                        <i class="fas fa-flag"></i>
-                        <h2>Diferença entre clima e estado de tempo</h2>
-                        <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                        <div class="buttons">
-                            <a href="/resources/details"><button>Ver recurso</button></a>
-                            <button>Editar recurso</button>
-                            <button>Adicionar propostas de operacionalização</button>
-                        </div>
-                        <p>21 de Março 2024</p>
-                        <div class="rating">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
-                        <p>Simulação</p>
-                        
-                    </div>
-                    <div class="rectangle">
-                        <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
-                        <h2>Titulo</h2>
-                        <p>Descricao</p>
-                        <div class="buttons">
-                            <a href="/resources/details"><button>Ver recurso</button></a>
-                            <button>Editar recurso</button>
-                            <button>Adicionar propostas de operacionalização</button>
-                        </div>
-                        <p>21 de Março 2024</p>
-                        <p>Simulação</p>
-                    </div>
-                    
+                    <button>Ver Recurso </button>
+                    <button class="edit"> Editar </button>
+                    <button class="eliminar"> Eliminar </button>
                 </div>
+
+                <div class="resource-card">
+                    <h3>Questionário sobre a União Europeia
+                    </h3>
+                    <p>Criado a 7 maio 2024 18:00</p>
+                    <p>Questionário sobre alguns dos aspetos mais significativos da União Europeia. Estão disponíveis dois níveis de dificuldade: principiante e especialista.</p>
+                    <div class="icon-bar">
+                        <!-- Flag Icon -->
+                        <i class="fas fa-flag"></i>
+                        <!-- Heart Icon -->
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <button>Ver Recurso </button>
+                    <button class="edit"> Editar </button>
+                    <button class="eliminar"> Eliminar </button>
+                </div>
+                
                 
                 <div class="pagination">
                     <a href="#" class="active">1</a>

@@ -7,6 +7,18 @@ body {
     background-color: #F0F4F8;
     color: #333;
 }
+
+.header-governo {
+    text-align: center; /* Center-align the content */
+    background-color: #dfdddd;
+    height: 40px;
+    font-size: 12px;
+}
+
+.header-governo img {
+    width: 70px; /* Adjust the width of the image as needed */
+    vertical-align: middle; /* Align the image vertically with the text */
+}
 .header-resource {
     margin-bottom: 10px;
     padding: 10px;
