@@ -178,10 +178,7 @@ nav ul li a {
     text-decoration: underline;
 }
 
-.filter-bar {
-    margin-bottom: 20px; /* Add margin to separate from rectangles */
-    text-align: center;
-}
+
 
 .platform-btn {
     background-color: #83ae03;
@@ -206,6 +203,53 @@ nav ul li a {
 }
 .android-icon {
     text-align: center;
+}
+
+.filter-bar {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-bar h2 {
+    margin-bottom: 10px;
+    color: #333;
+    text-align: left;
+}
+
+.filter-bar input[type="text"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.filter-bar button.search-button {
+    background-color: #aec03f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-bar button.clear-button {
+    background-color: #aec03f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-bar button.search-button:hover {
+    background-color: #899631;
+}
+.filter-bar button.clear-button:hover {
+    background-color: #899631;
+}
+
+.filter-bar button.search-button i {
+    margin-right: 5px;
 }
 
 

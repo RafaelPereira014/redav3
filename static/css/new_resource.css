@@ -9,6 +9,23 @@ body {
     padding: 0;
     color: #333;
 }
+.top-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 45px;
+}
+.header-governo {
+    text-align: center; /* Center-align the content */
+    background-color: #dfdddd;
+    height: 40px;
+    font-size: 12px;
+}
+
+.header-governo img {
+    width: 70px; /* Adjust the width of the image as needed */
+    vertical-align: middle; /* Align the image vertically with the text */
+}
 
 .container {
     width: 90%;

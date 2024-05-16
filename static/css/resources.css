@@ -5,6 +5,14 @@ nav ul li a {
     font-size: 18px;
 }
 
+.top-nav {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 45px;
+}
+
+
 .pagination {
     margin-top: 20px;
     display: flex;

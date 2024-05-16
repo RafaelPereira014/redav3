@@ -203,14 +203,65 @@ nav ul li a {
 }
 
 .filter-bar {
-    margin-bottom: 20px; /* Add margin to separate from rectangles */
-    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.filter-bar h2 {
+    margin-bottom: 10px;
+    color: #333;
+    text-align: left;
+}
+
+.filter-bar input[type="text"] {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+}
+
+.filter-bar button.search-button {
+    background-color: #aec03f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-bar button.clear-button {
+    background-color: #aec03f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.filter-bar button.search-button:hover {
+    background-color: #899631;
+}
+.filter-bar button.clear-button:hover {
+    background-color: #899631;
+}
+
+.filter-bar button.search-button i {
+    margin-right: 5px;
 }
 
 .platform-btn {
+    background-color: none;
+    color: #83ae03;
+    border: 1px solid #83ae03;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.platform-btn:hover{
     background-color: #83ae03;
     color: #fff;
-    border: 1px solid #83ae03;
 }
 
 /* Style for the active button */

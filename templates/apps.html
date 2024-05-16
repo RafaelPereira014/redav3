@@ -29,6 +29,10 @@
 </head>
 <body>
     <!-- Header -->
+    <div class="header-governo">
+        <img src="static/images/gov_acores_transparent.png" alt="Governo dos Açores">
+        <span> Esta é uma presença oficial do <a href="https://portal.azores.gov.pt">Governo dos Açores</a> </span>
+    </div>
     <header>
         <div class="container">
             <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
@@ -68,13 +72,18 @@
             <p>Início > Aplicações</p>
             
                 <!-- Search bar and platform filter buttons -->
+            <button class="platform-btn" data-platform="android">Android</button>
+            <button class="platform-btn" data-platform="ios">iOS</button>
+            <button class="platform-btn" data-platform="windows">Windows</button>
+            
             <div class="filter-bar">
                 <h2>Filtrar por...</h2>
                 <input type="text" placeholder="Palavras-chave...">
-                <button class="platform-btn" data-platform="android">Android</button>
-                <button class="platform-btn" data-platform="ios">iOS</button>
-                <button class="platform-btn" data-platform="windows">Windows</button>
+                <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
+                <button class="clear-button"> Limpar Filtros </button>
             </div>
+
+            
 
             <hr></hr>
 
