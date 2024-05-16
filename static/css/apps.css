@@ -13,14 +13,21 @@
 }
 
 .container2 p {
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Open Sans", sans-serif;
     display: block;
+    margin: 0 0 10px;
     margin-block-start: 1em;
+    line-height: 1.4285;
     margin-block-end: 1em;
     unicode-bidi: isolate;
-    
+    overflow: hidden;
+    max-height: 2em; /* Adjust the maximum height to show */
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
+
 
 .rectangle {
     position: relative;
