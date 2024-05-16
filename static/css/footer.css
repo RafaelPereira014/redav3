@@ -11,6 +11,15 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap; /* Allow content to wrap on smaller screens */
+    text-align: center;
+}
+
+.footer-container span {
+    margin-top: 10px; /* Adjust the top margin as needed */
+    text-align: center;
+    font-size: 12px;
+    align-items: center;
+    color: white;
 }
 
 /* Navigation links */
@@ -23,6 +32,16 @@
     text-decoration: none;
     margin-right: 20px;
 }
+.footer-nav button {
+    color: #ffffff;
+    background-color: #aec03f;
+    cursor: pointer;
+    font-size: 16px;
+    border: 1px solid #ffffff; /* Add a 1px solid white border */
+    padding: 10px 20px; /* Increase padding to make the button bigger */
+
+}
+
 
 .footer-nav a:hover {
     text-decoration: underline;

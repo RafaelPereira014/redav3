@@ -40,6 +40,10 @@ right: 0;
 
 
 
+.container h1 {
+    text-align: center;
+    font-size: 25px;
+}
 .container h2 {
     text-align: center;
     font-size: 16px;

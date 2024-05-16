@@ -65,6 +65,13 @@ def privacy():
 def help():
     return render_template('help.html')
 
+# fale connosco
+
+@app.route('/faleconnosco')
+def speakwus():
+    return render_template('faleconnosco.html')
+
+
 
 
 
