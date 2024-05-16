@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/apps.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-form.css') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -179,21 +180,24 @@
         </div>
     </main>
 
-    <!-- Login Modal -->
+   <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
+            <i class="fas fa-user user-icon"></i>
             <h2>Login</h2>
             <form>
-                <div class="input-group">
+                <div class="login-input">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>
                 </div>
-                <div class="input-group">
+                <div class="login-input">
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit">Login</button>
+                <div class="button-container">
+                    <button type="submit">Login</button>
+                </div>
             </form>
         </div>
     </div>
