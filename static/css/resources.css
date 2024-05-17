@@ -37,6 +37,20 @@ nav ul li a {
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
+
+button.resource {
+    padding: 10px 20px; /* Adjust padding for the button */
+    background-color: #83ae03; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    font-size: 14px; /* Adjust font size */
+    margin-bottom: 10px; /* Space below the button */
+}
+
+button.resource:hover {
+    background-color: #6f9802; /* Button background color on hover */
+}
 .search-container {
     display: flex;
     align-items: center;
@@ -70,28 +84,25 @@ nav ul li a {
     background-color: #a0af3b;
 }
 #advancedSearchOptions {
-    margin-top: 10px; /* Adjust spacing between search bar and advanced search options */
-    display: none; /* Initially hide advanced search options */
+    margin-top: 15px; /* Adjust spacing between search bar and advanced search options */
+    display: inline-block; /* Use flexbox for alignment */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
+    gap: 0px; /* Add space between items */
+    font-size: 10px;
+    
 }
 
 #advancedSearchOptions label {
-    display: inline-block; /* Display labels horizontally */
-    margin-right: 10px; /* Adjust spacing between labels */
-    font-weight: bold;
     color: black;
+    display: inline-block;
 }
 
-#advancedSearchOptions select, 
+#advancedSearchOptions select,
 #advancedSearchOptions input[type="text"] {
-    margin-bottom: 10px;
-    width: calc(80% - 10px); /* Adjust width of input elements */
+    width: calc(20% - 10px); /* Adjust width of input elements */
     padding: 8px; /* Adjust padding for input elements */
     border: 1px solid #ccc; /* Add border to input elements */
-    border-radius: 5px; /* Add border radius to input elements */
-}
-
-#advancedSearchOptions select {
-    width: calc(20% - 10px); /* Adjust width of select dropdowns */
+    margin-bottom: 10px; /* Space below input elements */
 }
 
 #advancedSearchOptions button {
@@ -102,11 +113,26 @@ nav ul li a {
     border-radius: 5px; /* Add border radius to button */
     cursor: pointer; /* Change cursor to pointer on hover */
     margin-top: 10px; /* Adjust spacing between button and input elements */
+    align-self: flex-end; /* Align button to the bottom of the container */
 }
 
 #advancedSearchOptions button:hover {
     background-color: #6f9802; /* Button background color on hover */
 }
+#advancedSearchBtn {
+    border: none;
+    background: none;
+    color: rgb(0, 0, 0); /* Change color as needed */
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 1000px;
+}
+
+#advancedSearchBtn:hover {
+    color:#a0af3b; /* Change color on hover if needed */
+}
+
 .top-nav {
     position: absolute;
     top: 0;

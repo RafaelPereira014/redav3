@@ -62,11 +62,13 @@
             <div class="search-container">
                 <input type="text" placeholder="Pesquisar..." name="search">
                 <button type="submit">Pesquisar</button>
-                <button id="advancedSearchBtn" onclick="toggleAdvancedSearch()">Pesquisa Avançada</button>
-
             </div>
+            <button id="advancedSearchBtn" onclick="toggleAdvancedSearch()">Pesquisa Avançada <i class="fas fa-caret-down"></i></button>
+
             <!-- Advanced search options -->
             <div id="advancedSearchOptions" style="display: none;">
+                <hr></hr>
+
                 <!-- Add your advanced search options here -->
                 <label for="years">Anos:</label>
                 <select id="years">
@@ -101,11 +103,6 @@
                 <!-- Add more advanced search fields as needed -->
                 <button>Limpar pesquisa</button>
             </div>
-            
-           
-           
-
-           
         </div>
     </header>
 
@@ -113,8 +110,10 @@
     <main>
         <div class="container">
             <p>Início > Aplicações</p>
-            <h1>2489 Resultados</h1>
-            <button class"resource"> Introduzir recurso</button>
+            <h3>2489 Resultados</h2>
+            <a href="/novorecurso" class="resource-link">
+                <button class="resource"><i class="fa fa-plus"></i> Introduzir recurso</button>
+            </a>
             <div class="order-resources">
                 <label for="order">Ordenar por:</label>
                 <select id="order">
