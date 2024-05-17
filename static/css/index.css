@@ -84,6 +84,9 @@ header h1 {
 
 
 
+
+
+
 nav ul {
     list-style-type: none;
     padding: 0px;
@@ -94,6 +97,22 @@ nav ul {
 nav ul li {
     display: inline;
     margin-right: 20px;
+}
+
+nav ul li button {
+    background: none; /* Remove default background */
+    border: none; /* Remove default border */
+    color: #ffffff; /* Match text color */
+    font-size: 18px; /* Match font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5%;
+    border-color: #a0af3b;
+}
+
+/* Adjust button hover effect for navigation */
+nav ul li button:hover {
+    text-decoration: underline; /* Underline text on hover */
+    color: #a0af3b; /* Change color on hover if needed */
 }
 
 nav ul li a {
@@ -327,7 +346,7 @@ button[type=submit]:hover {
 
 .top-nav ul li {
     display:inline-flex;
-    margin-left: 20px; /* Adjust spacing between buttons */
+    margin-left: 0px; /* Adjust spacing between buttons */
 }
 
 .top-nav ul li a {
