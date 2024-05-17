@@ -149,7 +149,7 @@ button.resource:hover {
     position: absolute;
     top: 0;
     right: 0;
-    margin-top: 10px;
+    margin-top: 45px;
 }
 
 .top-nav ul {
@@ -171,6 +171,7 @@ button.resource:hover {
 
 .top-nav ul li a:hover {
     text-decoration: underline;
+    color: #a0af3b;
 }
 .order-resources{
     text-align: right;
