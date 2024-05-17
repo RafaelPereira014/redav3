@@ -11,6 +11,7 @@
 
     <title>Novo/Editar recurso - REDA</title>
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    
 
     <!-- Link to TinyMCE CDN -->
     <script src="https://cdn.tiny.cloud/1/hcsdmgk5ojfti5cengfoxv1zfkb2t21ei6ue2obbe85k8lst/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
@@ -56,8 +57,9 @@
     </div>
     <header>
         <div class="container">
-            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </a>
             <!-- second div , above the header div with background image-->
             
             <nav>
@@ -65,10 +67,7 @@
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/apps">Aplicações</a></li>
                     <li><a href="/tools">Ferramentas</a></li>
-                    <li><a href="/resources">Recursos</a></li>
-                    <li><a href="/myaccount">Minha conta</a></li>
-                    <li><a href="/novorecurso">Novo Recurso</a></li>
-
+                    
                 </ul>
             </nav>
             <nav class="top-nav">

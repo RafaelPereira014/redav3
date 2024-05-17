@@ -1,9 +1,20 @@
 
+
+nav ul li button {
+    background: none; /* Remove default background */
+    border: none; /* Remove default border */
+    color: #000000; /* Match text color */
+    font-size: 18px; /* Match font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5%;
+    border-color: #a0af3b;
+}
 nav ul li a {
     text-decoration: none;
     color: #231616;
     font-size: 18px;
 }
+
 
 .top-nav {
     position: absolute;
@@ -18,6 +29,7 @@ nav ul li a {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .pagination a {

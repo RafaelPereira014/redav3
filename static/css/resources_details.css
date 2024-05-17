@@ -109,10 +109,25 @@ header h1 {
     font-size: 24px;
 }
 
+
+nav ul li button {
+    background: none; /* Remove default background */
+    border: none; /* Remove default border */
+    color: #000000; /* Match text color */
+    font-size: 18px; /* Match font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5%;
+    border-color: #a0af3b;
+}
+nav ul li button:hover {
+    text-decoration: underline;
+    color: #a0af3b;
+}
+
 nav ul {
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin-top: -40px;
     text-align: center;
 }
 
@@ -129,12 +144,13 @@ nav ul li a {
 
 nav ul li a:hover {
     text-decoration: underline;
+    color: #a0af3b;
 }
 .top-nav {
     position: absolute;
     top: 0;
     right: 0;
-    margin-top: 10px;
+    margin-top: 45px;
 }
 
 .top-nav ul {
@@ -156,8 +172,8 @@ nav ul li a:hover {
 
 .top-nav ul li a:hover {
     text-decoration: underline;
+    color: #a0af3b;
 }
-
 .carousel {
     position: relative;
 }

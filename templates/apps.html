@@ -24,6 +24,27 @@
             height: 250px; /* Adjust the height as needed */
             position: relative;
         }
+
+        .platform-btn {
+            background-color: none;
+            color: #83ae03;
+            border: 1px solid #83ae03;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        
+        .platform-btn:hover{
+            background-color: #83ae03;
+            color: #fff;
+        }
+        
+        /* Style for the active button */
+        .platform-btn.active {
+            background-color: #aec03f;
+            color: white;
+        }
     </style>
     
 </head>
@@ -35,17 +56,24 @@
     </div>
     <header>
         <div class="container">
-            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-            <!-- Search bar -->
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </a>            <!-- Search bar -->
             <nav>
                 <ul>
-                    
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/apps">Aplicações</a></li>
                     <li><a href="/tools">Ferramentas</a></li>
-                    <li><a href="/resources">Recursos</a></li>
-                    <li><a href="/myaccount">Minha conta</a></li>
-                    <li><a href="/novorecurso">Novo Recurso</a></li>
+                    <li>
+                        <button class="resource-button" onclick="location.href='/resources'">
+                            <i class="fa fa-search"></i> Recursos
+                        </button>
+                    </li>                    
+                    <li>
+                        <button class="resource-button" onclick="location.href='/novorecurso'">
+                            <i class="fa fa-plus"></i> Introduzir recurso
+                        </button>
+                    </li>  
                 </ul>
             </nav>
             <div class="container2">

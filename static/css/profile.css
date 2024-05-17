@@ -14,6 +14,16 @@ body {
     margin: auto;
 }
 
+nav ul li button {
+    background: none; /* Remove default background */
+    border: none; /* Remove default border */
+    color: #000000; /* Match text color */
+    font-size: 18px; /* Match font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5%;
+    border-color: #a0af3b;
+}
+
 .resource-card .icon-bar {
     margin-bottom: 10px; /* Adjust spacing between icons and buttons */
 }

@@ -32,7 +32,8 @@
         .rating {
             color: #ffc107; /* Color of the stars */
             font-size: 10px; /* Adjust the size of the stars */
-            margin-left: 170px;
+            align-items: center;
+            text-align: center;
 
         }
 
@@ -48,22 +49,25 @@
     
     <header>
         <div class="container">
-            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </a>
+            
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/apps">Aplicações</a></li>
                     <li><a href="/tools">Ferramentas</a></li>
                     <li>
-                        <button class="resource-button">
+                        <button class="resource-button" onclick="location.href='/resources'">
                             <i class="fa fa-search"></i> Recursos
                         </button>
-                    </li>
+                    </li>                    
                     <li>
-                        <button class="resource-button">
+                        <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
-                    </li>
+                    </li>  
                 </ul>
             </nav>
 

@@ -6,6 +6,16 @@
     padding: 20px;
 }
 
+nav ul li button {
+    background: none; /* Remove default background */
+    border: none; /* Remove default border */
+    color: #000000; /* Match text color */
+    font-size: 18px; /* Match font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5%;
+    border-color: #a0af3b;
+}
+
 .container2 h2 {
     margin-bottom: 20px;
     font-size: 25px;

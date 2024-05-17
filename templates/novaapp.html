@@ -49,8 +49,9 @@
     </div>
     <header>
         <div class="container">
-            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </a>
             <!-- second div , above the header div with background image-->
             
             <nav>
@@ -58,10 +59,7 @@
                     <li><a href="/">Inicio</a></li>
                     <li><a href="/apps">Aplicações</a></li>
                     <li><a href="/tools">Ferramentas</a></li>
-                    <li><a href="/resources">Recursos</a></li>
-                    <li><a href="/myaccount">Minha conta</a></li>
-                    <li><a href="/novorecurso">Novo Recurso</a></li>
-
+                    
                 </ul>
             </nav>
             <nav class="top-nav">
@@ -88,12 +86,12 @@
         <div class="container">
             <div class="input-group required">
                 <h2>Título:</h2>
-                <textarea id="titulo" name="titulo" rows="3" required></textarea>
+                <textarea id="titulo" name="titulo" rows="1" placeholder="Nome da aplicação" required></textarea>
             </div>
             
             <div class="input-group required">
                 <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao"  required></textarea>
+                <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente"  required></textarea>
             </div>
             <div class="key-words">
                 <h2>Palavras-chave</h2>

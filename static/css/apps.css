@@ -120,6 +120,7 @@ nav ul li a {
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .pagination a {
