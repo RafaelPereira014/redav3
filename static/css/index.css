@@ -201,15 +201,18 @@ nav ul li a:hover {
 .rectangle .buttons {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
 .rectangle .buttons button {
-    width: 100%;
+    width: 70%;
     margin-top: 10px;
     padding: 10px;
     color: #aec03f;
     border: none;
     cursor: pointer;
+    text-align: center;
+    
 
 }
 

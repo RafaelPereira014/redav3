@@ -91,9 +91,14 @@
             
             <div class="input-group required">
                 <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente"  required></textarea>
+                <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+                <div id="counter"></div>
+
+                <small class="small-text">
+                    Deve ter no mínimo 20 caracteres e no máximo 1500
+                </small>
             </div>
-            <div class="key-words">
+            <div class="input-group ">
                 <h2>Palavras-chave</h2>
                 <input type="text" id="tags-input" placeholder="Outros conceitos">
                 <small class="small-text">
@@ -200,6 +205,22 @@
                 document.querySelector(".input-group-tema").appendChild(label);
             }
         });
+
+        const messageEle = document.getElementById('descricao');
+        const counterEle = document.getElementById('counter');
+
+        messageEle.addEventListener('input', function (e) {
+            const target = e.target;
+
+            // Get the `maxlength` attribute
+            const maxLength = target.getAttribute('maxlength');
+
+            // Count the current number of characters
+            const currentLength = target.value.length;
+
+            counterEle.innerHTML = `${currentLength}/${maxLength}`;
+        });
+
         
         // Get the input element
         var input = document.getElementById("tags-input");
