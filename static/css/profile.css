@@ -381,6 +381,12 @@ nav ul li a:hover {
     text-align: center;
 }
 
+.profile-details h3 {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: -40px;
+}
+
 .profile-counts {
     display: flex; /* Display counts horizontally */
     justify-content: center; /* Center counts horizontally */

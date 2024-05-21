@@ -18,9 +18,10 @@
     
     <div class="sidebar">
         <div class="logo">
-            <img src="static/images/REDA_logo.png" alt="Logo">
+            <a href="/dashboard">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="Logo">
+            </a>        
         </div>
-    
         <ul>
             <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
 
