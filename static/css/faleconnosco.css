@@ -102,3 +102,15 @@ button[type="submit"]:hover,
 button[type="button"]:hover {
   background-color: #aec03f;
 }
+
+.header-governo {
+    text-align: center; /* Center-align the content */
+    background-color: #dfdddd;
+    height: 40px;
+    font-size: 12px;
+}
+
+.header-governo img {
+    width: 150px; /* Adjust the width of the image as needed */
+    vertical-align: middle; /* Align the image vertically with the text */
+}
