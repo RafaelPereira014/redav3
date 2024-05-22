@@ -115,8 +115,7 @@
                     </div>
                     <p>Ferramenta gratis que permite criar questionarios, jogos educatiovs e outras atividades lúdicas.</p>
                     <button class="readmore">Ler mais</button>
-                    <p class="android-icon"><i class="fab fa-android" onclick="openModal('modal1')"></i></p>
-   
+                    <button onclick="openModal('modal1')">Ler mais</button>   
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
@@ -229,10 +228,9 @@
     <div id="modal1" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('modal1')">&times;</span>
-            <h2>Está a sair do sítio REDA!</h2>
-            <p id="modalDescription"></p>
-            <button id="button1" class="button">Compreendi</button>
-            <button id="button2">Não, obrigado!</button>
+            <h2>Titulo</h2>
+            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
+                Obrigado por nos visitar e volte sempre!</p>
         </div>
     </div>
     <!-- Register Modal -->
@@ -288,29 +286,23 @@
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
+        // Function to open the modal
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "block";
             document.body.style.overflow = "hidden"; // Prevent scrolling
-    
-            // Set modal description and button actions
-            document.getElementById("modalDescription").textContent = "Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.Obrigado por nos visitar e volte sempre!";
-            document.getElementById("button1").onclick = function() {
-                // Action for button 1
-                alert("Button 1 clicked");
-            };
-            document.getElementById("button2").onclick = function() {
-                // Action for button 2
-                alert("Button 2 clicked");
-            };
+
         }
-    
+
         // Function to close the modal
         function closeModal(modalId) {
             var modal = document.getElementById(modalId);
             modal.style.display = "none";
             document.body.style.overflow = "auto"; // Allow scrolling
+
         }
+        
+        
     
         // Get the login modal
         var loginModal = document.getElementById("loginModal");

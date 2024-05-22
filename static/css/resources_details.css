@@ -472,7 +472,7 @@ footer {
 
 .image-meta {
     position: absolute;
-    bottom: 390px; /* Adjust as needed */
+    bottom: 280px; /* Adjust as needed */
     left: 0; /* Adjust as needed */
     width: 100%;
     background-color: rgba(45, 45, 45, 0.7);
@@ -510,10 +510,11 @@ footer {
 .rectangle .buttons {
     display: flex;
     flex-direction: column;
+    text-align: center;
 }
 
 .rectangle .buttons button {
-    width: 100%;
+    width: 70%;
     margin-top: 10px;
     padding: 10px;
     color: #aec03f;
