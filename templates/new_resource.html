@@ -19,9 +19,30 @@
             selector: 'textarea',
             plugins: 'lists',
             toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
-            menubar: false
+            menubar: false,
+            setup: function (editor) {
+                editor.on('input', function () {
+                    updateCounter(editor);
+                });
+                editor.on('keyup', function () {
+                    updateCounter(editor);
+                });
+                editor.on('change', function () {
+                    updateCounter(editor);
+                });
+            }
         });
+    
+        // Function to update the character counter
+        function updateCounter(editor) {
+            const maxLength = editor.getElement().maxLength || 1500;
+            const content = editor.getContent({ format: 'text' }).trim();
+            const currentLength = content.length;
+            const counterEle = document.getElementById('counter');
+            counterEle.innerHTML = `${currentLength}/${maxLength}`;
+        }
     </script>
+    
     <style>
         .container2 {
             background-image: url('static/images/new-form-bg.jpg');
@@ -98,14 +119,14 @@
             </div>
             <div class="input-group-aut required">
                 <h2>Autor/fonte:</h2>
-                <input type="text" id="autor" name="autor" place-holder="Nome do autor/fonte do recurso" required>
+                <input type="text" id="autor" name="autor" placeholder="Nome do autor/fonte do recurso" required>
             </div>
             <div class="input-group-org required">
                 <h2>Organização:</h2>
-                <input type="text" id="organizacao" name="organizacao" required>
+                <input type="text" id="organizacao" name="organizacao" placeholder="Escola/organização/nome do sítio do autor do recurso" required>
             </div>
             <div class="input-group-format required">
-                <h2>Formato:</h2>
+                <h2>Formato(MAX.2):</h2>
                 <input type="checkbox" id="formato1" name="formato" value="Opção 1">
                 <label for="formato1">Opção 1</label>
                 <input type="checkbox" id="formato2" name="formato" value="Opção 2">
@@ -153,8 +174,9 @@
             </div>
             <div class="input-group required">
                 <h2>Descrição:</h2>
-    
-                <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
+                <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+                <div id="counter"></div>
+                <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
             </div>
             <div class="input-group-lang required">
                 <h2>Idiomas:</h2>
@@ -167,7 +189,6 @@
             <div class="input-group-fich">
                 <h2>Ficheiro:</h2>
                 <input type="file" id="ficheiro" name="ficheiro" >
-               
                 <!-- Add more radio options as needed -->
             </div>
             <small class="small-text">
@@ -232,6 +253,7 @@
                 fileInput.style.display = 'block';
             }
         });
+        
 
     </script>
 </body>
