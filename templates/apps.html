@@ -115,7 +115,7 @@
                     </div>
                     <p>Ferramenta gratis que permite criar questionarios, jogos educatiovs e outras atividades lúdicas.</p>
                     <button class="readmore">Ler mais</button>
-                    <button onclick="openModal('modal1')">Ler mais</button>   
+                    <p class="android-icon"><i class="fab fa-android" onclick="openModal('modal1')"></i></p>
                 </div>
                 <div class="rectangle">
                     <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 1">
@@ -224,15 +224,7 @@
             </form>
         </div>
     </div>
-    <!-- Modal popup -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('modal1')">&times;</span>
-            <h2>Titulo</h2>
-            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
-                Obrigado por nos visitar e volte sempre!</p>
-        </div>
-    </div>
+
     <!-- Register Modal -->
     <div id="RegisterModal" class="modal">
         <div class="modal-content">
@@ -251,6 +243,23 @@
             </form>
         </div>
     </div>
+
+    <!-- Modal popup -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>Titulo</h2>
+            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
+            <small>Obrigado por nos visitar e volte sempre!</small>
+            <div class="button-container">
+                <button class="modal-button" onclick="closeModal('modal1')">Compreendi</button>
+                <button class="modal-button" onclick="closeModal('modal1')">Não, obrigado!</button>
+            </div>
+        </div>
+    </div>
+
+
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -291,7 +300,6 @@
             var modal = document.getElementById(modalId);
             modal.style.display = "block";
             document.body.style.overflow = "hidden"; // Prevent scrolling
-
         }
 
         // Function to close the modal
@@ -299,40 +307,37 @@
             var modal = document.getElementById(modalId);
             modal.style.display = "none";
             document.body.style.overflow = "auto"; // Allow scrolling
-
         }
-        
-        
-    
+
         // Get the login modal
         var loginModal = document.getElementById("loginModal");
-    
+
         // When the user clicks the button, open the login modal
         function openLoginModal() {
             loginModal.style.display = "block";
         }
-    
+
         // When the user clicks on <span> (x), close the login modal
         function closeLoginModal() {
             loginModal.style.display = "none";
         }
-    
+
         // Get the register modal
-        var RegisterModal = document.getElementById("RegisterModal");
-    
+        var registerModal = document.getElementById("RegisterModal");
+
         // When the user clicks the button, open the register modal
         function openRegisterModal() {
-            RegisterModal.style.display = "block";
+            registerModal.style.display = "block";
         }
-    
+
         // When the user clicks on <span> (x), close the register modal
         function closeRegisterModal() {
-            RegisterModal.style.display = "none";
+            registerModal.style.display = "none";
         }
-    
+
         // Close the modal if the user clicks outside of it
         window.onclick = function(event) {
-            if (event.target == loginModal || event.target == RegisterModal) {
+            if (event.target == loginModal || event.target == registerModal) {
                 closeModal("loginModal");
                 closeModal("RegisterModal");
             }

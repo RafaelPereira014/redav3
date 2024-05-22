@@ -30,6 +30,46 @@
 
 
 
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top of other elements */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* 10% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    position: relative; /* Ensure it's positioned within the modal container */
+    z-index: 10000; /* Ensure it sits on top of the modal container */
+}
+
+/* Close button */
+.modal .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal .close:hover,
+.modal .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Adjust other elements' z-index if needed */
 .rectangle {
     position: relative;
     width: calc(24% - 20px);
@@ -43,8 +83,8 @@
     overflow: hidden;
     border: 1px solid #b4b4b4;
     transition: box-shadow 0.3s ease;
+    z-index: 1; /* Ensure it's below the modal */
 }
-
 
 .rectangle:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Add a shadow effect */
@@ -66,6 +106,7 @@
     margin-bottom: 5px;
     margin-top: 5px;
     text-align: left;
+    z-index: 2; /* Ensure text is above the layer */
 }
 
 .rectangle img {
@@ -84,6 +125,7 @@
     z-index: 3; /* Ensure text is above the layer */
     width: 80%; /* Adjust text width */
 }
+
 
 .rectangle .buttons {
     display: flex;
@@ -281,9 +323,16 @@ nav ul li a {
 }
 
 .readmore{
+    color: #83ae03;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    align-items: center;
+
+}
+.readmore:hover{
     background-color: #83ae03;
     color: #fff;
-    border: 1px solid #83ae03;
     cursor: pointer;
     font-size: 13px;
     text-align: center;
@@ -294,61 +343,28 @@ nav ul li a {
     text-align: center;
 }
 
-/* Modal Styles */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 9999; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-}
-
-/* Modal Content/Box */
-.modal-content {
-    background-color: #fefefe;
-    margin: 10% auto; /* 10% from the top and centered */
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    position: relative; /* Ensure it's positioned within the modal container */
-    z-index: 10000; /* Ensure it sits on top of the modal container */
-}
-
-/* Close button */
-.modal .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.modal .close:hover,
-.modal .close:focus {
-    color: black;
-    text-decoration: none;
+/* CSS for modal buttons */
+.modal-button {
+    padding: 10px 20px;
+    border: none;
     cursor: pointer;
+    margin-right: 5px;
 }
 
-
-
-/* Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.modal-button:first-child {
+    background-color: #83ae03;
+    color: white;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+.modal-button:last-child {
+    background-color: #83ae03;
+    color: white;
 }
+
+.modal-button:hover {
+    opacity: 0.8;
+}
+
 
 
 
