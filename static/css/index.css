@@ -41,14 +41,45 @@ transition: transform 0.5s ease-in-out; /* Ensure this transition property is pr
 flex: 0 0 100%;
 }
 
+.prev, .next {
+    top: 70%;
+    margin-top: 30px;
+    transform: translateY(-100%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 .prev {
-left: 0;
+    left: 10px;
 }
 
 .next {
-right: 0;
+    right: 10px;
 }
-  
+
+.button {
+    color:#a0af3b;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    margin-bottom: 10px
+}
+
+.button:hover {
+    text-decoration: underline;
+
+}
 
 
 
@@ -105,7 +136,7 @@ nav ul li button {
     color: #ffffff; /* Match text color */
     font-size: 18px; /* Match font size */
     cursor: pointer; /* Pointer cursor on hover */
-    border-radius: 5%;
+    border-radius: 10%;
     border-color: #a0af3b;
 }
 

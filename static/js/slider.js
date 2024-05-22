@@ -1,30 +1,29 @@
-let currentIndex = 0;
-const intervalTime = 10000; // 10 seconds
-let isFirstMove = true;
-
-function moveSlide(direction) {
-    const slides = document.querySelectorAll('.carousel-item');
+document.addEventListener("DOMContentLoaded", function() {
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".carousel-item");
     const totalSlides = slides.length;
 
-    currentIndex = (currentIndex + direction + totalSlides) % totalSlides;
-
-    // Adjusting offset calculation for leftward slide
-    const offset = -currentIndex * 100;
-    const moveDirection = direction === -1 ? 'right' : 'left'; // Determine the direction of movement
-
-    if (!isFirstMove) {
-        document.querySelector('.carousel-inner').style.transition = `transform 0.5s ease-in-out ${moveDirection}`;
-    } else {
-        isFirstMove = false;
+    function showSlide(index) {
+        const carouselInner = document.querySelector(".carousel-inner");
+        carouselInner.style.transform = `translateX(-${index * 100}%)`;
     }
 
-    document.querySelector('.carousel-inner').style.transform = `translateX(${offset}%)`;
-}
+    function moveSlide(n) {
+        slideIndex += n;
+        if (slideIndex >= totalSlides) {
+            slideIndex = 0;
+        }
+        if (slideIndex < 0) {
+            slideIndex = totalSlides - 1;
+        }
+        showSlide(slideIndex);
+    }
 
-function startCarousel() {
+    // Auto slide
     setInterval(() => {
         moveSlide(1);
-    }, intervalTime);
-}
+    }, 10000); // Change slide every 10 seconds
 
-startCarousel();
+    document.querySelector(".prev").addEventListener("click", () => moveSlide(-1));
+    document.querySelector(".next").addEventListener("click", () => moveSlide(1));
+});

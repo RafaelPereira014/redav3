@@ -24,27 +24,6 @@
             height: 250px; /* Adjust the height as needed */
             position: relative;
         }
-
-        .platform-btn {
-            background-color: none;
-            color: #83ae03;
-            border: 1px solid #83ae03;
-            font-size: 18px;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        
-        .platform-btn:hover{
-            background-color: #83ae03;
-            color: #fff;
-        }
-        
-        /* Style for the active button */
-        .platform-btn.active {
-            background-color: #aec03f;
-            color: white;
-        }
     </style>
     
 </head>
@@ -104,10 +83,13 @@
         <div class="container">
             <p>Início > Aplicações</p>
             
-                <!-- Search bar and platform filter buttons -->
-            <button class="platform-btn" data-platform="android">Android</button>
-            <button class="platform-btn" data-platform="ios">iOS</button>
-            <button class="platform-btn" data-platform="windows">Windows</button>
+            <div class="button-container">
+                 <!-- Search bar and platform filter buttons -->
+                <button class="platform-btn" data-platform="android">Android</button>
+                <button class="platform-btn" data-platform="ios">iOS</button>
+                <button class="platform-btn" data-platform="windows">Windows</button>
+           
+            </div>
             
             <div class="filter-bar">
                 <h2>Filtrar por...</h2>

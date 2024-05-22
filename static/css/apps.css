@@ -10,6 +10,7 @@
     border: 1px solid #83ae03;
     cursor: pointer;
     font-size: 16px;
+    padding: 10px 10px;
 }
 
 .container2 p {
@@ -250,26 +251,35 @@ nav ul li a {
     margin-right: 5px;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers the buttons horizontally */
+    align-items: center; /* Centers the buttons vertically (optional) */
+    margin-top: 20px; /* Adjust as needed */
+}
+
 .platform-btn {
-    background-color: none;
+    background-color: #dfdddd;
     color: #83ae03;
     border: 1px solid #83ae03;
     font-size: 18px;
     text-align: center;
     cursor: pointer;
+    padding: 10px 10px;
+    margin: 0 5px; /* Adjust margin as needed */
+    align-items: center;
 }
 
-
-.platform-btn:hover{
+.platform-btn:hover {
     background-color: #83ae03;
     color: #fff;
 }
 
-/* Style for the active button */
 .platform-btn.active {
     background-color: #aec03f;
     color: white;
 }
+
 .readmore{
     background-color: #83ae03;
     color: #fff;
