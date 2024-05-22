@@ -17,6 +17,14 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    <link rel="stylesheet" href=
+        "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
+    <script src=
+        "https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js">
+    </script>
+    <script src=
+        "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+    </script>
 
     <style>
         body {
@@ -32,16 +40,31 @@
             margin: auto;
             text-align: center;
         }
+        .bs-example {
+            margin: 20px;
+            position: relative;
+        }
+         
+        .modal-content iframe {
+            margin: 0 auto;
+            display: block;
+        }
 
-        
-
-
-
-       
-        
+    
     </style>
    
     <!-- Add other necessary CSS links -->
+    <script>
+        $(document).ready(function() {
+            var url = $("#Geeks3").attr('src');
+            $("#Geeks2").on('hide.bs.modal', function() {
+                $("#Geeks3").attr('src', '');
+            });
+            $("#Geeks2").on('show.bs.modal', function() {
+                $("#Geeks3").attr('src', url);
+            });
+        });
+    </script>
    
 </head>
 <body>
@@ -94,10 +117,86 @@
     <!-- Main Content -->
     <main>
         <div class="container1">
-            <h2>Videos de ajuda</h2>
-            <p> Aceda a um conjunto de vídeos que o podem auxiliar na utilização da plataforma</p>
             
+            <h1>  
+            Videos de ajuda
+            </h1>
+         
+            
+            <div class="bs-example">
+                <a href="#Geeks2"
+                    class="btn btn-lg btn-primary"
+                    data-toggle="modal">Video 1</a>
         
+                <div id="Geeks2" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-hidden="true">×</button>
+                                <h4 class="modal-title">GeeksforGeeks</h4>
+                            </div>
+                            <div class="modal-body">
+                                <iframe id="Geeks3" width="450" height="350"
+                                        src="https://www.youtube.com/embed/V5he1JXiQbg"
+                                        frameborder="0" allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bs-example">
+                <a href="#Geeks2"
+                    class="btn btn-lg btn-primary"
+                    data-toggle="modal">Video 2</a>
+        
+                <div id="Geeks2" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-hidden="true">×</button>
+                                <h4 class="modal-title">GeeksforGeeks</h4>
+                            </div>
+                            <div class="modal-body">
+                                <iframe id="Geeks3" width="300" height="250"
+                                        src="https://www.youtube.com/embed/V5he1JXiQbg"
+                                        frameborder="0" allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><div class="bs-example">
+                <a href="#Geeks2"
+                    class="btn btn-lg btn-primary"
+                    data-toggle="modal">Video 3</a>
+        
+                <div id="Geeks2" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button"
+                                        class="close"
+                                        data-dismiss="modal"
+                                        aria-hidden="true">×</button>
+                                <h4 class="modal-title">GeeksforGeeks</h4>
+                            </div>
+                            <div class="modal-body">
+                                <iframe id="Geeks3" width="300" height="250"
+                                        src="https://www.youtube.com/embed/V5he1JXiQbg"
+                                        frameborder="0" allowfullscreen>
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         
         </div>
 
