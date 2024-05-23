@@ -89,6 +89,10 @@ def rec_pendentes():
 def po_pendentes():
     return render_template('admin/recursos/po_pendentes.html')
 
+@app.route('/dashboard/recursos/ocultos')
+def hidden():
+    return render_template('admin/recursos/ocultos.html')
+
 @app.route('/dashboard/aplicacoes')
 def admin_apps():
     return render_template('admin/aplicacoes/aplicacoes.html')
