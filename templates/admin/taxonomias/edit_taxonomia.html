@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - REDA</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+    <style>
+        .content {
+            display: flex;
+            padding: 20px;
+            align-items: flex-start; /* Align items at the start */
+        }
+
+        .form-container{
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            
+        }
+        .table-container {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top:55px;
+            
+        }
+
+        .form-container {
+            margin-right: 20px; /* Add margin between form and table */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form input, form select {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions i {
+            cursor: pointer;
+        }
+
+        .actions i:hover {
+            color: #007BFF;
+        }
+    </style>  
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="/static/images/REDA_logo.png" alt="Logo">
+        </div>
+    
+        <ul>
+            <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+
+            <li>
+                <a><i class="fas fa-database"></i> Recursos </a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/recursos/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                    <li><a href="/dashboard/recursos/po/pendentes"><i class="far fa-clock"></i> Operacionalizações pendentes</a></li>
+                    <li><a href="/dashboard/recursos/ocultos" >Ocultos</a></li>
+                </ul>
+            </li>
+            
+            
+            <li>
+                <a href="/dashboard/aplicacoes"><i class="fas fa-layer-group"></i> Aplicações</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/aplicacoes/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="/dashboard/ferramentas"><i class="fas fa-tools"></i> Ferramentas</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/ferramentas/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                </ul>
+            </li>
+            <li>
+                <a><i class="fas fa-comments"></i> Comentários</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/comentarios/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
+                    <li><a href="/dashboard/comentarios/palavras-proibidas"><i class="fas fa-ban"></i> Palavras proibidas</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="/dashboard/taxonomias"><i class="fas fa-sitemap"></i> Taxonomias</a>
+                <ul class="submenu">
+                    <li><a href="/dashboard/taxonomias/relacoes"><i class="fas fa-link"></i> Relações</a></li>
+                </ul>
+            </li>
+            <li><a href="/dashboard/utilizadores"><i class="fas fa-users"></i> Utilizadores</a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i> Mensagens</a></li>
+            <li><a href="#"><i class="fas fa-file-alt"></i> Artigos</a></li>
+        </ul>
+    </div>
+    
+    <div class="content">
+        <div>
+            <h3>Editar taxonomia: Nome da taxonomia</h3>
+            <div class="form-container">
+                <h3>Adicionar novo termo</h3>
+                <form action="/add_term" method="POST" enctype="multipart/form-data">
+                    <label for="title">Título</label>
+                    <input type="text" id="title" name="title" placeholder="Nome do termo" required>
+
+                    <label for="icon">Ícone</label>
+                    <input type="text" id="icon" name="icon" placeholder="eg.lalal" required>
+
+                    <label for="color">Cor</label>
+                    <input type="color" id="color" name="color" required>
+
+                    <label for="image">Imagem</label>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+
+                    <button type="submit">Criar termo</button>
+                    <button type="clear">Limpar</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="table-container">
+            <h3>Lista de termos: Nome taxonomia</h3>
+            <hr>
+            <table>
+                <tr>
+                  <th>Título</th>
+                  <th>Ações</th>
+                </tr>
+                <tr>
+                  <td>Alfreds Futterkiste</td>
+                  <td>
+                        <a href="/dashboard/taxonomias/nome_taxonomia">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <i class="fas fa-trash"></i>
+                    </td>
+                </tr>
+              </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleSubmenu(submenuId) {
+            var submenu = document.getElementById(submenuId);
+            if (submenu.style.display === "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -117,17 +117,26 @@ def admin_comments():
 def admin_comments_prohi():
     return render_template('admin/comentarios/palavras-proibidas.html')
 
+#######----- taxonomias-----------####
 @app.route('/dashboard/taxonomias')
 def admin_taxonomies():
     return render_template('admin/taxonomias/taxonomias.html')
+
+@app.route('/dashboard/taxonomias/nome_taxonomia')
+def admin_edit_taxonomies():
+    return render_template('admin/taxonomias/edit_taxonomia.html')
 
 @app.route('/dashboard/taxonomias/relacoes')
 def admin_taxonomies_rel():
     return render_template('admin/taxonomias/relacoes.html')
 
+#######----------------####
 @app.route('/dashboard/utilizadores')
 def admin_users():
     return render_template('admin/utilizadores/utilizadores.html')
+
+
+
 
 
 
