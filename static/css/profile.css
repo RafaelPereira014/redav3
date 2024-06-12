@@ -501,6 +501,18 @@ footer {
     button[type=submit] {
         width: 80%;
     }
+    .profile-icon {
+        position: absolute; /* Position the profile icon */
+        top: 50%; /* Position it in the center vertically */
+        left: 50%; /* Position it in the center horizontally */
+        transform: translate(-50%, -50%); /* Center it precisely */
+        width: 100px; /* Set the width and height */
+        height: 100px;
+        border-radius: 50%; /* Make it round */
+        overflow: hidden; /* Hide any overflow */
+        box-shadow: 0 0 0 5px #fff; /* Add a white border */
+        margin-top: -100px;
+    }
 }
 @media (max-width: 768px) {
     header .container img {
