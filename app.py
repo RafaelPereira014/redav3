@@ -1,26 +1,63 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import mysql.connector
+from db_operations.resources import *
+from db_operations.apps import *
+
+
 
 app = Flask(__name__)
+
+
+config = {
+    'host': 'localhost',
+    'user': 'root',
+    'password': 'passroot',
+    'database': 'redav3'
+}
+
+connection = mysql.connector.connect(**config)
 
 # Homepage
 @app.route('/')
 def homepage():
-    return render_template('index.html')
+    recent_resources = get_recent_approved_resources()
+    return render_template('index.html',recent_resources=recent_resources)
 
 # Resources
 @app.route('/resources')
 def resources():
-    return render_template('resources.html')
-
+    all_resources = get_all_resources()
+    # Pagination settings
+    page = request.args.get('page', 1, type=int)
+    per_page = 12
+    total_resources = len(all_resources)
+    total_pages = (total_resources + per_page - 1) // per_page
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_resources = all_resources[start:end]
+    
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages)
 # Resource Details
 @app.route('/resources/details')
 def resource_details():
     return render_template('resource_details.html')
 
 # Apps
-@app.route('/apps')
+@app.route('/apps', methods=['GET'])
 def apps():
-    return render_template('apps.html')
+    all_apps = get_all_apps()  # Replace with your function to get all apps
+    page = request.args.get('page', default=1, type=int)
+    apps_per_page = 8
+    total_apps = len(all_apps)
+    total_pages = (total_apps + apps_per_page - 1) // apps_per_page
+    
+    start_index = (page - 1) * apps_per_page
+    end_index = min(start_index + apps_per_page, total_apps)
+    
+    apps_for_current_page = all_apps[start_index:end_index]
+    
+    return render_template('apps.html', all_apps=apps_for_current_page, total_pages=total_pages, current_page=page)
+
 
 @app.route('/novaapp')
 def novaapp():

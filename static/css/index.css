@@ -156,9 +156,9 @@ nav ul li a:hover {
 
 .rectangle {
     position: relative;
-    width: calc(24% - 20px);
+    width: calc(24% - 20px); /* Adjust the width here */
+    height: 540px; /* Adjust the height here */
     margin: 1%;
-    height: 540px;
     background-color: #f1f0f0;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
@@ -256,6 +256,26 @@ nav ul li a:hover {
     margin-top: 10px;
     text-align: center;
 }
+
+@media (max-width: 1000px) {
+    .rectangle {
+        width: calc(48% - 10px); /* Adjust width for medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .rectangle {
+        width: calc(48% - 10px); /* Adjust width for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .rectangle {
+        width: 100%; /* Full width on smallest screens */
+        margin: 1% 0; /* Adjust margin for smaller screens */
+    }
+}
+
 
 .modal {
     display: none;

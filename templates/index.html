@@ -130,129 +130,40 @@
         <div class="container">
             <h1>Últimos recursos</h1>
             <div class="rectangles">
+                {% for resource in recent_resources %}
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <span class="image-meta">Multidisciplinar</span>
-
+                    <!-- Assuming this is within your HTML template -->
+                    <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
+                    <span class="image-meta">{{ resource.slug }}</span>
                     <i class="fas fa-heart"></i>
                     <i class="fas fa-flag"></i>
-                    <h2>Diferença entre clima e estado de tempo</h2>
-                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
+                    <h2>
+                        {% if resource.title|length > 25 %}
+                            {{ resource.title[:25]|escape}} ...
+                        {% else %}
+                            {{ resource.title|escape }}
+                        {% endif %}
+                    </h2>
+                    <p>
+                        {% if resource.description|length > 100 %}
+                            {{ resource.description[:100]|escape }} ...
+                        {% else %}
+                            {{ resource.description|escape }}
+                        {% endif %}
+                    </p>
                     <div class="buttons">
-                        <a href="/resources/details"><button>Ver recurso</button></a>
-                        <a href="/"><button>Editar recurso</button></a>
-                        <a href="/"><button>Adicionar proposta de operacionalização</button></a>
+                        <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
+                        <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
+                        <a href="/resources/add_proposal/{{ resource.id }}"><button>Adicionar proposta de operacionalização</button></a>
                     </div>
-                    <div class="rating">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </div>
-                    <div class="year-cycle">
-                        <span>3º Ciclo</span> | <span>Secundário</span>
-                    </div>
-                    <p>21 de Março 2024</p>
-                    <p>Simulação</p>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <span class="image-meta">Geografia</span>
-
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-flag"></i>
-                    <h2>Diferença entre clima e estado de tempo</h2>
-                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                    <div class="buttons">
-                        <a href="/resources/details"><button>Ver recurso</button></a>
-                        <a href="/"><button>Editar recurso</button></a>
-                        <a href="/"><button>Adicionar proposta de operacionalização</button></a>
-                    </div>
-                    <div class="rating">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </div>
-                    <div class="year-cycle">
-                        <span>2º Ciclo</span> | <span>Primária</span>
-                    </div>
-                    <p>21 de Março 2024</p>
-                    <p>Simulação</p>
                     
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <span class="image-meta">Teste teste</span>
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-flag"></i>
-                    <h2>Diferença entre clima e estado de tempo</h2>
-                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                    <div class="buttons">
-                        <a href="/resources/details"><button>Ver recurso</button></a>
+                    <div class="year-cycle">
+                        <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
                     </div>
-                    <div class="resource-info">
-                        <div class="rating">
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
-                        </div>
-                        <div class="year-cycle">
-                            <span>3º Ciclo</span>
-                        </div>
-                        <p class="date">21 de Março 2024</p>
-                        <p class="type">Simulação</p>
-                    </div>
+                    <p>{{ resource.created_at }}</p>
+                    <p>{{ resource.type_id }}</p>
                 </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 4">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 5">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 6">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 7">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/image1.jpg') }}" alt="Image 8">
-                    <div class="buttons">
-                        <i class="gg-heart"></i>
-                        <button>View</button>
-                        <button>Edit</button>
-                        <button>Add</button>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <!-- Testimonial Carousel -->
