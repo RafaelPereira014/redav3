@@ -96,56 +96,18 @@
 
             <div class="rectangles">
                
-                <!-- Resource 1 -->
+                {% for tool in all_tools %}
                 <div class="rectangle">
-                    <h2>Titulo</h2>
-                    <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
-                        Obrigado por nos visitar e volte sempre!</p>
-                    <button onclick="openModal('modal1')">Ler mais</button>
-                    <button> Abrir endereço </button>
-
+                    <div class="text">
+                        <h2>{{ tool.title }}</h2>
+                        <small class="small-text">{{ tool.platform }}</small>
+                    </div>
+                    <p>{{ tool.description }}</p>
+                    <button class="readmore">Ler mais</button>
                     
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <h2>Titulo</h2>
-                        <p>Descrição</p>
                     </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <h2>Titulo</h2>
-                        <p>Descrição</p>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <h2>Titulo</h2>
-                        <p>Descrição</p>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <h2>Titulo</h2>
-                        <p>Descrição</p>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <h2>Titulo</h2>
-                        <p>Descrição</p>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <p>Titulo</p>
-                    </div>
-                </div>
-                <div class="rectangle">
-                    <div class="buttons">
-                        <p>Titulo</p>
-                    </div>
-                </div>
+                {% endfor %}
+               
                
                 
                 <!-- Resource 2 -->

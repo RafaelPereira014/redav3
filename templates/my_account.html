@@ -122,37 +122,22 @@
                     <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
                     <button class="clear-button"> Limpar Filtros </button>
                 </div>
-                <div class="resource-card">
-                    <h3>"C'est ma terre", de Christophe Maé"
-                    </h3>
-                    <p>Criado a 7 maio 2024 18:00</p>
-                    <p>Esta canção poderá ser útil para introdução,de temas relacionados com o ambiente e a ecologia ou para consolidação ou revisão de aprendizagens que sobre eles incidam.</p>
-                    <div class="icon-bar">
-                        <!-- Flag Icon -->
-                        <i class="fas fa-flag"></i>
-                        <!-- Heart Icon -->
-                        <i class="fas fa-heart"></i>
+                {% for resource in my_resources %}
+                    <div class="resource-card">
+                        <h3>{{ resource.title }}</h3>
+                        <p>Criado a {{ resource.created_at }}</p>
+                        <p>{{ resource.description }}</p>
+                        <div class="icon-bar">
+                            <!-- Flag Icon -->
+                            <i class="fas fa-flag"></i>
+                            <!-- Heart Icon -->
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <button>Ver Recurso</button>
+                        <button class="edit">Editar</button>
+                        <button class="eliminar">Eliminar</button>
                     </div>
-                    <button>Ver Recurso </button>
-                    <button class="edit"> Editar </button>
-                    <button class="eliminar"> Eliminar </button>
-                </div>
-
-                <div class="resource-card">
-                    <h3>Questionário sobre a União Europeia
-                    </h3>
-                    <p>Criado a 7 maio 2024 18:00</p>
-                    <p>Questionário sobre alguns dos aspetos mais significativos da União Europeia. Estão disponíveis dois níveis de dificuldade: principiante e especialista.</p>
-                    <div class="icon-bar">
-                        <!-- Flag Icon -->
-                        <i class="fas fa-flag"></i>
-                        <!-- Heart Icon -->
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <button>Ver Recurso </button>
-                    <button class="edit"> Editar </button>
-                    <button class="eliminar"> Eliminar </button>
-                </div>
+                {% endfor %}
                 
                 
                 <div class="pagination">
@@ -198,36 +183,30 @@
 
             </section>
             <section id="my-apps" class="content-section" style="display: none;">
-                <!-- Content for "Minhas Propostas" section -->
-                <h2>minhas apps</h2>
-                <p>This is the content for apps...</p>
+                <h1>Minhas apps</h1>
+                <h3>12 resultados <h3>
+                {% for app in my_apps %}
+                <div class="tool-card">
+                    <h3>{{app.title}}</h3>
+                    <p>{{app.description}}</p>
+                    <button>View app</button>
+                </div>
+                {%endfor%}
+
             </section>
             <section id="my-tools" class="content-section" style="display: none;">
                 <!-- Content for "Minhas Propostas" section -->
                 <h1>Minhas ferramentas</h1>
                 <h3>12 resultados <h3>
 
-                <div class="tool-card">
-                    <h3>Tool Name 1</h3>
-                    <p>Description of Tool 1</p>
-                    <button>Use Tool</button>
-                </div>
-                <!-- Tool 2 -->
-                <div class="tool-card">
-                    <h3>Tool Name 2</h3>
-                    <p>Description of Tool 2</p>
-                    <button>Use Tool</button>
-                </div><div class="tool-card">
-                    <h3>Tool Name 1</h3>
-                    <p>Description of Tool 1</p>
-                    <button>Use Tool</button>
-                </div>
-                <!-- Tool 2 -->
-                <div class="tool-card">
-                    <h3>Tool Name 2</h3>
-                    <p>Description of Tool 2</p>
-                    <button>Use Tool</button>
-                </div>
+                {% for tool in my_tools %}
+                    <div class="tool-card">
+                        <h3>{{tool.title}}</h3>
+                        <p>{{tool.description}}</p>
+                        <button>Use Tool</button>
+                    </div>
+                {%endfor%}
+                
             </section>
 
             <!-- Repeat similar content sections for other options -->

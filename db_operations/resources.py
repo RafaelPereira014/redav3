@@ -8,6 +8,22 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 
+def get_userid(username):
+    """Get the user ID for the given username."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT id FROM Users WHERE name=%s", (username,))
+    user = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if user:
+        return user['id']
+    else:
+        return None
+
+
+
 def get_recent_approved_resources(limit=8):
     """Get the most recent approved resources from the DB."""
     conn = connect_to_database()
@@ -27,6 +43,25 @@ def get_all_resources():
     cursor.close()
     conn.close()
     return resources
+
+
+def get_resources_from_user(userid):
+    """Get all resources from user."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        cursor.execute("SELECT * FROM Resources WHERE user_id=%s ORDER BY id DESC", (userid,))
+        resources_user = cursor.fetchall()
+    except Exception as e:
+        print(f"Error: {e}")
+        resources_user = []
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return resources_user
+
 
 
 def approved_resources():

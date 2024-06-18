@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 import mysql.connector
 from db_operations.resources import *
 from db_operations.apps import *
+from db_operations.tools import *
 
 
 
@@ -66,7 +67,9 @@ def novaapp():
 # Tools
 @app.route('/tools')
 def tools():
-    return render_template('tools.html')
+    all_tools = get_all_tools()
+    
+    return render_template('tools.html',all_tools=all_tools)
 
 @app.route('/novaferramenta')
 def newtool():
@@ -75,7 +78,16 @@ def newtool():
 # My Account
 @app.route('/myaccount')
 def my_account():
-    return render_template('my_account.html')
+    userid = '5'
+    if userid is None:
+        return "User not found", 404
+    
+    my_resources = get_resources_from_user(userid)
+    my_apps = get_apps_from_user(userid)
+    my_tools = get_tools_from_user(userid)
+    
+    return render_template('my_account.html', my_resources=my_resources, my_apps=my_apps, my_tools=my_tools)
+
 
 # New_resource
 @app.route('/novorecurso')

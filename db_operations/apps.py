@@ -17,5 +17,22 @@ def get_all_apps():
     conn.close()
     return apps
 
+def get_apps_from_user(userid):
+    """Get all apps from user."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id=%s ORDER BY id DESC", (userid, 3))
+        apps_user = cursor.fetchall()
+    except Exception as e:
+        print(f"Error: {e}")
+        apps_user = []
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return apps_user
+
 
 
