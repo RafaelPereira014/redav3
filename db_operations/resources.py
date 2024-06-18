@@ -52,6 +52,16 @@ def get_hidden_resources():
     conn.close()
     return hidden_resources
 
+
+def get_highlighted_resources():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE highlight='1' ORDER BY id DESC")
+    highlighted_resources = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return highlighted_resources
+
 def get_recent_approved_resources(limit=8):
     """Get the most recent approved resources from the DB."""
     conn = connect_to_database()

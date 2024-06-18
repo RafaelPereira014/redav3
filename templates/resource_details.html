@@ -65,12 +65,6 @@
             </nav>
             <nav class="top-nav">
                 <ul>
-                    <!--
-                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Help</a></li>
-                    -->
-
                     <li><a href="/ajuda">Ajuda</a></li>
                     <li><a href="/myaccount">Minha Conta</a></li>
                     <li><a href="/dashboard" target="_blank">Administração</a></li>
@@ -87,7 +81,7 @@
                 <span> Inicio > Recursos > nome recurso </span>
             </div>
             <div class="resource-details">
-                {%for resource in resources_details%}
+                {%for resource in resource_details%}
                 <div class="resource-info">
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
                     <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
@@ -101,15 +95,8 @@
                         <span>{{ resource.description }}</span>
                     </div>
                     <!-- Star rating -->
-                    <div>
-                        {% for _ in range(resource.stars) %}
-                            <span class="fa fa-star checked"></span>
-                        {% endfor %}
-                        {% for _ in range(5 - resource.stars) %}
-                            <span class="fa fa-star"></span>
-                        {% endfor %}
-                    </div>
-                    <!-- Additional details -->
+                    
+                    <!-- Additional details 
                     <div class="mini-fields">
                         <div>
                             <span>Formato:</span>
@@ -136,6 +123,7 @@
                             <span>{{ resource.keywords }}</span>
                         </div>
                     </div>
+                    -->
                     <!-- Actions -->
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
@@ -145,6 +133,7 @@
                         <button class="hide">Ocultar</button>
                     </div>
                     <!-- Ficha Técnica -->
+
                     <div class="ficha-tecnica">
                         <h3>Ficha Técnica</h3>
                         <div class="separator">
@@ -164,11 +153,11 @@
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
                         <div class="button-container">
-                            {% for key, proposal in resource.proposals.items() %}
+                            {% for key, proposal in resource.proposals %}
                                 <button onclick="showProposta({{ key }})">Proposta {{ key }}</button>
                             {% endfor %}
                         </div>
-                        {% for key, proposal in resource.proposals.items() %}
+                        {% for key, proposal in resource.proposals %}
                             <div id="proposta{{ key }}" style="display: none;">
                                 <div class="separator">
                                     <span>Autor:</span>
@@ -208,6 +197,7 @@
                             </div>
                         {% endfor %}
                     </div>
+                    
                     <!-- Comentários -->
                     <div class="comments">
                         <h3>Comentários</h3>

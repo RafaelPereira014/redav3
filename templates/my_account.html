@@ -124,9 +124,9 @@
                 </div>
                 {% for resource in my_resources %}
                     <div class="resource-card">
-                        <h3>{{ resource.title }}</h3>
+                        <h3>{{ resource.title | safe }}</h3>
                         <p>Criado a {{ resource.created_at }}</p>
-                        <p>{{ resource.description }}</p>
+                        <p>{{ resource.description | escape}}</p>
                         <div class="icon-bar">
                             <!-- Flag Icon -->
                             <i class="fas fa-flag"></i>
@@ -187,8 +187,8 @@
                 <h3>12 resultados <h3>
                 {% for app in my_apps %}
                 <div class="tool-card">
-                    <h3>{{app.title}}</h3>
-                    <p>{{app.description}}</p>
+                    <h3>{{app.title | safe }}</h3>
+                    <p>{{app.description | safe}}</p>
                     <button>View app</button>
                 </div>
                 {%endfor%}
@@ -201,8 +201,8 @@
 
                 {% for tool in my_tools %}
                     <div class="tool-card">
-                        <h3>{{tool.title}}</h3>
-                        <p>{{tool.description}}</p>
+                        <h3>{{tool.title | safe}}</h3>
+                        <p>{{tool.description | safe}}</p>
                         <button>Use Tool</button>
                     </div>
                 {%endfor%}

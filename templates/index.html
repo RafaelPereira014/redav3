@@ -78,32 +78,20 @@
 
             <div class="carousel">
                 <div class="carousel-inner">
-                    <div class="carousel-item active" id="carousel-item-1">
+                    {% for resource in highlighted_resources %}
+                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="carousel-item-{{ loop.index }}">
                         <div class="carousel-caption">
-                            <h3>Os simbolos Europeus</h3>
-                            <p>Sitio da Internet sobre os simbolos europeus: hino europeu, dia da Europa, bandeira europeia e divisa da Uniao Europeia</p>
-                            <a href="/resources/details" class="button">Ler mais...</a>
-
+                            <h3>{{ resource.title }}</h3>
+                            <p>{{ resource.description }}</p>
+                            <a href="/resources/details/{{ resource.id }}" class="button">Ler mais...</a>
                         </div>
                     </div>
-                    <div class="carousel-item" id="carousel-item-2">
-                        <div class="carousel-caption">
-                            <h3>Family: guião para trabalho de apresentação oral.</h3>
-                            <p>Guião para preparação de um trabalho em PowerPoint para apresentação oral sobre a família.</p>
-                            <a href="/resources/details" class="button">Ler mais...</a>
-
-                        </div>
-                    </div>
-                    <div class="carousel-item" id="carousel-item-3">
-                        <div class="carousel-caption">
-                            <h3>Title 3</h3>
-                            <p>Description 3</p>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
                 <button class="prev" onclick="moveSlide(-1)">❮</button>
                 <button class="next" onclick="moveSlide(1)">❯</button>
             </div>
+            
               
         
             <nav class="top-nav">
@@ -139,16 +127,16 @@
                     <i class="fas fa-flag"></i>
                     <h2>
                         {% if resource.title|length > 25 %}
-                            {{ resource.title[:25]|escape}} ...
+                            {{ resource.title[:25]}} ...
                         {% else %}
-                            {{ resource.title|escape }}
+                            {{ resource.title|safe}}
                         {% endif %}
                     </h2>
                     <p>
                         {% if resource.description|length > 100 %}
-                            {{ resource.description[:100]|escape }} ...
+                            {{ resource.description[:100] }} ...
                         {% else %}
-                            {{ resource.description|escape }}
+                            {{ resource.description |safe }}
                         {% endif %}
                     </p>
                     <div class="buttons">
@@ -156,7 +144,7 @@
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <a href="/resources/add_proposal/{{ resource.id }}"><button>Adicionar proposta de operacionalização</button></a>
                     </div>
-                    
+                                
                     <div class="year-cycle">
                         <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
                     </div>
@@ -165,6 +153,7 @@
                 </div>
                 {% endfor %}
             </div>
+            
         </div>
         <!-- Testimonial Carousel -->
         <div class="testimonial-carousel">

@@ -23,14 +23,15 @@ try:
         # Create a cursor object to execute SQL queries
         cursor = connection.cursor()
         
-        change = get_resources_from_user('5')
+        change = get_all_details_resource('3900')
         #name = get_username(9)
-        print(change)
-        # Fetch all rows (tickets) from the result set
+        change_str = str(change)
 
-        # Close the cursor
-        cursor.close()
+        # Replace commas with newlines
+        formatted_change = change_str.replace(',', ',\n')
 
+        # Print the formatted string
+        print(formatted_change)
     # Close the database connection
     connection.close()
     print("Connection closed")
