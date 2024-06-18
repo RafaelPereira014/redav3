@@ -87,192 +87,148 @@
                 <span> Inicio > Recursos > nome recurso </span>
             </div>
             <div class="resource-details">
-               
+                {%for resource in resources_details%}
                 <div class="resource-info">
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Resource Image">
+                    <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
                     <div class="actions">
-                        
                         <div class="share-icons">
                             <a href="#" onclick="openShareModal()"><i class="fas fa-share-alt"></i></a>
                         </div>
-                        
-
                     </div>
-                    <h2>Titulo recurso</h2>
+                    <h2>{{ resource.title }}</h2>
                     <div>
-                        <span>
-                            Vídeo sobre a fome e a importância da partilha e da solidariedade para a superação da crise alimentar.
-                            Este vídeo faz parte da campanha “One Human Family, Food for All”, da Cáritas Internationalis, que tem como objetivo acabar com a fome até 2025.
-                        </span>
+                        <span>{{ resource.description }}</span>
                     </div>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star checked"></span>
-                    <span class="fa fa-star"></span>
-                    <span class="fa fa-star"></span>
-
+                    <!-- Star rating -->
+                    <div>
+                        {% for _ in range(resource.stars) %}
+                            <span class="fa fa-star checked"></span>
+                        {% endfor %}
+                        {% for _ in range(5 - resource.stars) %}
+                            <span class="fa fa-star"></span>
+                        {% endfor %}
+                    </div>
+                    <!-- Additional details -->
                     <div class="mini-fields">
                         <div>
                             <span>Formato:</span>
-                            <span>PDF</span>
+                            <span>{{ resource.format }}</span>
                         </div>
                         <div>
                             <span>Submetido por:</span>
-                            <span>John Doe</span>
+                            <span>{{ resource.submitted_by }}</span>
                         </div>
                         <div>
                             <span>Criado a:</span>
-                            <span>April 24, 2024</span>
+                            <span>{{ resource.created_at }}</span>
                         </div>
                         <div>
                             <span>Autor:</span>
-                            <span>Jane Doe</span>
+                            <span>{{ resource.author }}</span>
                         </div>
                         <div>
                             <span>Organização:</span>
-                            <span>ABC Organization</span>
+                            <span>{{ resource.organization }}</span>
                         </div>
                         <div>
                             <span>Palavras-chave:</span>
-                            <span>aasa;dasdsab;cfasd;dfadsa;easdas;edaads;f;</span>
+                            <span>{{ resource.keywords }}</span>
                         </div>
                     </div>
+                    <!-- Actions -->
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
                         <button>Gerir propostas</button>
                         <button>Editar recurso</button>
                         <button class="Delete">Eliminar</button>
                         <button class="hide">Ocultar</button>
-                    
                     </div>
+                    <!-- Ficha Técnica -->
                     <div class="ficha-tecnica">
-                        
                         <h3>Ficha Técnica</h3>
                         <div class="separator">
                             <span>Idioma:</span>
-                            <span>English</span>
+                            <span>{{ resource.language }}</span>
                         </div>
                         <div class="separator">
                             <span>Modos de utilização:</span>
-                            <span>Educational</span>
+                            <span>{{ resource.usage_modes }}</span>
                         </div>
                         <div class="separator">
                             <span>Requisitos técnicos:</span>
-                            <span>PDF Reader</span>
+                            <span>{{ resource.technical_requirements }}</span>
                         </div>
                     </div>
+                    <!-- Proposta de operacionalização -->
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
-
                         <div class="button-container">
-                            <button onclick="showProposta(1)">Proposta 1</button>
-                            <button onclick="showProposta(2)">Proposta 2</button>
+                            {% for key, proposal in resource.proposals.items() %}
+                                <button onclick="showProposta({{ key }})">Proposta {{ key }}</button>
+                            {% endfor %}
                         </div>
-                        <div id="proposta1" style="display: block;">
-                            <div class="separator">
-                                <span>Autor:</span>
-                                <span>English</span>
+                        {% for key, proposal in resource.proposals.items() %}
+                            <div id="proposta{{ key }}" style="display: none;">
+                                <div class="separator">
+                                    <span>Autor:</span>
+                                    <span>{{ proposal.author }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Organização:</span>
+                                    <span>{{ proposal.organization }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Criado a:</span>
+                                    <span>{{ proposal.created_at }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Anos de escolaridade:</span>
+                                    <span>{{ proposal.school_years }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Disciplinas:</span>
+                                    <span>{{ proposal.disciplines }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Dominios:</span>
+                                    <span>{{ proposal.domains }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Subdominios:</span>
+                                    <span>{{ proposal.subdomains }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Conceitos:</span>
+                                    <span>{{ proposal.concepts }}</span>
+                                </div><div class="separator">
+                                    <span>Proposta de operacionalização:</span>
+                                    <span>{{ proposal.operationalization }}</span>
+                                </div>
                             </div>
-                            <div class="separator">
-                                <span>Organização:</span>
-                                <span>Educational</span>
-                            </div>
-                            <div class="separator">
-                                <span>Criado a:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div class="separator">
-                                <span>Anos de escolaridade:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div class="separator">
-                                <span>Disciplinas:</span>
-                                <span>kmasdkd,ashdbas,ahsdh,hasd,.hasd,ahsd,hnas</span>
-                            </div>
-                            <div class="separator">
-                                <span>Dominios:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div class="separator">
-                                <span>Subdominios:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div class="separator">
-                                <span>Conceitos:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div class="separator">
-                                <span>Proposta de operacionalização:</span>
-                                <span>Esta é uma proposta de operacionalização</span>
-                            </div>
-                        </div>
-                        <div id="proposta2" style="display: none;">
-                            <div>
-                                <span>Autor:</span>
-                                <span>LALALALALALLALA</span>
-                            </div>
-                            <div>
-                                <span>Organização:</span>
-                                <span>KAMSDKMADSKMSD</span>
-                            </div>
-                            <div>
-                                <span>Criado a:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div>
-                                <span>Anos de escolaridade:</span>
-                                <span>01293I123M</span>
-                            </div>
-                            <div>
-                                <span>Disciplinas:</span>
-                                <span>kmasdkd,ashdbas,ahsdh,hasd,.hasd,ahsd,hnas</span>
-                            </div>
-                            <div>
-                                <span>Dominios:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div>
-                                <span>Subdominios:</span>
-                                <span>kmasdkd</span>
-                            </div><div>
-                                <span>Conceitos:</span>
-                                <span>kmasdkd</span>
-                            </div>
-                            <div>
-                                <span>Proposta de operacionalização:</span>
-                                <span>Esta é uma proposta de operacionalização</span>
-                            </div>
-
-                        </div>
-                       
+                        {% endfor %}
                     </div>
-                    
-                </div>
-                
-                <div class="comments">
-                    <h3>Comentários</h3>
-                    <div class="comment-form">
-                        <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
-                        <button>Submeter comentário</button>
-                    </div>
-                    <div class="comment-list">
-                        <div class="comment">
-                            <div class="comment-info">
-                                <span class="comment-author">John Doe:</span>
-                                <span class="comment-date">April 25, 2024</span>
-                            </div>
-                            <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <!-- Comentários -->
+                    <div class="comments">
+                        <h3>Comentários</h3>
+                        <div class="comment-form">
+                            <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
+                            <button>Submeter comentário</button>
                         </div>
-                        <div class="comment">
-                            <div class="comment-info">
-                                <span class="comment-author">Jane Doe:</span>
-                                <span class="comment-date">April 26, 2024</span>
-                            </div>
-                            <p>Another comment here. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                        <div class="comment-list">
+                            {% for comment in resource.comments %}
+                                <div class="comment">
+                                    <div class="comment-info">
+                                        <span class="comment-author">{{ comment.author }}:</span>
+                                        <span class="comment-date">{{ comment.date }}</span>
+                                    </div>
+                                    <p>{{ comment.text }}</p>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
+                {%endfor%}
             </div>
         </div>
     </main>

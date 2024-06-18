@@ -22,23 +22,41 @@ def get_userid(username):
     else:
         return None
 
+def get_all_resources():
+    """Get all approved resources from the DB."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC")
+    resources = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return resources
 
+def get_pendent_resources():
+    """Get all approved resources from the DB."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 0 OR approvedScientific = 0 AND approvedLinguistic = 1 ORDER BY id DESC")
+    pendent_resources = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return pendent_resources
+
+def get_hidden_resources():
+    """Get all approved resources from the DB."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE hidden='1' ORDER BY id DESC")
+    hidden_resources = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return hidden_resources
 
 def get_recent_approved_resources(limit=8):
     """Get the most recent approved resources from the DB."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC LIMIT %s", (limit,))
-    resources = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return resources
-
-def get_all_resources():
-    """Get all approved resources from the DB."""
-    conn = connect_to_database()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC")
     resources = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -61,6 +79,17 @@ def get_resources_from_user(userid):
         conn.close()
     
     return resources_user
+
+def get_all_details_resource(resource_id):
+    
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE id=%s ", (resource_id,))
+    resources_details = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return resources_details
+
 
 
 

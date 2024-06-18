@@ -103,12 +103,18 @@
             {% for app in all_apps %}
             {% if loop.index <= 8 %} <!-- Show only 8 per page -->
             <div class="rectangle">
-                <img src="{{ url_for('static', filename=app.image) }}" alt="{{ app.title }}">
+                <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
                 <div class="text">
                     <h2>{{ app.title }}</h2>
                     <small class="small-text">{{ app.platform }}</small>
                 </div>
-                <p>{{ app.description }}</p>
+                <p>
+                    {% if app.description|length > 100 %}
+                        {{ app.description[:100]|escape }} ...
+                    {% else %}
+                        {{ app.description|escape }}
+                    {% endif %}
+                </p>
                 <button class="readmore">Ler mais</button>
                 {% if app.platform == 'android' %}
                 <p class="android-icon"><i class="fab fa-android" onclick="openModal('modal1')"></i></p>

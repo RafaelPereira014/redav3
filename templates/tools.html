@@ -95,31 +95,29 @@
             <hr></hr>
 
             <div class="rectangles">
-               
                 {% for tool in all_tools %}
                 <div class="rectangle">
-                    <div class="text">
-                        <h2>{{ tool.title }}</h2>
-                        <small class="small-text">{{ tool.platform }}</small>
-                    </div>
+                   
+                    <h2>{{ tool.title }}</h2>
+                    <small class="small-text">{{ tool.platform }}</small>
+                   
                     <p>{{ tool.description }}</p>
                     <button class="readmore">Ler mais</button>
-                    
-                    </div>
-                {% endfor %}
-               
-               
-                
-                <!-- Resource 2 -->
-                <!-- Duplicate the above resource div for each additional resource -->
-
-                <!-- Pagination -->
-                <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <!-- Add more pagination links as needed -->
                 </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                {% if page > 1 %}
+                <a href="{{ url_for('tools', page=page-1) }}">&laquo; Anterior</a>
+                {% endif %}
+                {% for p in range(1, total_pages + 1) %}
+                <a href="{{ url_for('tools', page=p) }}" class="{% if page == p %}active{% endif %}">{{ p }}</a>
+                {% endfor %}
+                {% if page < total_pages %}
+                <a href="{{ url_for('tools', page=page+1) }}">Próximo &raquo;</a>
+                {% endif %}
             </div>
         </div>
     </main>

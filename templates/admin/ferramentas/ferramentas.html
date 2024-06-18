@@ -76,35 +76,28 @@
        
 
         <table>
-            <tr>
-              <th>Título</th>
-              <th>Lojas</th>
-              <th>Data de criação</th>
-              <th>Submetido por</th>
-              <th>Ações</th>
-            </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-              <td>Germany</td>
-              <td>
-                <i class="fa fa-pencil"></i>
-                <i class="fas fa-trash"></i>
-            </td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-              <td>Mexico</td>
-              <td>
-                <i class="fa fa-pencil"></i>
-                <i class="fas fa-trash"></i>
-            </td>
-            </tr>
-          </table>
-       
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Data de criação</th>
+                    <th>Submetido por</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tool in all_tools %}
+                <tr>
+                    <td>{{ tool.title }}</td>
+                    <td>{{ tool.created_at}}</td>
+                    <td>{{ tool.author }}</td>
+                    <td>
+                        <i class="fa fa-pencil"></i>
+                        <i class="fas fa-trash"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <script>

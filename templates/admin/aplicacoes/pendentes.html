@@ -71,37 +71,34 @@
     <div class="content">
         <h2>Aplicações pendentes de aprovação</h2>
         <div>
-            <button onclick="displayTodos()">Todos</button>
-            <button onclick="displayCientifica()">Científica</button>
-            <button onclick="displayLinguistica()">Linguística</button>
             <input type="text" id="search" placeholder="Pesquisar...">
         </div>
 
         <hr></hr>
 
-       
-
         <table>
-            <tr>
-              <th>Título</th>
-              <th>Lojas</th>
-              <th>Data de criação</th>
-              <th>Submetido por</th>
-              <th>Aprovado</th>
-            </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-              <td>Germany</td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-              <td>Mexico</td>
-            </tr>
-          </table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Data de criação</th>
+                    <th>Submetido por</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in pendent_apps %}
+                <tr>
+                    <td>{{ app.title }}</td>
+                    <td>{{ app.created_at}}</td>
+                    <td>{{ app.author }}</td>
+                    <td>
+                        <i class="fa fa-pencil"></i>
+                        <i class="fas fa-trash"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
        
     </div>
 

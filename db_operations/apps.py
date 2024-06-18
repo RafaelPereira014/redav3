@@ -17,6 +17,16 @@ def get_all_apps():
     conn.close()
     return apps
 
+def get_apps():
+    """Get all approved resources from the DB."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE type_id='3'  ORDER BY id DESC")
+    all_apps = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return all_apps
+
 def get_apps_from_user(userid):
     """Get all apps from user."""
     conn = connect_to_database()
@@ -34,5 +44,13 @@ def get_apps_from_user(userid):
     
     return apps_user
 
+def get_pendent_apps():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE type_id='3' AND approved='0' ORDER BY id DESC")
+    pendent_apps = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return pendent_apps
 
 

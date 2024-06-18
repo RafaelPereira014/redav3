@@ -39,9 +39,13 @@ def resources():
     
     return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages)
 # Resource Details
-@app.route('/resources/details')
-def resource_details():
-    return render_template('resource_details.html')
+@app.route('/resources/details/<int:resource_id>')
+def resource_details(resource_id):
+    resource_details = get_all_details_resource(resource_id)
+    if not resource_details:
+        return render_template('error.html', message='Resource not found'), 404
+
+    return render_template('resource_details.html', resource_details=resource_details)
 
 # Apps
 @app.route('/apps', methods=['GET'])
@@ -66,10 +70,29 @@ def novaapp():
 
 # Tools
 @app.route('/tools')
-def tools():
-    all_tools = get_all_tools()
+def tools(page=1):
+    per_page = 8
+    offset = (page - 1) * per_page
     
-    return render_template('tools.html',all_tools=all_tools)
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Count total number of tools for pagination
+    cursor.execute("SELECT COUNT(*) as total FROM Resources WHERE type_id=%s", (1,))
+    total_tools = cursor.fetchone()['total']
+    
+    # Fetch tools for the current page
+    cursor.execute("SELECT * FROM Resources WHERE type_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (1, per_page, offset))
+    all_tools = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    # Calculate total number of pages
+    total_pages = (total_tools + per_page - 1) // per_page
+    
+    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages)
+
 
 @app.route('/novaferramenta')
 def newtool():
@@ -132,7 +155,8 @@ def admin():
 
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():
-    return render_template('admin/recursos/pendentes.html')
+    recursos_pendentes = get_pendent_resources()
+    return render_template('admin/recursos/pendentes.html',recursos_pendentes=recursos_pendentes)
 
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():
@@ -140,23 +164,28 @@ def po_pendentes():
 
 @app.route('/dashboard/recursos/ocultos')
 def hidden():
-    return render_template('admin/recursos/ocultos.html')
+    ocultos = get_hidden_resources()
+    return render_template('admin/recursos/ocultos.html',ocultos=ocultos)
 
 @app.route('/dashboard/aplicacoes')
 def admin_apps():
-    return render_template('admin/aplicacoes/aplicacoes.html')
+    all_apps = get_apps()  # Replace with your function to get all apps
+    return render_template('admin/aplicacoes/aplicacoes.html',all_apps=all_apps)
 
 @app.route('/dashboard/aplicacoes/pendentes')
 def admin_apps_pendentes():
-    return render_template('admin/aplicacoes/pendentes.html')
+    pendent_apps = get_pendent_apps()
+    return render_template('admin/aplicacoes/pendentes.html',pendent_apps=pendent_apps)
 
 @app.route('/dashboard/ferramentas')
 def admin_tools():
-    return render_template('admin/ferramentas/ferramentas.html')
+    all_tools = get_all_tools()
+    return render_template('admin/ferramentas/ferramentas.html',all_tools=all_tools)
 
 @app.route('/dashboard/ferramentas/pendentes')
 def admin_tools_pendentes():
-    return render_template('admin/ferramentas/pendentes.html')
+    pendent_tools = get_pendent_tools()
+    return render_template('admin/ferramentas/pendentes.html',pendent_tools=pendent_tools)
 
 @app.route('/dashboard/comentarios/pendentes')
 def admin_comments():

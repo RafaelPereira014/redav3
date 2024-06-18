@@ -35,4 +35,13 @@ def get_tools_from_user(userid):
     return tools_user
 
 
+def get_pendent_tools():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM Resources WHERE type_id='1' AND approved='0' ORDER BY id DESC")
+    pendent_tools = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return pendent_tools
+
 
