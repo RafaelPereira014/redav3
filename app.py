@@ -3,6 +3,7 @@ import mysql.connector
 from db_operations.resources import *
 from db_operations.apps import *
 from db_operations.tools import *
+from db_operations.resources_details import *
 
 
 
@@ -42,7 +43,7 @@ def resources():
 # Resource Details
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
-    resource_details = get_all_details_resource(resource_id)
+    resource_details = get_resource_and_taxonomy_details(resource_id)
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
 

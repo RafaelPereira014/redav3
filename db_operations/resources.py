@@ -90,15 +90,57 @@ def get_resources_from_user(userid):
     
     return resources_user
 
-def get_all_details_resource(resource_id):
-    
+def get_resource_and_taxonomy_details(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE id=%s ", (resource_id,))
-    resources_details = cursor.fetchall()
+    
+    # Query to fetch resource details
+    resource_query = """
+        SELECT * FROM Resources WHERE id = %s
+    """
+    cursor.execute(resource_query, (resource_id,))
+    resource_details = cursor.fetchone()
+    
+    # Query to fetch taxonomy details
+    taxonomy_query = """
+        SELECT
+            rt.resource_id,
+            MAX(CASE WHEN tax.title = 'Idiomas' THEN t.title END) AS idiomas_title,
+            MAX(CASE WHEN tax.title = 'Formato' THEN t.title END) AS formato_title,
+            MAX(CASE WHEN tax.title = 'Modos de utilização' THEN t.title END) AS modo_utilizacao_title,
+            MAX(CASE WHEN tax.title = 'Requisitos Técnicos' THEN t.title END) AS requisitos_tecnicos_title
+        FROM
+            resource_terms rt
+        JOIN
+            Terms t ON rt.term_id = t.id
+        JOIN
+            Taxonomies tax ON t.taxonomy_id = tax.id
+        WHERE
+            rt.resource_id = %s
+        GROUP BY
+            rt.resource_id;
+    """
+    cursor.execute(taxonomy_query, (resource_id,))
+    taxonomy_details = cursor.fetchone()
+    
     cursor.close()
     conn.close()
-    return resources_details
+    
+    # Combine both resource and taxonomy details into a single dictionary
+    if resource_details and taxonomy_details:
+        combined_details = {
+            'resource_id': resource_id,
+            'title': resource_details['title'],
+            'description': resource_details['description'],
+            'idiomas_title': taxonomy_details['idiomas_title'],
+            'formato_title': taxonomy_details['formato_title'],
+            'modo_utilizacao_title': taxonomy_details['modo_utilizacao_title'],
+            'requisitos_tecnicos_title': taxonomy_details['requisitos_tecnicos_title']
+            # Add more fields as needed
+        }
+        return combined_details
+    else:
+        return None  # Or handle the case where details are not found
 
 
 

@@ -77,12 +77,10 @@
     <!-- Main Content -->
     <main>
         <div class="container">
-            <div class="header-resource">
-                <span> Inicio > Recursos > nome recurso </span>
-            </div>
+            {% if resource_details %}
             <div class="resource-details">
-                {%for resource in resource_details%}
                 <div class="resource-info">
+                    <!-- Resource details -->
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
                     <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
                     <div class="actions">
@@ -90,40 +88,10 @@
                             <a href="#" onclick="openShareModal()"><i class="fas fa-share-alt"></i></a>
                         </div>
                     </div>
-                    <h2>{{ resource.title }}</h2>
+                    <h2>{{ resource_details.title }}</h2>
                     <div>
-                        <span>{{ resource.description }}</span>
+                        <span>{{ resource_details.description }}</span>
                     </div>
-                    <!-- Star rating -->
-                    
-                    <!-- Additional details 
-                    <div class="mini-fields">
-                        <div>
-                            <span>Formato:</span>
-                            <span>{{ resource.format }}</span>
-                        </div>
-                        <div>
-                            <span>Submetido por:</span>
-                            <span>{{ resource.submitted_by }}</span>
-                        </div>
-                        <div>
-                            <span>Criado a:</span>
-                            <span>{{ resource.created_at }}</span>
-                        </div>
-                        <div>
-                            <span>Autor:</span>
-                            <span>{{ resource.author }}</span>
-                        </div>
-                        <div>
-                            <span>Organização:</span>
-                            <span>{{ resource.organization }}</span>
-                        </div>
-                        <div>
-                            <span>Palavras-chave:</span>
-                            <span>{{ resource.keywords }}</span>
-                        </div>
-                    </div>
-                    -->
                     <!-- Actions -->
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
@@ -133,71 +101,22 @@
                         <button class="hide">Ocultar</button>
                     </div>
                     <!-- Ficha Técnica -->
-
                     <div class="ficha-tecnica">
                         <h3>Ficha Técnica</h3>
                         <div class="separator">
                             <span>Idioma:</span>
-                            <span>{{ resource.language }}</span>
+                            <span>{{ resource_details.idiomas_title }}</span>
                         </div>
                         <div class="separator">
                             <span>Modos de utilização:</span>
-                            <span>{{ resource.usage_modes }}</span>
+                            <span>{{ resource_details.modo_utilizacao_title }}</span>
                         </div>
                         <div class="separator">
                             <span>Requisitos técnicos:</span>
-                            <span>{{ resource.technical_requirements }}</span>
+                            <span>{{ resource_details.requisitos_tecnicos_title }}</span>
                         </div>
                     </div>
-                    <!-- Proposta de operacionalização -->
-                    <div class="proposta-op">
-                        <h3>Proposta de operacionalização</h3>
-                        <div class="button-container">
-                            {% for key, proposal in resource.proposals %}
-                                <button onclick="showProposta({{ key }})">Proposta {{ key }}</button>
-                            {% endfor %}
-                        </div>
-                        {% for key, proposal in resource.proposals %}
-                            <div id="proposta{{ key }}" style="display: none;">
-                                <div class="separator">
-                                    <span>Autor:</span>
-                                    <span>{{ proposal.author }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Organização:</span>
-                                    <span>{{ proposal.organization }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Criado a:</span>
-                                    <span>{{ proposal.created_at }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Anos de escolaridade:</span>
-                                    <span>{{ proposal.school_years }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Disciplinas:</span>
-                                    <span>{{ proposal.disciplines }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Dominios:</span>
-                                    <span>{{ proposal.domains }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Subdominios:</span>
-                                    <span>{{ proposal.subdomains }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Conceitos:</span>
-                                    <span>{{ proposal.concepts }}</span>
-                                </div><div class="separator">
-                                    <span>Proposta de operacionalização:</span>
-                                    <span>{{ proposal.operationalization }}</span>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    
+                
                     <!-- Comentários -->
                     <div class="comments">
                         <h3>Comentários</h3>
@@ -206,22 +125,25 @@
                             <button>Submeter comentário</button>
                         </div>
                         <div class="comment-list">
-                            {% for comment in resource.comments %}
-                                <div class="comment">
-                                    <div class="comment-info">
-                                        <span class="comment-author">{{ comment.author }}:</span>
-                                        <span class="comment-date">{{ comment.date }}</span>
-                                    </div>
-                                    <p>{{ comment.text }}</p>
+                            {% for comment in resource_details.comments %}
+                            <div class="comment">
+                                <div class="comment-info">
+                                    <span class="comment-author">{{ comment.author }}:</span>
+                                    <span class="comment-date">{{ comment.date }}</span>
                                 </div>
+                                <p>{{ comment.text }}</p>
+                            </div>
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-                {%endfor%}
             </div>
+            {% else %}
+            <p>Recurso não encontrado.</p>
+            {% endif %}
         </div>
     </main>
+    
     
     <div id="shareModal" class="modal">
         <div class="modal-content">

@@ -4,6 +4,7 @@ from db_operations.resources import *
 from db_operations.new_resource import *
 from db_operations.apps import *
 from db_operations.tools import *
+from db_operations.resources_details import *
 
 # MySQL connection configuration
 config = {
@@ -23,7 +24,7 @@ try:
         # Create a cursor object to execute SQL queries
         cursor = connection.cursor()
         
-        change = get_all_details_resource('3900')
+        change = get_resource_and_taxonomy_details('3972')
         #name = get_username(9)
         change_str = str(change)
 
