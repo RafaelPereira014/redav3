@@ -34,6 +34,7 @@
         margin: 10px 0;
         
     }
+    
 </style>
 <body>
     <div class="header-governo">
@@ -65,6 +66,12 @@
             </nav>
             <nav class="top-nav">
                 <ul>
+                    <!--
+                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Help</a></li>
+                    -->
+
                     <li><a href="/ajuda">Ajuda</a></li>
                     <li><a href="/myaccount">Minha Conta</a></li>
                     <li><a href="/dashboard" target="_blank">Administração</a></li>
@@ -77,8 +84,11 @@
     <!-- Main Content -->
     <main>
         <div class="container">
-            {% if resource_details %}
+            <div class="header-resource">
+                <span> Inicio > Recursos > nome recurso </span>
+            </div>
             <div class="resource-details">
+               
                 <div class="resource-info">
                     <!-- Resource details -->
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
@@ -88,17 +98,45 @@
                             <a href="#" onclick="openShareModal()"><i class="fas fa-share-alt"></i></a>
                         </div>
                     </div>
-                    <h2>{{ resource_details.title }}</h2>
+                    <h2>{{ resource_details.title | safe }}</h2>
                     <div>
-                        <span>{{ resource_details.description }}</span>
+                        <span>{{ resource_details.description | safe }}</span>
                     </div>
-                    <!-- Actions -->
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+
+                    <div class="mini-fields">
+                        <div>
+                            <span>Formato:</span>
+                            <span>{{resource_details.formato_title}}</span>
+                        </div>
+                        <div>
+                            <span>Criado a:</span>
+                            <span>{{resource_details.created_at}}</span>
+                        </div>
+                        <div>
+                            <span>Autor:</span>
+                            <span>{{resource_details.author}}</span>
+                        </div>
+                        <div>
+                            <span>Organização:</span>
+                            <span>{{resource_details.organization}}</span>
+                        </div>
+                        <div>
+                            <span>Palavras-chave:</span>
+                            <span>aasa;dasdsab;cfasd;dfadsa;easdas;edaads;f;</span>
+                        </div>
+                    </div>
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
                         <button>Gerir propostas</button>
                         <button>Editar recurso</button>
                         <button class="Delete">Eliminar</button>
                         <button class="hide">Ocultar</button>
+                    
                     </div>
                     <!-- Ficha Técnica -->
                     <div class="ficha-tecnica">
@@ -111,39 +149,89 @@
                             <span>Modos de utilização:</span>
                             <span>{{ resource_details.modo_utilizacao_title }}</span>
                         </div>
+                        {% if resource_details.requisitos_tecnicos_title is not none %}
                         <div class="separator">
                             <span>Requisitos técnicos:</span>
                             <span>{{ resource_details.requisitos_tecnicos_title }}</span>
                         </div>
+                        {% endif %}
                     </div>
-                
-                    <!-- Comentários -->
-                    <div class="comments">
-                        <h3>Comentários</h3>
-                        <div class="comment-form">
-                            <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
-                            <button>Submeter comentário</button>
+                    <div class="proposta-op">
+                        <h3>Proposta de operacionalização</h3>
+                        <div class="button-container">
+                            <button onclick="showProposta(1)">Proposta 1</button>
                         </div>
-                        <div class="comment-list">
-                            {% for comment in resource_details.comments %}
-                            <div class="comment">
-                                <div class="comment-info">
-                                    <span class="comment-author">{{ comment.author }}:</span>
-                                    <span class="comment-date">{{ comment.date }}</span>
-                                </div>
-                                <p>{{ comment.text }}</p>
+                        <div id="proposta1" style="display: block;">
+                            <div class="separator">
+                                <span>Autor:</span>
+                                {% for user_id, user_info in resource_details.user_details.items() %}
+                                    <span>{{user_info.name}}</span>
+                                {% endfor %}                           
+                             </div>
+                            <div class="separator">
+                                <span>Organização:</span>
+                                {% for user_id, user_info in resource_details.user_details.items() %}
+                                    <span>{{user_info.organization}}</span>
+                                {% endfor %} 
                             </div>
-                            {% endfor %}
+                            <div class="separator">
+                                <span>Proposta de operacionalização:</span>
+                                <span>testestesteste</span>
+                            </div>
+                            <div class="separator">
+                                <span>Anos de escolaridade:</span>
+                                <span>{{ resource_details.scripts.anos_resources|join(', ') }}</span>
+                            </div>
+                            <div class="separator">
+                                <span>Disciplinas:</span>
+                                <span>{{ resource_details.scripts.areas_resources|join(', ') }}</span>
+                            </div>
+                            <div class="separator">
+                                <span>Domínios/Temas:</span>
+                                <span>{{ resource_details.scripts.dominios_resources|join(', ') }}</span>
+                            </div>
+                            <div class="separator">
+                                <span>Subdomínios:</span>
+                                <span>{{ resource_details.scripts.subdominios|join(', ') }}</span>
+                            </div>
+                            <div class="separator">
+                                <span>Conceitos:</span>
+                                <span>kmasdkd</span>
+                            </div>
+                        </div>
+                        
+                        
+                       
+                    </div>
+                    
+                </div>
+                
+                <div class="comments">
+                    <h3>Comentários</h3>
+                    <div class="comment-form">
+                        <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
+                        <button>Submeter comentário</button>
+                    </div>
+                    <div class="comment-list">
+                        <div class="comment">
+                            <div class="comment-info">
+                                <span class="comment-author">John Doe:</span>
+                                <span class="comment-date">April 25, 2024</span>
+                            </div>
+                            <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                        <div class="comment">
+                            <div class="comment-info">
+                                <span class="comment-author">Jane Doe:</span>
+                                <span class="comment-date">April 26, 2024</span>
+                            </div>
+                            <p>Another comment here. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            {% else %}
-            <p>Recurso não encontrado.</p>
-            {% endif %}
         </div>
     </main>
-    
     
     <div id="shareModal" class="modal">
         <div class="modal-content">

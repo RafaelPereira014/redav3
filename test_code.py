@@ -22,17 +22,23 @@ try:
         print("Connected to MySQL database")
 
         # Create a cursor object to execute SQL queries
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
         
-        change = get_resource_and_taxonomy_details('3972')
-        #name = get_username(9)
+        # Call the function to get combined details
+        change = get_combined_details('3974')
+        
+        # Convert the dictionary to a formatted string
         change_str = str(change)
 
-        # Replace commas with newlines
+        # Replace commas with newlines for better readability
         formatted_change = change_str.replace(',', ',\n')
 
         # Print the formatted string
         print(formatted_change)
+    
+    # Close the cursor
+    cursor.close()
+
     # Close the database connection
     connection.close()
     print("Connection closed")
