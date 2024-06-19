@@ -81,8 +81,16 @@
                     {% for resource in highlighted_resources %}
                     <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="carousel-item-{{ loop.index }}">
                         <div class="carousel-caption">
-                            <h3>{{ resource.title }}</h3>
-                            <p>{{ resource.description }}</p>
+                            <h3>
+                                {{resource.title | safe }}
+                            </h3>
+                            <p>
+                                {% if resource.description|length > 150 %}
+                                    {{ resource.description[:100] | safe }} ...
+                                {% else %}
+                                    {{ resource.description |safe }}
+                                {% endif %}
+                            </p>
                             <a href="/resources/details/{{ resource.id }}" class="button">Ler mais...</a>
                         </div>
                     </div>

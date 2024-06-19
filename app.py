@@ -23,8 +23,9 @@ connection = mysql.connector.connect(**config)
 @app.route('/')
 def homepage():
     recent_resources = get_recent_approved_resources()
-    highlited_resources = get_highlighted_resources()
-    return render_template('index.html',recent_resources=recent_resources,highlited_resources=highlited_resources)
+    highlighted_resources = get_highlighted_resources()  # Corrected variable name
+    return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources)
+
 
 # Resources
 @app.route('/resources')

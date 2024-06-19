@@ -25,16 +25,14 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_combined_details('3974')
+        change = get_highlighted_resources()
         
-        # Convert the dictionary to a formatted string
-        change_str = str(change)
+        
 
-        # Replace commas with newlines for better readability
-        formatted_change = change_str.replace(',', ',\n')
+       
 
         # Print the formatted string
-        print(formatted_change)
+        print(change)
     
     # Close the cursor
     cursor.close()

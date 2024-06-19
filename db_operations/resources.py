@@ -56,7 +56,7 @@ def get_hidden_resources():
 def get_highlighted_resources():
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE highlight='1' ORDER BY id DESC")
+    cursor.execute("SELECT id,title,description FROM Resources WHERE highlight='1' ORDER BY id DESC")
     highlighted_resources = cursor.fetchall()
     cursor.close()
     conn.close()
