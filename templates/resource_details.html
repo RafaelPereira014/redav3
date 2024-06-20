@@ -264,14 +264,14 @@
                         <i class="fas fa-flag"></i>
                         <h2>
                             {% if related.title|length > 25 %}
-                                {{ related.title[:25] | safe}} ...
+                                {{ related.title[:25] }} ...
                             {% else %}
                                 {{ related.title|safe}}
                             {% endif %}
                         </h2>
                         <p>
                             {% if related.description|length > 100 %}
-                                {{ related.description[:100]|safe }} ...
+                                {{ related.description[:100] }} ...
                             {% else %}
                                 {{ related.description |safe }}
                             {% endif %}
