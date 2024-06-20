@@ -133,8 +133,8 @@
                             <!-- Heart Icon -->
                             <i class="fas fa-heart"></i>
                         </div>
-                        <button>Ver Recurso</button>
-                        <button class="edit">Editar</button>
+                        <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
+                        <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <button class="eliminar">Eliminar</button>
                     </div>
                 {% endfor %}
