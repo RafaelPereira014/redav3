@@ -28,21 +28,28 @@ def get_apps():
     return all_apps
 
 def get_apps_from_user(userid):
-    """Get all apps from user."""
+    """Get all tools from user and their count."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
+    apps_user = []
+    apps_count = 0
+    
     try:
+        # Query to fetch all tools
         cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id=%s ORDER BY id DESC", (userid, 3))
         apps_user = cursor.fetchall()
+        
+        # Query to count the tools
+        cursor.execute("SELECT COUNT(*) AS count FROM Resources WHERE user_id=%s AND type_id=%s", (userid, 3))
+        apps_count = cursor.fetchone()['count']
     except Exception as e:
         print(f"Error: {e}")
-        apps_user = []
     finally:
         cursor.close()
         conn.close()
     
-    return apps_user
+    return apps_user, apps_count
 
 def get_pendent_apps():
     conn = connect_to_database()

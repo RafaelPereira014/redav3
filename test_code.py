@@ -5,6 +5,8 @@ from db_operations.new_resource import *
 from db_operations.apps import *
 from db_operations.tools import *
 from db_operations.resources_details import *
+from db_operations.users_op import *
+from db_operations.scripts import *
 
 # MySQL connection configuration
 config = {
@@ -25,7 +27,7 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_highlighted_resources()
+        change = get_combined_details('3973')
         
         
 

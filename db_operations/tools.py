@@ -18,21 +18,29 @@ def get_all_tools():
     return tools
 
 def get_tools_from_user(userid):
-    """Get all tools from user."""
+    """Get all tools from user and their count."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
+    tools_user = []
+    tools_count = 0
+    
     try:
+        # Query to fetch all tools
         cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id=%s ORDER BY id DESC", (userid, 1))
         tools_user = cursor.fetchall()
+        
+        # Query to count the tools
+        cursor.execute("SELECT COUNT(*) AS count FROM Resources WHERE user_id=%s AND type_id=%s", (userid, 1))
+        tools_count = cursor.fetchone()['count']
     except Exception as e:
         print(f"Error: {e}")
-        tools_user = []
     finally:
         cursor.close()
         conn.close()
     
-    return tools_user
+    return tools_user, tools_count
+
 
 
 def get_pendent_tools():

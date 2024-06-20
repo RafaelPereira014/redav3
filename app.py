@@ -4,6 +4,8 @@ from db_operations.resources import *
 from db_operations.apps import *
 from db_operations.tools import *
 from db_operations.resources_details import *
+from db_operations.users_op import *
+from db_operations.scripts import *
 
 
 
@@ -45,10 +47,25 @@ def resources():
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     resource_details = get_combined_details(resource_id)
+    
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
+    
+    related_resources = get_related_resources(resource_details['title'])
+    
+    return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+# Edit resources
+@app.route('/resources/edit/<int:resource_id>')
+def resource_edit(resource_id):
+    resource_details = get_combined_details(resource_id)
+    
+    if not resource_details:
+        return render_template('error.html', message='Resource not found'), 404
+    
+    related_resources = get_related_resources(resource_details['title'])
+    
+    return render_template('edit_resource.html', resource_details=resource_details, related_resources=related_resources)
 
-    return render_template('resource_details.html', resource_details=resource_details)
 
 # Apps
 @app.route('/apps', methods=['GET'])
@@ -109,10 +126,13 @@ def my_account():
         return "User not found", 404
     
     my_resources = get_resources_from_user(userid)
-    my_apps = get_apps_from_user(userid)
-    my_tools = get_tools_from_user(userid)
+    apps_user,apps_count = get_apps_from_user(userid)
+    tools_user, tools_count = get_tools_from_user(userid)
+    user_details = get_details(userid)
+    resources_count=no_resources(userid)
+    scripts_user,scripts_count=get_script_details(userid)
     
-    return render_template('my_account.html', my_resources=my_resources, my_apps=my_apps, my_tools=my_tools)
+    return render_template('my_account.html', my_resources=my_resources,apps_count=apps_count,apps_user=apps_user, tools_user=tools_user,tools_count=tools_count,user_details=user_details,resources_count=resources_count,scripts_user=scripts_user,scripts_count=scripts_count)
 
 
 # New_resource

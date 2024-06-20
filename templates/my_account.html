@@ -84,19 +84,18 @@
         <div class="container">
             <!-- Profile Header -->
             <div class="header-profile">
-                
                 <div class="profile-icon">
                     <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="Profile Icon">
                 </div>
                 
                 <div class="profile-details">
-                    <h3> Bem vindo(a) Equipa REDA</h3>    
+                    <h3> Bem vindo(a) {{user_details.name}}</h3>     
 
                     <div class="profile-counts">
                         
-                        <p>100 Recursos </p>
-                        <p>50 Aplicações </p>
-                        <p>20 Ferramentas</p>
+                        <p>{{resources_count}} Recursos </p>
+                        <p>{{apps_count}} Aplicações </p>
+                        <p>{{tools_count}} Ferramentas</p>
                     </div>
                 </div>
                  <!-- Options Menu -->
@@ -114,15 +113,16 @@
             <section id="my-resources" class="content-section">
                 <!-- Content for "Meus Recursos" section -->
                 <!-- Display user's resources here -->
-                <h1>Meus recursos</h1>
-                <p>1729 resultados </p>
+                <h1>Os meus recursos</h1>
+                <p> {{resources_count}} resultados </p>
                 <button-pag href="/novorecurso"> + Novo recurso </button-pag>
                 <div class="search-container">
                     <input type="text" placeholder="Palavras-chave...">
                     <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
                     <button class="clear-button"> Limpar Filtros </button>
                 </div>
-                {% for resource in my_resources %}
+                    {% for resource in my_resources %}
+
                     <div class="resource-card">
                         <h3>{{ resource.title | safe }}</h3>
                         <p>Criado a {{ resource.created_at }}</p>
@@ -154,56 +154,51 @@
             </section>
             <section id="my-proposals" class="content-section" style="display: none;">
                 <!-- Content for "Minhas Propostas" section -->
-                <h1>Minhas propostas de op.</h1>
+                <h1>Recrusos com a minha contribuição</h1>
                 <h3>1739 resultados <h3>
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Search...">
                     <button onclick="searchResources()">Search</button>
                 </div>
                     
-                <div class="proposta-card">
-                    <h3>"C'est ma terre", de Christophe Maé"
-                    </h3>
-                    <p>Criado a 7 maio 2024 18:00</p>
-                    <p>Esta canção poderá ser útil para introdução,de temas relacionados com o ambiente e a ecologia ou para consolidação ou revisão de aprendizagens que sobre eles incidam.</p>
-                    <button>Ver </button>
-                    <button>Adicionar proposta</button>
-                    <button>Gerir propostas</button>
-                </div>
+                {% for script in scripts_user%}
+                    <div class="proposta-card">
+                        <h3> Proposta de operacionalização </h3>
+                        <p>{{script.created_at}}</p>
+                        <p>{{script.operation}}</p>
+                        <button>Ver </button>
+                        <button>Adicionar proposta</button>
+                        <button>Gerir propostas</button>
+                    </div>
+                {%endfor%}
 
-                <div class="proposta-card">
-                    <h3>Questionário sobre a União Europeia
-                    </h3>
-                    <p>Criado a 7 maio 2024 18:00</p>
-                    <p>Questionário sobre alguns dos aspetos mais significativos da União Europeia. Estão disponíveis dois níveis de dificuldade: principiante e especialista.</p>
-                    <button>Ver </button>
-                    <button>Adicionar proposta</button>
-                    <button>Gerir propostas</button>
-                </div>
+                
 
             </section>
             <section id="my-apps" class="content-section" style="display: none;">
-                <h1>Minhas apps</h1>
+                <h1>Aplicações</h1>
                 <h3>12 resultados <h3>
-                {% for app in my_apps %}
+                {% for app in apps_user %}
                 <div class="tool-card">
                     <h3>{{app.title | safe }}</h3>
                     <p>{{app.description | safe}}</p>
-                    <button>View app</button>
+                    <button class="edit">Editar</button>
+                    <button class="eliminar">Eliminar</button>
                 </div>
                 {%endfor%}
 
             </section>
             <section id="my-tools" class="content-section" style="display: none;">
                 <!-- Content for "Minhas Propostas" section -->
-                <h1>Minhas ferramentas</h1>
+                <h1>Ferramentas</h1>
                 <h3>12 resultados <h3>
 
-                {% for tool in my_tools %}
+                {% for tool in tools_user %}
                     <div class="tool-card">
                         <h3>{{tool.title | safe}}</h3>
                         <p>{{tool.description | safe}}</p>
-                        <button>Use Tool</button>
+                        <button class="edit">Editar</button>
+                        <button class="eliminar">Eliminar</button>
                     </div>
                 {%endfor%}
                 

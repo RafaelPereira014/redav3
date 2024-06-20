@@ -8,33 +8,54 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 
-def taxonomie_details(resource_id):
+def get_related_resources(resource_title, limit=3):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
+
+    try:
+        # Split the resource title into keywords
+        keywords = resource_title.split()
+        
+        # Create a LIKE pattern for each keyword
+        like_patterns = [f"%{keyword}%" for keyword in keywords]
+        
+        # Build the query to find related resources
+        query = """
+            SELECT * FROM Resources
+            WHERE (
+        """
+        
+        # Add conditions for each keyword pattern
+        query += " OR ".join(["title LIKE %s"] * len(like_patterns))
+        
+        # Close the WHERE clause and add the limit
+        query += """
+            ) AND title != %s
+            ORDER BY CASE
+        """
+        
+        # Add case for ordering by keyword match count
+        for index, keyword in enumerate(keywords):
+            query += f" WHEN title LIKE %s THEN {index + 1}"
+        
+        query += """
+            ELSE NULL END
+            LIMIT %s
+        """
+        
+        # Prepare the parameters for the query
+        query_params = like_patterns + [resource_title] + like_patterns + [limit]
+        
+        # Execute the query with the patterns and the original title to exclude
+        cursor.execute(query, query_params)
+        related_resources = cursor.fetchall()
+    except Exception as e:
+        print(f"Error: {e}")
+        related_resources = []
+    finally:
+        cursor.close()
+        conn.close()
     
-    query = """
-        SELECT
-            rt.resource_id,
-            MAX(CASE WHEN tax.title = 'Idiomas' THEN t.title END) AS idiomas_title,
-            MAX(CASE WHEN tax.title = 'Formato' THEN t.title END) AS formato_title,
-            MAX(CASE WHEN tax.title = 'Modos de utilização' THEN t.title END) AS modo_utilizacao_title,
-            MAX(CASE WHEN tax.title = 'Requisitos Técnicos' THEN t.title END) AS requisitos_tecnicos_title
-        FROM
-            resource_terms rt
-        JOIN
-            Terms t ON rt.term_id = t.id
-        JOIN
-            Taxonomies tax ON t.taxonomy_id = tax.id
-        WHERE
-            rt.resource_id = %s
-        GROUP BY
-            rt.resource_id;
-    """
-    
-    cursor.execute(query, (resource_id,))
-    resource_details = cursor.fetchone()
-    
-    cursor.close()
-    conn.close()
-    
-    return resource_details
+    return related_resources
+
+

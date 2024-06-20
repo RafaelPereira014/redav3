@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-9Lf9+4Mjcjy5uDZ4AdK6GhpOj76lwhVbl2+uYvs1zLoXgRUeGNCZXz0aTl+1S9NpBUrKb9ICbpZMWZ3BhHrT7w==" crossorigin="anonymous" />
+
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+
+
+    <title>Novo/Editar recurso - REDA</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    
+
+    <!-- Link to TinyMCE CDN -->
+    <script src="https://cdn.tiny.cloud/1/hcsdmgk5ojfti5cengfoxv1zfkb2t21ei6ue2obbe85k8lst/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        // Initialize TinyMCE editor
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
+            menubar: false
+        });
+    </script>
+    <style>
+        .container2 {
+            background-image: url('static/images/new-form-bg.jpg');
+            background-size: cover; /* Adjust the background size */
+            background-position: center; /* Center the background image */
+            text-align: center; /* Center the text horizontally */
+            padding: 40px 0; /* Add padding for better spacing */
+            color: #fff; /* Change text color to white for better contrast */
+        }
+        .required {
+            position: relative;
+        }
+        
+        .required::after {
+            content: '*';
+            position: absolute;
+            top: 0;
+            right:absolute;
+            color: red;
+            font-size: 1.4rem;
+            line-height: 0.3;
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="header-governo">
+        <img src="static/images/logo.GOV-AZORES.2019.png" alt="Governo dos Açores">
+        <span> Esta é uma presença oficial do <a href="https://portal.azores.gov.pt">Governo dos Açores</a> </span>
+    </div>
+    <header>
+        <div class="container">
+            <a href="/">
+                <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
+            </a>
+            <!-- second div , above the header div with background image-->
+            
+            <nav>
+                <ul>
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/apps">Aplicações</a></li>
+                    <li><a href="/tools">Ferramentas</a></li>
+                    
+                </ul>
+            </nav>
+            <nav class="top-nav">
+                <ul>
+                    <!--
+                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
+                    <li><a href="#">Register</a></li>
+                    <li><a href="#">Help</a></li>
+                    -->
+
+                    <li><a href="/ajuda">Ajuda</a></li>
+                    <li><a href="/myaccount">Minha Conta</a></li>
+                    <li><a href="/dashboard" target="_blank">Administração</a></li>
+                    <li><a href="#">Sair</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container2">
+        <h1>Novo recurso</h1>
+        <p>Detalhes > Metadados </p>
+        <img src="" alt="">
+    </div>
+    <main>
+        <div class="container">
+            <h1>Detalhes</h1>
+            <div class="input-group-escolaridade required">
+                <h2>Ano de Escolaridade:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/escolaridade.js') }}"></script>
+
+            </div>
+            <div class="input-group-disci required">
+                <h2>Disciplinas:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/disciplinas.js') }}"></script>
+            </div>
+            <div class="input-group-domain required">
+                <h2>Dominios:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
+            </div>
+            <div class="input-group-subdomain required">
+                <h2>Subdominios:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/subdominios.js') }}"></script>
+            </div>
+            <div class="input-group-concept required">
+                <h2>Conceitos:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/conceitos.js') }}"></script>
+            </div>
+
+            <div class="input-group-conceitos ">
+                <h2>Outros conceitos:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/conceitos.js') }}"></script>
+            </div>
+
+            <div class="input-group-descricao-proposta required">
+                <h2>Descrição da proposta de operacionalização:</h2>
+    
+                <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
+            </div>
+           
+            <div class="input-group-helpfile">
+                <h2>Documento de apoio:</h2>
+                <input type="file" id="ficheiro" name="ficheiro" >
+               
+                <!-- Add more radio options as needed -->
+            </div>
+            <div class="input-group-destinatario">
+                <h2>Destinatarios:</h2>
+                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
+
+                <!-- Add more radio options as needed -->
+            </div>
+            <small class="small-text">
+                <span class="text-danger">*</span>
+                Campo obrigatório
+            </small>
+            
+            <button type="submit">Criar recurso</button>
+            <button type="submit">Cancelar</button>
+
+        </div>
+    </main>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <i class="fas fa-user user-icon"></i>
+            <h2>Login</h2>
+            <form>
+                <div class="login-input">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="login-input">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="button-container">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+     <!-- Footer -->
+     <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-nav">
+                <a href="/sobre">Sobre</a>
+                <a href="/ajuda">Ajuda</a>
+                <a href="#">Ficha Técnica</a>
+                <a href="/politica-privacidade">Política de Privacidade</a>
+                <a href="/faleconnosco">
+                    <button>Fale connosco</button>
+                </a>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+            
+            <div class="additional-images">
+                <img src="static/images/dre_transparent.png" alt="Image 1">
+                <img src="static/images/gov_acores_transparent.png" alt="Image 2">
+            </div>
+            <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
+
+        </div>
+    </footer>
+</body>
+</html>

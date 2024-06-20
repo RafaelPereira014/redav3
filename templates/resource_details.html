@@ -85,7 +85,7 @@
     <main>
         <div class="container">
             <div class="header-resource">
-                <span> Inicio > Recursos > nome recurso </span>
+                <span> Inicio > Recursos > {{ resource_details.title | safe }}</span>
             </div>
             <div class="resource-details">
                
@@ -133,7 +133,7 @@
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
                         <button>Gerir propostas</button>
-                        <button>Editar recurso</button>
+                        <a href="/resources/edit/{{ resource_details.resource_id }}"><button>Editar recurso</button></a>
                         <button class="Delete">Eliminar</button>
                         <button class="hide">Ocultar</button>
                     
@@ -254,58 +254,39 @@
     <div class="related">
         <h2>Outros recursos relacionados</h2>
             <div class="rectangles">
+                {% for related in related_resources%}
                 <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <span class="image-meta">Multidisciplinar</span>
+                    
+                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
+                        <span class="image-meta">Multidisciplinar</span>
 
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-flag"></i>
-                    <h2>Diferença entre clima e estado de tempo</h2>
-                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                    <div class="buttons">
-                        
-                        <a href="/resources/details"><button>Ver recurso</button></a>
-                        
-                    </div>
-                    <div class="rating">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </div>
-                    <div class="year-cycle">
-                        <span>2º Ciclo</span> | <span>Primária</span>
-                    </div>
-                    <p>21 de Março 2024</p>
-                    <p>Simulação</p>
-                </div>
-                <div class="rectangle">
-                    <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                    <span class="image-meta">Geografia</span>
+                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-flag"></i>
+                        <h2>
+                            {% if related.title|length > 25 %}
+                                {{ related.title[:25]}} ...
+                            {% else %}
+                                {{ related.title|safe}}
+                            {% endif %}
+                        </h2>
+                        <p>
+                            {% if related.description|length > 100 %}
+                                {{ related.description[:100] }} ...
+                            {% else %}
+                                {{ related.description |safe }}
+                            {% endif %}
+                        </p>
+                        <div class="buttons">
+                            
+                            <a href="/resources/details/{{ related.id }}"><button>Ver recurso</button></a>
 
-                    <i class="fas fa-heart"></i>
-                    <i class="fas fa-flag"></i>
-                    <h2>Diferença entre clima e estado de tempo</h2>
-                    <p>Vídeo sobre as diferenças entre os conceitos de clima e de estado...</p>
-                    <div class="buttons">
-                        <a href="/resources/details"><button>Ver recurso</button></a>
-                        
-                    </div>
-                    <div class="rating">
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star checked"></span>
-                        <span class="fa fa-star"></span>
-                        <span class="fa fa-star"></span>
-                    </div>
-                    <div class="year-cycle">
-                        <span>2º Ciclo</span> | <span>Primária</span>
-                    </div>
-                    <p>21 de Março 2024</p>
-                    <p>Simulação</p>
+                            
+                        </div>
+                        <p>Simulação</p>
                     
                 </div>
+                {%endfor%}
+                
             </div>
 
     </div>
