@@ -49,7 +49,20 @@ def resources():
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages)
+    # Define the range of pages to show
+    if total_pages <= 5:
+        page_range = range(1, total_pages + 1)
+    else:
+        if page <= 3:
+            page_range = range(1, 6)
+        elif page >= total_pages - 2:
+            page_range = range(total_pages - 4, total_pages + 1)
+        else:
+            page_range = range(page - 2, page + 3)
+
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range)
+
+
 
 
 # Resource Details
@@ -67,6 +80,11 @@ def resource_details(resource_id):
         return render_template('error.html', message='Resource not found'), 404
     
     related_resources = get_related_resources(resource_details['title'])
+    for related in related_resources:
+        
+        related['image_url'] = get_resource_image_url(slug)
+        related['embed'] = get_resource_embed(resource_id)
+    
 
     
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)

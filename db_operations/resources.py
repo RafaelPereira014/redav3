@@ -24,19 +24,23 @@ def get_userid(username):
         return None
 
 def get_all_resources(page, per_page):
-    offset = (page - 1) * per_page
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
+    offset = (page - 1) * per_page
+
     query = """
         SELECT * FROM Resources
+        ORDER BY id DESC
         LIMIT %s OFFSET %s
     """
+    
     cursor.execute(query, (per_page, offset))
     resources = cursor.fetchall()
     
     cursor.close()
     conn.close()
+    
     return resources
 
 def get_total_resource_count():
@@ -44,12 +48,14 @@ def get_total_resource_count():
     cursor = conn.cursor()
     
     query = "SELECT COUNT(*) FROM Resources"
+    
     cursor.execute(query)
-    total_resources = cursor.fetchone()[0]
+    total_count = cursor.fetchone()[0]
     
     cursor.close()
     conn.close()
-    return total_resources
+    
+    return total_count
 
 
 def get_pendent_resources():
