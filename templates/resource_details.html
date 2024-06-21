@@ -92,7 +92,7 @@
                 <div class="resource-info">
                     <!-- Resource details -->
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
-                    <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
+                    <img src="{{ resource_details.image_url }}" alt="Resource Image"> <!-- Use the image_url attribute here -->
                     <div class="actions">
                         <div class="share-icons">
                             <a href="#" onclick="openShareModal()"><i class="fas fa-share-alt"></i></a>

@@ -34,6 +34,9 @@ def homepage():
 def resources():
     all_resources = get_all_resources()
     # Pagination settings
+    for resource in all_resources:
+        resource['image_url'] = get_resource_image_url(resource['slug'])
+    
     page = request.args.get('page', 1, type=int)
     per_page = 12
     total_resources = len(all_resources)
@@ -47,11 +50,16 @@ def resources():
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     resource_details = get_combined_details(resource_id)
+    slug = get_resouce_slug(resource_id)
+    resource_details['image_url'] = get_resource_image_url(slug)
+    
+    
     
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
     
     related_resources = get_related_resources(resource_details['title'])
+
     
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
 # Edit resources

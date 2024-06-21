@@ -148,7 +148,7 @@
                 {% for resource in all_resources %}
                 <div class="rectangle">
                     <!-- Assuming this is within your HTML template -->
-                    <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
+                    <img src="{{ resource.image_url }}" alt="Resource Image"> <!-- Use the image_url attribute here -->
                     <span class="image-meta">{{ resource.slug }}</span>
                     <i class="fas fa-heart"></i>
                     <i class="fas fa-flag"></i>

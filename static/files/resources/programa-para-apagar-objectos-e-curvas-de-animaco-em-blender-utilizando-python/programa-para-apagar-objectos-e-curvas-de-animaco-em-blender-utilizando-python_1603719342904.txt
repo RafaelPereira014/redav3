@@ -1,0 +1,24 @@
+import bpy
+
+def apagar_tudo():
+    bpy.ops.object.select_all(action='SELECT')
+    bpy.ops.object.delete(use_global=False)
+    bpy.context.scene.frame_end = 1
+    try:
+        if bpy.context.object.animation_data:
+            action = bpy.context.object.animation_data.action
+            if action:
+                layers_a_remover = ["location", "scale", "rotation"]
+                # escolher qual o tipo de layer a remover ( curva ) ou deixar assim para todas.
+                a_apagar=[]
+                for c in action.fcurves:
+                    for tipo in layers_a_remover:
+                        if c.data_path.startswith(tipo):
+                            a_apagar.append(c)
+                # remove fcurves
+                for c in a_apagar:
+                        action.fcurves.remove(c)
+    except:
+        return
+
+apagar_tudo()

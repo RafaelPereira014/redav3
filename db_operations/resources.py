@@ -1,6 +1,7 @@
 from datetime import datetime
+import os
 from config import DB_CONFIG  # Import the database configuration
-from flask import session
+from flask import current_app, session, url_for
 import mysql.connector  # Import MySQL Connector Python module
 
 def connect_to_database():
@@ -240,4 +241,31 @@ def no_resources(userid):
     conn.close()
     return result[0] if result else 0
 
+
+def get_resource_image_url(resource_slug):
+    image_extensions = ['png', 'jpg']
+    directory_path = os.path.join(current_app.root_path, 'static', 'files', 'resources', resource_slug)
+
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        for ext in image_extensions:
+            for filename in os.listdir(directory_path):
+                if filename.startswith(resource_slug) and filename.endswith('.' + ext):
+                    return url_for('static', filename=f'files/resources/{resource_slug}/{filename}')
+
+    return url_for('static', filename='images/default.jpg')
+
+
+def get_resouce_slug(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT slug FROM Resources WHERE id=%s", (resource_id,))
+    slug = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if slug:
+        return slug['slug']
+    else:
+        return None
+    
 
