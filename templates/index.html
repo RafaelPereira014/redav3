@@ -42,6 +42,26 @@
             text-align: center;
         }
 
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        
+        .video-container iframe,
+        .video-container object,
+        .video-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+
         
     </style>
 </head>
@@ -129,7 +149,13 @@
                 {% for resource in recent_resources %}
                 <div class="rectangle">
                     <!-- Assuming this is within your HTML template -->
-                    <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
+                    {% if resource.image_url %}
+                    <img src="{{ resource.image_url }}" >
+                    {% else %}
+                    <div class="video-container">
+                        {{resource.embed | safe}}
+                    </div>
+                    {% endif %}                    
                     <span class="image-meta">{{ resource.slug }}</span>
                     <i class="fas fa-heart"></i>
                     <i class="fas fa-flag"></i>

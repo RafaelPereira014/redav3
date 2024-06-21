@@ -27,7 +27,7 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_resouce_slug('3973')
+        change = get_resource_embed('3973')
         
         
 

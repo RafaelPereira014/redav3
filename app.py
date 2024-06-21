@@ -25,33 +25,41 @@ connection = mysql.connector.connect(**config)
 @app.route('/')
 def homepage():
     recent_resources = get_recent_approved_resources()
+    
+    for resource in recent_resources:
+        resource['image_url'] = get_resource_image_url(resource['slug'])
+        resource['embed'] = get_resource_embed(resource['id'])
     highlighted_resources = get_highlighted_resources()  # Corrected variable name
     return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources)
 
 
-# Resources
 @app.route('/resources')
 def resources():
-    all_resources = get_all_resources()
-    # Pagination settings
-    for resource in all_resources:
-        resource['image_url'] = get_resource_image_url(resource['slug'])
-    
     page = request.args.get('page', 1, type=int)
     per_page = 12
-    total_resources = len(all_resources)
-    total_pages = (total_resources + per_page - 1) // per_page
-    start = (page - 1) * per_page
-    end = start + per_page
-    paginated_resources = all_resources[start:end]
+
+    # Fetch resources for the current page
+    paginated_resources = get_all_resources(page, per_page)
     
+    # Fetch total resource count for pagination
+    total_resources = get_total_resource_count()
+    total_pages = (total_resources + per_page - 1) // per_page
+
+    for resource in paginated_resources:
+        resource['image_url'] = get_resource_image_url(resource['slug'])
+        resource['embed'] = get_resource_embed(resource['id'])
+
     return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages)
+
+
 # Resource Details
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     resource_details = get_combined_details(resource_id)
     slug = get_resouce_slug(resource_id)
     resource_details['image_url'] = get_resource_image_url(slug)
+    resource_details['embed'] = get_resource_embed(resource_id)
+
     
     
     

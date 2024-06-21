@@ -48,6 +48,26 @@
             color: #fff;
             border-color: #333;
         }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        
+        .video-container iframe,
+        .video-container object,
+        .video-container embed {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
     </style>
 </head>
 <body>
@@ -147,8 +167,13 @@
             <div class="rectangles">
                 {% for resource in all_resources %}
                 <div class="rectangle">
-                    <!-- Assuming this is within your HTML template -->
-                    <img src="{{ resource.image_url }}" alt="Resource Image"> <!-- Use the image_url attribute here -->
+                    {% if resource.image_url %}
+                        <img src="{{ resource.image_url }}" alt="Resource Image">
+                    {% else %}
+                        <div class="video-container">
+                            {{ resource.embed | safe }}
+                        </div>
+                    {% endif %}
                     <span class="image-meta">{{ resource.slug }}</span>
                     <i class="fas fa-heart"></i>
                     <i class="fas fa-flag"></i>
@@ -168,7 +193,6 @@
                         {% endif %}
                     </p>
                     
-                    
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
@@ -181,19 +205,22 @@
                     <p>{{ resource.created_at }}</p>
                     <p>{{ resource.type_id }}</p>
                 </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
+
             <div class="pagination">
                 {% if page > 1 %}
-                <a href="{{ url_for('resources', page=page-1) }}">&laquo; Anterior</a>
+                    <a href="{{ url_for('resources', page=page-1) }}">Previous</a>
                 {% endif %}
+                
                 {% for p in range(1, total_pages + 1) %}
-                <a href="{{ url_for('resources', page=p) }}" class="{% if p == page %}active{% endif %}">{{ p }}</a>
+                    <a href="{{ url_for('resources', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
+                
                 {% if page < total_pages %}
-                <a href="{{ url_for('resources', page=page+1) }}">Próximo &raquo;</a>
+                    <a href="{{ url_for('resources', page=page+1) }}">Next</a>
                 {% endif %}
             </div>
+
         </div>
     </main>
     <footer class="footer">

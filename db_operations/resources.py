@@ -23,15 +23,34 @@ def get_userid(username):
     else:
         return None
 
-def get_all_resources():
-    """Get all approved resources from the DB."""
+def get_all_resources(page, per_page):
+    offset = (page - 1) * per_page
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC")
+    
+    query = """
+        SELECT * FROM Resources
+        LIMIT %s OFFSET %s
+    """
+    cursor.execute(query, (per_page, offset))
     resources = cursor.fetchall()
+    
     cursor.close()
     conn.close()
     return resources
+
+def get_total_resource_count():
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    
+    query = "SELECT COUNT(*) FROM Resources"
+    cursor.execute(query)
+    total_resources = cursor.fetchone()[0]
+    
+    cursor.close()
+    conn.close()
+    return total_resources
+
 
 def get_pendent_resources():
     """Get all approved resources from the DB."""
@@ -252,7 +271,7 @@ def get_resource_image_url(resource_slug):
                 if filename.startswith(resource_slug) and filename.endswith('.' + ext):
                     return url_for('static', filename=f'files/resources/{resource_slug}/{filename}')
 
-    return url_for('static', filename='images/default.jpg')
+    return None  # Return None if no image is found
 
 
 def get_resouce_slug(resource_id):
@@ -265,6 +284,19 @@ def get_resouce_slug(resource_id):
     
     if slug:
         return slug['slug']
+    else:
+        return None
+    
+def get_resource_embed(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT embed FROM Resources WHERE id=%s", (resource_id,))
+    embed = cursor.fetchone()  # fetchone is used because we expect only one resource with the given id
+    cursor.close()
+    conn.close()
+
+    if embed:
+        return embed['embed']
     else:
         return None
     
