@@ -188,9 +188,11 @@
                             {{ resource.embed | safe }}
                         </div>
                     {% endif %}
-                    <span class="image-meta">{{ resource.slug }}</span>
+                    <!-- <span class="image-meta">{{ resource.slug }}</span>
                     <i class="fas fa-heart"></i>
                     <i class="fas fa-flag"></i>
+                    -->
+                    <small>Geografia</small>
                     <h2>
                         {% if resource.title|length > 25 %}
                             {{ resource.title[:25] ~ '...' | safe }}

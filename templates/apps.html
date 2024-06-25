@@ -103,7 +103,7 @@
             {% for app in all_apps %}
             {% if loop.index <= 8 %} <!-- Show only 8 per page -->
             <div class="rectangle">
-                <img src="{{ url_for('static', filename='images/new-form-bg.jpg') }}" alt="Background Image">
+                <img src="{{ app.image_url }}" alt="Resource Image">                
                 <div class="text">
                     <h2>{{ app.title }}</h2>
                     <small class="small-text">{{ app.platform }}</small>
@@ -125,13 +125,19 @@
     
             <!-- Pagination -->
             <div class="pagination">
-                {% for page_num in range(1, total_pages + 1) %}
-                    {% if page_num == current_page %}
-                        <a href="#" class="active">{{ page_num }}</a>
-                    {% else %}
-                        <a href="/apps?page={{ page_num }}">{{ page_num }}</a>
-                    {% endif %}
+                {% if page > 1 %}
+                    <a href="{{ url_for('apps', page=1) }}">Início</a>
+                    <a href="{{ url_for('apps', page=page-1) }}">Anterior</a>
+                {% endif %}
+                
+                {% for p in page_range %}
+                    <a href="{{ url_for('apps', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
+                
+                {% if page < total_pages %}
+                    <a href="{{ url_for('apps', page=page+1) }}">Próximo</a>
+                    <a href="{{ url_for('apps', page=total_pages) }}">Último</a>
+                {% endif %}
             </div>
         </div>
     </main>

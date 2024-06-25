@@ -30,7 +30,7 @@ def get_all_resources(page, per_page):
     offset = (page - 1) * per_page
 
     query = """
-        SELECT * FROM Resources
+        SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 AND type_id='2'
         ORDER BY id DESC
         LIMIT %s OFFSET %s
     """

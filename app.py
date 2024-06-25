@@ -101,21 +101,40 @@ def resource_edit(resource_id):
     return render_template('edit_resource.html', resource_details=resource_details, related_resources=related_resources)
 
 
-# Apps
 @app.route('/apps', methods=['GET'])
 def apps():
-    all_apps = get_all_apps()  # Replace with your function to get all apps
     page = request.args.get('page', default=1, type=int)
     apps_per_page = 8
-    total_apps = len(all_apps)
+
+    # Fetch apps for the current page
+    paginated_apps = get_all_apps(page, apps_per_page)
+    
+    # Fetch total app count for pagination
+    total_apps = get_total_app_count()
     total_pages = (total_apps + apps_per_page - 1) // apps_per_page
-    
-    start_index = (page - 1) * apps_per_page
-    end_index = min(start_index + apps_per_page, total_apps)
-    
-    apps_for_current_page = all_apps[start_index:end_index]
-    
-    return render_template('apps.html', all_apps=apps_for_current_page, total_pages=total_pages, current_page=page)
+
+    # Update each app with its slug and image URL
+    for app in paginated_apps:
+        app['slug'] = get_app_slug(app['id'])
+        if app['slug']:
+            app['image_url'] = get_apps_image_url(app['slug'])
+        else:
+            app['image_url'] = None
+
+    # Define the range of pages to show
+    if total_pages <= 5:
+        page_range = range(1, total_pages + 1)
+    else:
+        if page <= 3:
+            page_range = range(1, 6)
+        elif page >= total_pages - 2:
+            page_range = range(total_pages - 4, total_pages + 1)
+        else:
+            page_range = range(page - 2, page + 3)
+
+    return render_template('apps.html', all_apps=paginated_apps, page=page, total_pages=total_pages, page_range=page_range)
+
+
 
 
 @app.route('/novaapp')
@@ -124,28 +143,41 @@ def novaapp():
 
 # Tools
 @app.route('/tools')
-def tools(page=1):
+def tools():
+    page = request.args.get('page', 1, type=int)
     per_page = 8
     offset = (page - 1) * per_page
-    
+
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    
+
     # Count total number of tools for pagination
     cursor.execute("SELECT COUNT(*) as total FROM Resources WHERE type_id=%s", (1,))
     total_tools = cursor.fetchone()['total']
-    
+
     # Fetch tools for the current page
     cursor.execute("SELECT * FROM Resources WHERE type_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (1, per_page, offset))
     all_tools = cursor.fetchall()
-    
+
     cursor.close()
     conn.close()
-    
+
     # Calculate total number of pages
     total_pages = (total_tools + per_page - 1) // per_page
-    
-    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages)
+
+    # Define the range of pages to show
+    if total_pages <= 5:
+        page_range = range(1, total_pages + 1)
+    else:
+        if page <= 3:
+            page_range = range(1, 6)
+        elif page >= total_pages - 2:
+            page_range = range(total_pages - 4, total_pages + 1)
+        else:
+            page_range = range(page - 2, page + 3)
+
+    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range)
+
 
 
 @app.route('/novaferramenta')

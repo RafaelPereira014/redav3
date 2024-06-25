@@ -110,15 +110,18 @@
             <!-- Pagination -->
             <div class="pagination">
                 {% if page > 1 %}
-                <a href="{{ url_for('tools', page=page-1) }}">&laquo; Anterior</a>
+                    <a href="{{ url_for('tools', page=page-1) }}">Anterior</a>
                 {% endif %}
-                {% for p in range(1, total_pages + 1) %}
-                <a href="{{ url_for('tools', page=p) }}" class="{% if page == p %}active{% endif %}">{{ p }}</a>
+                
+                {% for p in page_range %}
+                    <a href="{{ url_for('tools', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
+                
                 {% if page < total_pages %}
-                <a href="{{ url_for('tools', page=page+1) }}">Próximo &raquo;</a>
+                    <a href="{{ url_for('tools', page=page+1) }}">Próximo</a>
                 {% endif %}
             </div>
+            
         </div>
     </main>
 

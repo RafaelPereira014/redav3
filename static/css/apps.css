@@ -98,8 +98,8 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 55%;
-    background-color: rgba(0, 0, 0, 0.7); /* Adjust background color opacity */
+    height: 53%;
+    background-color: rgba(0, 0, 0, 0.628); /* Adjust background color opacity */
     z-index: 1; /* Ensure layer is above the image */
 }
 
@@ -117,7 +117,7 @@
     height: 150px;
     object-fit: cover;
     margin-bottom: 10px;
-    z-index: 2; /* Ensure image is above the layer */
+    z-index: 1; /* Ensure image is above the layer */
 }
 
 .rectangle .text {
