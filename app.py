@@ -76,6 +76,8 @@ def resource_details(resource_id):
     resource_details['image_url'] = get_resource_image_url(slug)
     resource_details['embed'] = get_resource_embed(resource_id)
     resource_details['files'] = get_resource_files(slug)
+    resource_details['link'] = get_resource_link(resource_id)
+    resource_details['propostaOp']=get_propostasOp(resource_id)
     
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:

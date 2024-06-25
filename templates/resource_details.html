@@ -120,19 +120,25 @@
                     <div class="actions">
                         <div class="share-icons">
                             <a href="#" onclick="openShareModal()"><i class="fas fa-share-alt"></i></a>
+                            <a href="{{ resource_details.link }}" target="_blank" class="link-icon">
+                                <i class="fas fa-link">Abrir</i>
+                            </a>
                         </div>
+                        
                     </div>
                     
                     <h2>{{ resource_details.title | safe }}</h2>
+                   
                     <div>
                         <span>{{ resource_details.description | safe }}</span>
                     </div>
+                    <!-- 
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star checked"></span>
                     <span class="fa fa-star"></span>
                     <span class="fa fa-star"></span>
-
+                    -->
                     <div class="mini-fields">
                         <div>
                             <span>Formato:</span>
@@ -183,20 +189,21 @@
                     <div class="ficha-tecnica">
                         <h3>Ficha Técnica</h3>
                         <div class="separator">
-                            <span>Idioma:</span>
+                            <strong>Idioma:</strong>
                             <span>{{ resource_details.idiomas_title }}</span>
                         </div>
                         <div class="separator">
-                            <span>Modos de utilização:</span>
+                            <strong>Modos de utilização:</strong>
                             <span>{{ resource_details.modo_utilizacao_title }}</span>
                         </div>
                         {% if resource_details.requisitos_tecnicos_title is not none %}
                         <div class="separator">
-                            <span>Requisitos técnicos:</span>
+                            <strong>Requisitos técnicos:</strong>
                             <span>{{ resource_details.requisitos_tecnicos_title }}</span>
                         </div>
                         {% endif %}
                     </div>
+                    
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
                         <div class="button-container">
@@ -204,46 +211,44 @@
                         </div>
                         <div id="proposta1" style="display: block;">
                             <div class="separator">
-                                <span>Autor:</span>
+                                <strong>Autor:</strong>
                                 {% for user_id, user_info in resource_details.user_details.items() %}
                                     <span>{{user_info.name}}</span>
                                 {% endfor %}                           
-                             </div>
+                            </div>
                             <div class="separator">
-                                <span>Organização:</span>
+                                <strong>Organização:</strong>
                                 {% for user_id, user_info in resource_details.user_details.items() %}
                                     <span>{{user_info.organization}}</span>
                                 {% endfor %} 
                             </div>
                             <div class="separator">
-                                <span>Proposta de operacionalização:</span>
-                                <span>testestesteste</span>
+                                <strong>Proposta de operacionalização:</strong>
+                                <span>{{resource_details.propostaOp | safe}}</span>
                             </div>
                             <div class="separator">
-                                <span>Anos de escolaridade:</span>
+                                <strong>Anos de escolaridade:</strong>
                                 <span>{{ resource_details.scripts.anos_resources|join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <span>Disciplinas:</span>
+                                <strong>Disciplinas:</strong>
                                 <span>{{ resource_details.scripts.areas_resources|join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <span>Domínios/Temas:</span>
+                                <strong>Domínios/Temas:</strong>
                                 <span>{{ resource_details.scripts.dominios_resources|join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <span>Subdomínios:</span>
+                                <strong>Subdomínios:</strong>
                                 <span>{{ resource_details.scripts.subdominios|join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <span>Conceitos:</span>
+                                <strong>Conceitos:</strong>
                                 <span>{{ resource_details.scripts.hashtags|join(', ') }}</span>
                             </div>
                         </div>
-                        
-                        
-                       
                     </div>
+                    
                     
                 </div>
                 

@@ -323,3 +323,28 @@ def get_resource_embed(resource_id):
         return None
     
 
+def get_resource_link(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT link FROM Resources WHERE id=%s", (resource_id,))
+    link = cursor.fetchone()  # fetchone is used because we expect only one resource with the given id
+    cursor.close()
+    conn.close()
+
+    if link:
+        return link['link']
+    else:
+        return None
+
+def get_propostasOp(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT operation FROM Scripts WHERE resource_id=%s", (resource_id,))
+    operation = cursor.fetchone()  # fetchone is used because we expect only one resource with the given id
+    cursor.close()
+    conn.close()
+
+    if operation:
+        return operation['operation']
+    else:
+        return None
