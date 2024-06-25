@@ -151,7 +151,12 @@
                         </div>
                         <div>
                             <span>Palavras-chave:</span>
-                            <span>aasa;dasdsab;cfasd;dfadsa;easdas;edaads;f;</span>
+                            <span>
+                                {% for hashtag in resource_details.scripts.hashtags %}
+                                    <a href="/search?hashtag={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </span>
+                            
                         </div>
                     </div>
                     <div class="actions">
@@ -220,7 +225,7 @@
                             </div>
                             <div class="separator">
                                 <span>Conceitos:</span>
-                                <span>kmasdkd</span>
+                                <span>{{ resource_details.scripts.hashtags|join(', ') }}</span>
                             </div>
                         </div>
                         

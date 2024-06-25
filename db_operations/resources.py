@@ -178,7 +178,7 @@ def get_combined_details(resource_id):
                 Terms
             INNER JOIN
                 Taxonomies ON Terms.taxonomy_id = Taxonomies.id AND 
-                              Taxonomies.slug IN ('macro_areas_resources', 'dominios_resources', 'areas_resources', 'anos_resources', 'subdominios')
+                              Taxonomies.slug IN ('macro_areas_resources', 'dominios_resources', 'areas_resources', 'anos_resources', 'subdominios','hashtags')
             INNER JOIN
                 script_terms ON script_terms.term_id = Terms.id
             INNER JOIN
@@ -198,6 +198,7 @@ def get_combined_details(resource_id):
             'areas_resources': [],
             'dominios_resources': [],
             'subdominios': [],
+            'hashtags':[],
         }
 
         for script in script_details:
