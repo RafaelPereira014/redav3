@@ -327,22 +327,26 @@ nav ul li a {
 }
 
 .readmore{
-    color: #83ae03;
-    cursor: pointer;
-    font-size: 14px;
-    text-align: center;
-    align-items: center;
-
-}
-.readmore:hover{
     background-color: #83ae03;
     color: #fff;
+    border: 1px solid #83ae03;
     cursor: pointer;
     font-size: 13px;
     text-align: center;
     align-items: center;
 
 }
+.open-path{
+    background-color: #83ae03;
+    color: #fff;
+    border: 1px solid #83ae03;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+    align-items: center;
+
+}
+
 .android-icon {
     text-align: center;
 }

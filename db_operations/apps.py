@@ -105,3 +105,22 @@ def get_total_app_count():
     cursor.close()
     conn.close()
     return result['count']
+
+
+def get_app_metadata(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT metadata FROM resource_terms WHERE resource_id=%s", (resource_id,))
+    
+    metadata = cursor.fetchone()
+    
+    cursor.fetchall()  # Fetch all remaining rows to clear unread results, even though we expect none.
+    
+    cursor.close()
+    conn.close()
+    
+    if metadata:
+        return metadata['metadata']
+    else:
+        return None

@@ -116,10 +116,13 @@ def apps():
     # Update each app with its slug and image URL
     for app in paginated_apps:
         app['slug'] = get_app_slug(app['id'])
+        app['metadados']=get_app_metadata(app['id'])
         if app['slug']:
             app['image_url'] = get_apps_image_url(app['slug'])
         else:
             app['image_url'] = None
+    
+   
 
     # Define the range of pages to show
     if total_pages <= 5:

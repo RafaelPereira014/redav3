@@ -24,6 +24,85 @@
             height: 250px; /* Adjust the height as needed */
             position: relative;
         }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-content .close:hover,
+        .modal-content .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content p {
+            margin-top: 20px;
+        }
+
+        .modal-content .button-container {
+            margin-top: 20px;
+        }
+
+        .modal-content .button-container a,
+        .modal-content .button-container button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #fff;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .modal-content .button-container a {
+            background-color: #83ae03;
+        }
+
+        .modal-content .button-container a:hover {
+            background-color: #6c9201;
+        }
+
+        .modal-content .button-container button {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        .modal-content .button-container button:hover {
+            background-color: #999;
+        }
+
     </style>
     
 </head>
@@ -84,10 +163,11 @@
             <p>Início > Aplicações</p>
             
             <div class="button-container">
-                <!-- Search bar and platform filter buttons -->
+                <!-- Search bar and platform filter buttons 
                 <button class="platform-btn" data-platform="android">Android</button>
                 <button class="platform-btn" data-platform="ios">iOS</button>
                 <button class="platform-btn" data-platform="windows">Windows</button>
+                -->
             </div>
             
             <div class="filter-bar">
@@ -98,12 +178,17 @@
             </div>
     
             <hr></hr>
+            
     
             <!-- Loop through applications -->
             {% for app in all_apps %}
             {% if loop.index <= 8 %} <!-- Show only 8 per page -->
             <div class="rectangle">
-                <img src="{{ app.image_url }}" alt="Resource Image">                
+                {% if app.image_url %} 
+                <img src="{{ app.image_url }}">
+                {% else %}
+                <img src="{{ app.image_url }}">
+                {% endif %}
                 <div class="text">
                     <h2>{{ app.title }}</h2>
                     <small class="small-text">{{ app.platform }}</small>
@@ -111,14 +196,15 @@
                 <p>
                     {% if app.description|length > 100 %}
                         {{ app.description[:100]|escape }} ...
+                        <button class="readmore">Ler mais</button>
                     {% else %}
                         {{ app.description|escape }}
                     {% endif %}
                 </p>
-                <button class="readmore">Ler mais</button>
-                {% if app.platform == 'android' %}
-                <p class="android-icon"><i class="fab fa-android" onclick="openModal('modal1')"></i></p>
-                {% endif %}
+                <div class="button-container">
+                    <button class="open-path">Abrir endereço</button>
+                </div>
+                
             </div>
             {% endif %}
             {% endfor %}
@@ -141,6 +227,32 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal for "Ler mais" -->
+    <div id="appModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
+    {% for app in all_apps %}
+    <!-- Modal for "Abrir endereço" -->
+    <div id="openPathModal" class="modal">
+        <div class="modal-content">
+            <h2>Abrir endereço</h2>
+            <p>Ao abrir este endereço, você será redirecionado para uma página externa.</p>
+            <div class="button-container">
+                <a href="{{ app.metadados }}" class="compreendi" target="_blank">Compreendi</a>
+                <button class="close-modal">Não, obrigado</button>
+            </div>
+        </div>
+        
+    </div>
+    {% endfor %}
+
+
+    
     
 
    <!-- Login Modal -->
@@ -184,19 +296,7 @@
         </div>
     </div>
 
-    <!-- Modal popup -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('modal1')">&times;</span>
-            <h2>Está a sair do sítio REDA!</h2>
-            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
-            <small>Obrigado por nos visitar e volte sempre!</small>
-            <div class="button-container">
-                <button class="modal-button" onclick="closeModal('modal1')">Compreendi</button>
-                <button class="modal-button" onclick="closeModal('modal1')">Não, obrigado!</button>
-            </div>
-        </div>
-    </div>
+   
 
     <!-- Footer -->
     <footer class="footer">
@@ -231,6 +331,8 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tool_modal.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/apps_modal.js') }}"></script>
     <script>
         // Function to open the modal
         function openModal(modalId) {
