@@ -206,47 +206,49 @@
                     
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
+                        {% for operation in resource_details.operations %}
                         <div class="button-container">
-                            <button onclick="showProposta(1)">Proposta 1</button>
+                            <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
                         </div>
-                        <div id="proposta1" style="display: block;">
+                        <div id="proposta{{ loop.index }}" style="display: none;">
                             <div class="separator">
-                                <strong>Autor:</strong>
+                                <span>Autor:</span>
                                 {% for user_id, user_info in resource_details.user_details.items() %}
-                                    <span>{{user_info.name}}</span>
-                                {% endfor %}                           
+                                    <span>{{ user_info.name }}</span>
+                                {% endfor %}
                             </div>
                             <div class="separator">
-                                <strong>Organização:</strong>
+                                <span>Organização:</span>
                                 {% for user_id, user_info in resource_details.user_details.items() %}
-                                    <span>{{user_info.organization}}</span>
-                                {% endfor %} 
+                                    <span>{{ user_info.organization }}</span>
+                                {% endfor %}
                             </div>
                             <div class="separator">
-                                <strong>Proposta de operacionalização:</strong>
-                                <span>{{resource_details.propostaOp | safe}}</span>
+                                <span>Proposta de operacionalização:</span>
+                                <span>{{ operation | safe }}</span>
                             </div>
                             <div class="separator">
-                                <strong>Anos de escolaridade:</strong>
-                                <span>{{ resource_details.scripts.anos_resources|join(', ') }}</span>
+                                <span>Anos de escolaridade:</span>
+                                <span>{{ resource_details.scripts.anos_resources | join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <strong>Disciplinas:</strong>
-                                <span>{{ resource_details.scripts.areas_resources|join(', ') }}</span>
+                                <span>Disciplinas:</span>
+                                <span>{{ resource_details.scripts.areas_resources | join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <strong>Domínios/Temas:</strong>
-                                <span>{{ resource_details.scripts.dominios_resources|join(', ') }}</span>
+                                <span>Domínios/Temas:</span>
+                                <span>{{ resource_details.scripts.dominios_resources | join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <strong>Subdomínios:</strong>
-                                <span>{{ resource_details.scripts.subdominios|join(', ') }}</span>
+                                <span>Subdomínios:</span>
+                                <span>{{ resource_details.scripts.subdominios_resources | join(', ') }}</span>
                             </div>
                             <div class="separator">
-                                <strong>Conceitos:</strong>
-                                <span>{{ resource_details.scripts.hashtags|join(', ') }}</span>
+                                <span>Conceitos:</span>
+                                <span>{{ resource_details.scripts.hashtags | join(', ') }}</span>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
                     
                     
@@ -295,7 +297,7 @@
           <input type="text" id="resourceLink" value="https://your-website.com/resource-link" readonly>
           <button onclick="copyLink()">Copy Link</button>
         </div>
-      </div>
+    </div>
 
     <div class="related">
         <h2>Outros recursos relacionados</h2>
@@ -392,13 +394,12 @@
             document.execCommand("Copiar");
             alert("Link copiado para o clipboard!");
         }
-        function showProposta(num) {
-            if (num === 1) {
-                document.getElementById('proposta1').style.display = 'block';
-                document.getElementById('proposta2').style.display = 'none';
-            } else if (num === 2) {
-                document.getElementById('proposta1').style.display = 'none';
-                document.getElementById('proposta2').style.display = 'block';
+        function showProposta(propostaIndex) {
+            var propostaElement = document.getElementById('proposta' + propostaIndex);
+            if (propostaElement.style.display === 'none' || propostaElement.style.display === '') {
+                propostaElement.style.display = 'block';
+            } else {
+                propostaElement.style.display = 'none';
             }
         }
         

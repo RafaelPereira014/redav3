@@ -340,11 +340,11 @@ def get_propostasOp(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT operation FROM Scripts WHERE resource_id=%s", (resource_id,))
-    operation = cursor.fetchone()  # fetchone is used because we expect only one resource with the given id
+    operations = cursor.fetchall()  # fetchall is used to get all matching records
     cursor.close()
     conn.close()
 
-    if operation:
-        return operation['operation']
+    if operations:
+        return [operation['operation'] for operation in operations]
     else:
-        return None
+        return []
