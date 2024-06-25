@@ -65,29 +65,26 @@ def resources():
 
 
 
-# Resource Details
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     resource_details = get_combined_details(resource_id)
-    slug = get_resouce_slug(resource_id)
-    resource_details['image_url'] = get_resource_image_url(slug)
-    resource_details['embed'] = get_resource_embed(resource_id)
-
-    
-    
     
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
     
+    slug = get_resouce_slug(resource_id)
+    resource_details['image_url'] = get_resource_image_url(slug)
+    resource_details['embed'] = get_resource_embed(resource_id)
+    resource_details['files'] = get_resource_files(slug)
+    
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:
-        
         related['image_url'] = get_resource_image_url(slug)
         related['embed'] = get_resource_embed(resource_id)
     
-
-    
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+
+
 # Edit resources
 @app.route('/resources/edit/<int:resource_id>')
 def resource_edit(resource_id):
