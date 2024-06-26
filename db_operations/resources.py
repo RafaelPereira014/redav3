@@ -269,7 +269,7 @@ def no_resources(userid):
 
 
 def get_resource_image_url(resource_slug):
-    image_extensions = ['png', 'jpg']
+    image_extensions = ['png', 'jpg','JPG','PNG']
     directory_path = os.path.join(current_app.root_path, 'static', 'files', 'resources', resource_slug)
 
     if os.path.exists(directory_path) and os.path.isdir(directory_path):
@@ -348,3 +348,21 @@ def get_propostasOp(resource_id):
         return [operation['operation'] for operation in operations]
     else:
         return []
+
+def search_resources(search_term, page, per_page):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    query = """
+        SELECT SQL_CALC_FOUND_ROWS * FROM Resources
+        WHERE title LIKE %s OR description LIKE %s ORDER BY id DESC
+        LIMIT %s OFFSET %s
+    """
+    search_term = f"%{search_term}%"
+    offset = (page - 1) * per_page
+    cursor.execute(query, (search_term, search_term, per_page, offset))
+    resources = cursor.fetchall()
+    cursor.execute("SELECT FOUND_ROWS()")
+    total_results = cursor.fetchone()["FOUND_ROWS()"]
+    cursor.close()
+    conn.close()
+    return resources, total_results

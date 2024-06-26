@@ -81,6 +81,20 @@
             width: 100%;
             height: 100%;
         }
+
+        /* CSS for created_at and formato_title */
+        .created_at {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .formato_title {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
         
     </style>
 </head>
@@ -120,7 +134,7 @@
                 </ul>
             </nav>
             <div class="search-container">
-                <input type="text" placeholder="Procurar recursos..." name="search">
+                <input type="text" placeholder="Procurar recursos..." name="search" value="{{ request.args.get('search', '') }}">
                 <button type="submit"><i class="fa fa-search"></i> Pesquisar</button>
             </div>
             <button id="advancedSearchBtn" onclick="toggleAdvancedSearch()">Pesquisa Avançada <i class="fas fa-caret-down"></i></button>
@@ -188,7 +202,6 @@
                             {{ resource.embed | safe }}
                         </div>
                     {% endif %}
-                   
                     <small>Geografia</small>
                     <h2>
                         {% if resource.title|length > 25 %}
@@ -197,7 +210,6 @@
                             {{ resource.title | safe }}
                         {% endif %}
                     </h2>
-                    
                     <p>
                         {% if resource.description|length > 100 %}
                             {{ resource.description[:100] ~ '...' | safe }}
@@ -205,21 +217,25 @@
                             {{ resource.description | safe }}
                         {% endif %}
                     </p>
-                    
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <a href="/resources/add_proposal/{{ resource.id }}"><button>Adicionar proposta de operacionalização</button></a>
                     </div>
-                    
                     <div class="year-cycle">
                         <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
                     </div>
-                    <p>{{ resource.created_at }}</p>
-                    <p>{{ resource.type_id }}</p>
+                    <p class="created_at">{{ resource.created_at }}</p>
+                    {% if resource.details and resource.details.formato_title %}
+                    <p>{{ resource.details.formato_title }}</p>
+                    <p class="formato_title {% if resource.details.formato_title == 'Video/Animação' %}video{% endif %}">
+                        {{ resource.duration}}
+                    </p>
+                    {% endif %}
                 </div>
-            {% endfor %}
-
+                {% endfor %}
+            </div>
+    
             <div class="pagination">
                 {% if page > 1 %}
                     <a href="{{ url_for('resources', page=1) }}">Início</a>
@@ -235,11 +251,9 @@
                     <a href="{{ url_for('resources', page=total_pages) }}">Último</a>
                 {% endif %}
             </div>
-            
-            
-
         </div>
     </main>
+    
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-nav">
@@ -254,6 +268,30 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Get all elements with class 'created_at'
+        const createdAtElements = document.querySelectorAll('.created_at');
+        
+        // Array of month names in Portuguese
+        const months = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", 
+                        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+        
+        // Loop through each element and format its date
+        createdAtElements.forEach(element => {
+            // Extract the date string
+            const dateString = element.textContent.trim();
+            
+            // Convert the date string to a JavaScript Date object
+            const date = new Date(dateString);
+            
+            // Format the date in the desired format
+            const formattedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+            
+            // Update the content of the element with the formatted date
+            element.textContent = formattedDate;
+        });
+    </script>
+
     <script>
         function toggleAdvancedSearch() {
             var options = document.getElementById('advancedSearchOptions');

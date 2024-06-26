@@ -1,3 +1,4 @@
+import math
 from flask import Flask, render_template, request
 import mysql.connector
 from db_operations.resources import *
@@ -35,19 +36,24 @@ def homepage():
 
 @app.route('/resources')
 def resources():
+    search_term = request.args.get('search', '')
     page = request.args.get('page', 1, type=int)
     per_page = 12
 
-    # Fetch resources for the current page
-    paginated_resources = get_all_resources(page, per_page)
-    
-    # Fetch total resource count for pagination
-    total_resources = get_total_resource_count()
+    if search_term:
+        # If search term is provided, search for resources
+        paginated_resources, total_resources = search_resources(search_term, page, per_page)
+    else:
+        # Otherwise, fetch all resources
+        paginated_resources = get_all_resources(page, per_page)
+        total_resources = get_total_resource_count()
+
     total_pages = (total_resources + per_page - 1) // per_page
 
     for resource in paginated_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
+        resource['details'] = get_combined_details(resource['id'])  # Fetch resource details
 
     # Define the range of pages to show
     if total_pages <= 5:
@@ -60,9 +66,30 @@ def resources():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range)
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term)
 
 
+@app.route('/resources/search')
+def search():
+    search_term = request.args.get('search')
+    page = int(request.args.get('page', 1))
+    per_page = 10  # Number of resources per page
+
+    resources = []
+    total_results = 0
+    if search_term:
+        resources, total_results = search_resources(search_term, page, per_page)
+
+    total_pages = math.ceil(total_results / per_page)
+    page_range = range(1, total_pages + 1)
+
+    return render_template(
+        'resources.html',
+        all_resources=resources,
+        page=page,
+        total_pages=total_pages,
+        page_range=page_range
+    )
 
 
 @app.route('/resources/details/<int:resource_id>')
@@ -86,6 +113,7 @@ def resource_details(resource_id):
         related['embed'] = get_resource_embed(related['id'])
     
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+
 
 
 
@@ -298,24 +326,3 @@ def admin_edit_taxonomies():
     return render_template('admin/taxonomias/edit_taxonomia.html')
 
 @app.route('/dashboard/taxonomias/relacoes')
-def admin_taxonomies_rel():
-    return render_template('admin/taxonomias/relacoes.html')
-
-#######----------------####
-@app.route('/dashboard/utilizadores')
-def admin_users():
-    return render_template('admin/utilizadores/utilizadores.html')
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
