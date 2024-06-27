@@ -190,10 +190,17 @@ def tools():
     # Fetch tools for the current page
     cursor.execute("SELECT * FROM Resources WHERE type_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (1, per_page, offset))
     all_tools = cursor.fetchall()
+    
+    for tool in all_tools:
+        tool_id = tool['id']
+        tool_metadata = get_tools_metadata(tool_id)
+        tool['link'] = tool_metadata
+        
+
+    
 
     cursor.close()
     conn.close()
-
     # Calculate total number of pages
     total_pages = (total_tools + per_page - 1) // per_page
 
@@ -207,6 +214,8 @@ def tools():
             page_range = range(total_pages - 4, total_pages + 1)
         else:
             page_range = range(page - 2, page + 3)
+            
+    
 
     return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range)
 

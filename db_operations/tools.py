@@ -56,17 +56,17 @@ def get_tools_metadata(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
-    cursor.execute("SELECT metadata FROM resource_terms WHERE resource_id=%s", (resource_id,))
+    cursor.execute("SELECT link FROM Resources WHERE id=%s", (resource_id,))
     
-    metadata = cursor.fetchone()
+    link = cursor.fetchone()
     
     cursor.fetchall()  # Fetch all remaining rows to clear unread results, even though we expect none.
     
     cursor.close()
     conn.close()
     
-    if metadata:
-        return metadata['metadata']
+    if link:
+        return link['link']
     else:
         return None
 
