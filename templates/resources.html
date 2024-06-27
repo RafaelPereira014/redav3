@@ -270,37 +270,4 @@
     </footer>
     <script>
         // Get all elements with class 'created_at'
-        const createdAtElements = document.querySelectorAll('.created_at');
-        
-        // Array of month names in Portuguese
-        const months = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", 
-                        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
-        
-        // Loop through each element and format its date
-        createdAtElements.forEach(element => {
-            // Extract the date string
-            const dateString = element.textContent.trim();
-            
-            // Convert the date string to a JavaScript Date object
-            const date = new Date(dateString);
-            
-            // Format the date in the desired format
-            const formattedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-            
-            // Update the content of the element with the formatted date
-            element.textContent = formattedDate;
-        });
-    </script>
-
-    <script>
-        function toggleAdvancedSearch() {
-            var options = document.getElementById('advancedSearchOptions');
-            if (options.style.display === 'none') {
-                options.style.display = 'block';
-            } else {
-                options.style.display = 'none';
-            }
-        }
-    </script>
-</body>
-</html>
+        const cr

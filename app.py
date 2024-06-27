@@ -133,7 +133,7 @@ def resource_edit(resource_id):
 @app.route('/apps', methods=['GET'])
 def apps():
     page = request.args.get('page', default=1, type=int)
-    apps_per_page = 8
+    apps_per_page = 12
 
     # Fetch apps for the current page
     paginated_apps = get_all_apps(page, apps_per_page)
@@ -326,3 +326,24 @@ def admin_edit_taxonomies():
     return render_template('admin/taxonomias/edit_taxonomia.html')
 
 @app.route('/dashboard/taxonomias/relacoes')
+def admin_taxonomies_rel():
+    return render_template('admin/taxonomias/relacoes.html')
+
+#######----------------####
+@app.route('/dashboard/utilizadores')
+def admin_users():
+    return render_template('admin/utilizadores/utilizadores.html')
+
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

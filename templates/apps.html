@@ -182,7 +182,7 @@
     
             <!-- Loop through applications -->
             {% for app in all_apps %}
-            {% if loop.index <= 8 %} <!-- Show only 8 per page -->
+            {% if loop.index <= 12 %} <!-- Show only 8 per page -->
             <div class="rectangle">
                 {% if app.image_url %} 
                 <img src="{{ app.image_url }}">
