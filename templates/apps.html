@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Aplicações - REDA</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/apps.css') }}">
@@ -18,16 +16,60 @@
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
         header {
-            background-image: url('static/images/apps-bg.jpg'); /* Replace 'path_to_your_image.jpg' with the path to your image */
+            background-image: url('static/images/apps-bg.jpg'); 
             background-size: cover;
             background-position: center;
-            height: 250px; /* Adjust the height as needed */
+            height: 250px; 
             position: relative;
         }
-        
 
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 9999; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+        }
+        .modal h2 {
+            color: black;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            position: relative;
+            z-index: 10000; 
+        }
+
+
+        .compreendi {
+            background-color: #83ae03;
+            color: #fff;
+            border: 1px solid #83ae03;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 10px;
+            margin-right: 5px;
+        }
+        
+        .close-modal {
+            background-color: #83ae03;
+            color: #fff;
+            border: 1px solid #83ae03;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 10px 10px;
+        }
+        
     </style>
-    
 </head>
 <body>
     <!-- Header -->
@@ -39,7 +81,7 @@
         <div class="container">
             <a href="/">
                 <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-            </a>            <!-- Search bar -->
+            </a>
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
@@ -62,15 +104,8 @@
                 <p>Descubra as aplicações para dispositivos móveis que encontrámos sobre educação, gestão de trabalho, jogos, formação, ciências, matemática, português, física e química.</p>
                 <a href="/novaapp"><button>Introduzir aplicação</button></a>
             </div>
-           
             <nav class="top-nav">
                 <ul>
-                    <!--
-                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Help</a></li>
-                    -->
-
                     <li><a href="/ajuda">Ajuda</a></li>
                     <li><a href="/myaccount">Minha Conta</a></li>
                     <li><a href="/dashboard" target="_blank">Administração</a></li>
@@ -84,65 +119,53 @@
     <main>
         <div class="container">
             <p>Início > Aplicações</p>
-            
             <div class="button-container">
-                <!-- Search bar and platform filter buttons 
-                <button class="platform-btn" data-platform="android">Android</button>
-                <button class="platform-btn" data-platform="ios">iOS</button>
-                <button class="platform-btn" data-platform="windows">Windows</button>
-                -->
             </div>
-            
             <div class="filter-bar">
                 <h2>Filtrar por...</h2>
                 <input type="text" placeholder="Palavras-chave...">
                 <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
                 <button class="clear-button"> Limpar Filtros </button>
             </div>
-    
-            <hr></hr>
-            
-    
+            <hr>
             <!-- Loop through applications -->
             {% for app in all_apps %}
-            {% if loop.index <= 12 %} <!-- Show only 8 per page -->
             <div class="rectangle">
-                {% if app.image_url %} 
-                <img src="{{ app.image_url }}">
-                {% else %}
-                <img src="static/images/white.jpeg" alt="Governo dos Açores">
-                {% endif %}
+                <img src="{{ app.image_url or 'static/images/white.jpeg' }}" alt="App Image">
                 <div class="text">
                     <h2>{{ app.title }}</h2>
                     <small class="small-text">{{ app.platform }}</small>
                 </div>
-                <p>
-                    {% if app.description|length > 100 %}
-                        {{ app.description[:100]|escape }} ...
-                        <button class="readmore">Ler mais</button>
-                    {% else %}
-                        {{ app.description|escape }}
-                    {% endif %}
-                </p>
+                <p class="short-description">{{ app.description[:100]|escape }}...</p>
+                <p class="full-description" style="display: none;">{{ app.description|escape }}</p>
+                <button class="readmore">Ler mais</button>
                 <div class="button-container">
-                    <button class="open-path">Abrir endereço</button>
+                    <button class="open-path" data-modal-id="openPathModal-{{ loop.index }}">Abrir endereço</button>
                 </div>
-                
+                <div id="openPathModal-{{ loop.index }}" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal('openPathModal-{{ loop.index }}')">&times;</span>
+                        <h2>Está a sair do sítio REDA</h2>
+                        <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
+                        <p>Obrigado por nos visitar e volte sempre!</p>
+                        <div class="button-container">
+                            <a href="{{ app.link }}" class="compreendi" target="_blank">Compreendi</a>
+                            <button class="close-modal" onclick="closeModal('openPathModal-{{ loop.index }}')">Não, obrigado</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% endif %}
+            
             {% endfor %}
-    
             <!-- Pagination -->
             <div class="pagination">
                 {% if page > 1 %}
                     <a href="{{ url_for('apps', page=1) }}">Início</a>
                     <a href="{{ url_for('apps', page=page-1) }}">Anterior</a>
                 {% endif %}
-                
                 {% for p in page_range %}
                     <a href="{{ url_for('apps', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
-                
                 {% if page < total_pages %}
                     <a href="{{ url_for('apps', page=page+1) }}">Próximo</a>
                     <a href="{{ url_for('apps', page=total_pages) }}">Último</a>
@@ -154,34 +177,15 @@
     <!-- Modal for "Ler mais" -->
     <div id="appModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="closeModal('appModal')">&times;</span>
             <h2 id="modalTitle"></h2>
             <p id="modalDescription"></p>
         </div>
     </div>
-    {% for app in all_apps %}
-    <!-- Modal for "Abrir endereço" -->
-    <div id="openPathModal" class="modal">
-        <div class="modal-content">
-            <h2>Abrir endereço</h2>
-            <p>Ao abrir este endereço, você será redirecionado para uma página externa.</p>
-            <div class="button-container">
-                <a href="{{ app.metadados }}" class="compreendi" target="_blank">Compreendi</a>
-                <button class="close-modal">Não, obrigado</button>
-            </div>
-        </div>
-        
-    </div>
-    {% endfor %}
-
-
-    
-    
-
-   <!-- Login Modal -->
+    <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
             <i class="fas fa-user user-icon"></i>
             <h2>Login</h2>
             <form>
@@ -199,11 +203,10 @@
             </form>
         </div>
     </div>
-
     <!-- Register Modal -->
     <div id="RegisterModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <span class="close" onclick="closeModal('RegisterModal')">&times;</span>
             <h2>Register</h2>
             <form>
                 <div class="input-group">
@@ -218,9 +221,6 @@
             </form>
         </div>
     </div>
-
-   
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
@@ -232,9 +232,7 @@
                 <a href="/faleconnosco">
                     <button>Fale connosco</button>
                 </a>
-
             </div>
-            
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -242,57 +240,100 @@
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-pinterest"></i></a>
             </div>
-            
             <div class="additional-images">
                 <img src="static/images/dre_transparent.png" alt="Image 1">
                 <img src="static/images/gov_acores_transparent.png" alt="Image 2">
             </div>
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
-
         </div>
-
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script src="{{ url_for('static', filename='js/apps_modal.js') }}"></script>
     <script>
-        // Function to open the modal
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = "block";
-                document.body.style.overflow = "hidden"; // Prevent scrolling
-            }
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
         }
-    
-        // Function to close the modal
+
         function closeModal(modalId) {
             var modal = document.getElementById(modalId);
-            if (modal) {
-                modal.style.display = "none";
-                document.body.style.overflow = "auto"; // Allow scrolling
+            modal.style.display = "none";
+            document.body.style.overflow = "auto";
+        }
+        document.querySelector(".search-button").addEventListener("click", function() {
+            var keyword = document.querySelector(".filter-bar input[type='text']").value;
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ word: keyword })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Log the search results
+                displaySearchResults(data);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+        
+        function displaySearchResults(results) {
+            
+            results.forEach(app => {
+                var appElement = document.createElement('div');
+                appElement.className = 'rectangle';
+                appElement.innerHTML = `
+                    <img src="${app.image_url ? app.image_url : 'static/images/white.jpeg'}" alt="App Image">
+                    <div class="text">
+                        <h2>${app.title}</h2>
+                        <small class="small-text">${app.platform}</small>
+                    </div>
+                    <p class="short-description">${app.description.length > 100 ? app.description.slice(0, 100) + '...' : app.description}</p>
+                    <p class="full-description" style="display: none;">${app.description}</p>
+                    <button class="readmore">Ler mais</button>
+                    <div class="button-container">
+                        <button class="open-path" data-modal-id="openPathModal-${app.id}">Abrir endereço</button>
+                    </div>
+                    <div id="openPathModal-${app.id}" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal('openPathModal-${app.id}')">&times;</span>
+                            <h2>Abrir endereço</h2>
+                            <p>Ao abrir este endereço, você será redirecionado para uma página externa.</p>
+                            <div class="button-container">
+                                <a href="${app.link}" class="compreendi" target="_blank">Compreendi</a>
+                                <button class="close-modal" onclick="closeModal('openPathModal-${app.id}')">Não, obrigado</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(appElement);
+            });
+        
+            // Reattach event listeners for "Ler mais" buttons
+            attachReadMoreListeners();
+        }
+        
+        function attachReadMoreListeners() {
+            var readmoreButtons = document.getElementsByClassName("readmore");
+        
+            for (var i = 0; i < readmoreButtons.length; i++) {
+                readmoreButtons[i].addEventListener("click", function(event) {
+                    var parentRectangle = event.target.closest(".rectangle");
+                    var modalTitle = parentRectangle.querySelector("h2").innerText;
+                    var fullDescription = parentRectangle.querySelector(".full-description").innerText;
+                    
+                    document.getElementById("modalTitle").innerText = modalTitle;
+                    document.getElementById("modalDescription").innerText = fullDescription;
+        
+                    // Display the modal
+                    appModal.style.display = "block";
+                    document.body.style.overflow = "hidden"; // Prevent background scrolling
+                });
             }
         }
-    
-        // When the user clicks on <span> (x), close the modal
-        function closeModalBySpan(modalId) {
-            closeModal(modalId);
-        }
-    
-        // Close the modal if the user clicks outside of it
-        window.onclick = function(event) {
-            var loginModal = document.getElementById("loginModal");
-            var registerModal = document.getElementById("RegisterModal");
-    
-            if (event.target == loginModal || event.target == registerModal) {
-                closeModal("loginModal");
-                closeModal("RegisterModal");
-            }
-        };
+        
     </script>
-    
-    
-    
 </body>
 </html>
-

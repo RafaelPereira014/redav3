@@ -156,17 +156,30 @@
                         {% if tool.description|length > 280 %}
                         <span class="short-description">{{ tool.description[:220]|escape }} ...</span>
                         <span class="full-description" style="display: none;">{{ tool.description|escape }}</span>
-                        <button class="readmore">Ler mais</button>
+                        <button class="
+                        more">Ler mais</button>
                         {% else %}
                         {{ tool.description|escape }}
                         {% endif %}
                     </p>
                     <div class="button-container">
-                        <button class="open-path">Abrir endereço</button>
+                        <button class="open-path" data-modal-id="openPathModal-{{ loop.index }}">Abrir endereço</button>
+                    </div>
+                </div>
+                
+                <div id="openPathModal-{{ loop.index }}" class="modal">
+                    <div class="modal-content">
+                        <h2>Está a sair do sítio REDA</h2>
+                        <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
+                        <p>Obrigado por nos visitar e volte sempre!</p>
+                        <div class="button-container">
+                            <a href="{{ tool.link }}" class="compreendi" target="_blank">Compreendi</a>
+                            <button class="close-modal">Não, obrigado</button>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
-
+                
 
             </div>
 
@@ -193,21 +206,7 @@
                 </div>
             </div>
 
-            <!-- Modal for "Abrir endereço" -->
-            {% for tool in all_tools %}
-            <div id="openPathModal" class="modal">
-                <div class="modal-content">
-                    <h2>Está a sair do sítio REDA</h2>
-                    <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
-
-                    <p>Obrigado por nos visitar e volte sempre!</p>
-                    <div class="button-container">
-                        <a href="{{ tool.link }}" class="compreendi" target="_blank">Compreendi</a>             
-                        <button class="close-modal">Não, obrigado</button>
-                    </div>
-                </div>
-            </div>
-            {%endfor%}
+            
             
         </div>
     </main>
@@ -250,15 +249,7 @@
     </div>
     <!-- Modal popup -->
     
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('modal1')">&times;</span>
-            <h2>Titulo</h2>
-            <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.
-                Obrigado por nos visitar e volte sempre!</p>
-        </div>
-    </div>
-
+    
 
     <!-- Footer -->
     <footer class="footer">
@@ -334,6 +325,7 @@
         function closeRegisterModal() {
             RegisterModal.style.display = "none";
         }
+        
     </script>
 </body>
 </html>

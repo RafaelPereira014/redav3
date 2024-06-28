@@ -74,6 +74,7 @@
     cursor: pointer;
 }
 
+
 .rectangle .buttons button:hover {
     background-color: #aec03f;
     color: #fff;
@@ -381,5 +382,25 @@ nav ul li a {
     background-color: #999;
 }
 
+/* Specific button styles */
+.compreendi {
+    background-color: #83ae03;
+    color: #fff;
+    border: 1px solid #83ae03;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 10px;
+}
+
+.close-modal {
+    background-color: #83ae03;
+    color: #fff;
+    border: 1px solid #83ae03;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px 10px;
+}
+
+    
 
 

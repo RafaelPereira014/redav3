@@ -1,5 +1,5 @@
 import math
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 import mysql.connector
 from db_operations.resources import *
 from db_operations.apps import *
@@ -69,27 +69,7 @@ def resources():
     return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term)
 
 
-@app.route('/resources/search')
-def search():
-    search_term = request.args.get('search')
-    page = int(request.args.get('page', 1))
-    per_page = 10  # Number of resources per page
 
-    resources = []
-    total_results = 0
-    if search_term:
-        resources, total_results = search_resources(search_term, page, per_page)
-
-    total_pages = math.ceil(total_results / per_page)
-    page_range = range(1, total_pages + 1)
-
-    return render_template(
-        'resources.html',
-        all_resources=resources,
-        page=page,
-        total_pages=total_pages,
-        page_range=page_range
-    )
 
 
 @app.route('/resources/details/<int:resource_id>')
@@ -166,6 +146,12 @@ def apps():
 
     return render_template('apps.html', all_apps=paginated_apps, page=page, total_pages=total_pages, page_range=page_range)
 
+@app.route('/search', methods=['POST'])
+def search():
+    data = request.get_json()
+    word = data.get('word')
+    results = search_apps(word)
+    return jsonify(results)
 
 
 
@@ -196,8 +182,7 @@ def tools():
         tool_metadata = get_tools_metadata(tool_id)
         tool['link'] = tool_metadata
         
-
-    
+        
 
     cursor.close()
     conn.close()

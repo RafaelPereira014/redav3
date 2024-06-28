@@ -27,7 +27,7 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_apps_image_url('water-competence')
+        change = search_apps('water')
         
         
 

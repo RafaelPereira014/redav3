@@ -124,3 +124,25 @@ def get_app_metadata(resource_id):
         return metadata['metadata']
     else:
         return None
+
+
+def search_apps(word):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Ensure the query parameter includes wildcards for proper search functionality
+    search_word = f"%{word}%"
+    
+    try:
+        cursor.execute("SELECT * FROM Resources WHERE type_id='3' AND title LIKE %s", (search_word,))
+        search_apps = cursor.fetchall()  # Fetch all matching rows
+        
+        return search_apps if search_apps else None
+        
+    except Exception as e:
+        print(f"Error executing search query: {e}")
+        return None
+        
+    finally:
+        cursor.close()
+        conn.close()
