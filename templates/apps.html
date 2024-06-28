@@ -149,7 +149,7 @@
                         <p>Está a sair do sítio REDA da Direção Regional de Educação dos Açores. A DRE não se responsabiliza nem tem qualquer controlo sobre as opiniões expressas ou a informação externa à plataforma. Os termos e condições bem como as políticas de privacidade da plataforma REDA não se aplicam à página que irá aceder.</p>
                         <p>Obrigado por nos visitar e volte sempre!</p>
                         <div class="button-container">
-                            <a href="{{ app.link }}" class="compreendi" target="_blank">Compreendi</a>
+                            <a href="{{ app.metadados }}" class="compreendi" target="_blank">Compreendi</a>
                             <button class="close-modal" onclick="closeModal('openPathModal-{{ loop.index }}')">Não, obrigado</button>
                         </div>
                     </div>
@@ -280,7 +280,9 @@
         });
         
         function displaySearchResults(results) {
-            
+            var container = document.querySelector(".container");
+            container.innerHTML = '<p>Início > Aplicações</p>'; // Clear previous content and add breadcrumb
+        
             results.forEach(app => {
                 var appElement = document.createElement('div');
                 appElement.className = 'rectangle';
