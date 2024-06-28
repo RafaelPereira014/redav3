@@ -79,6 +79,7 @@ def resource_details(resource_id):
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
     
+    # Fetch and append additional details
     slug = get_resouce_slug(resource_id)
     resource_details['image_url'] = get_resource_image_url(slug)
     resource_details['embed'] = get_resource_embed(resource_id)
@@ -86,6 +87,7 @@ def resource_details(resource_id):
     resource_details['link'] = get_resource_link(resource_id)
     resource_details['operations'] = get_propostasOp(resource_id)  # Fetching operations
     
+    # Fetch related resources and append additional details
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:
         related_slug = get_resouce_slug(related['id'])
@@ -93,6 +95,7 @@ def resource_details(resource_id):
         related['embed'] = get_resource_embed(related['id'])
     
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+
 
 
 

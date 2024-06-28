@@ -151,72 +151,67 @@ def get_combined_details(resource_id):
         cursor.execute(taxonomy_query, (resource_id,))
         taxonomy_details = cursor.fetchone()
 
-        # Query to fetch script IDs based on resource_id
-        script_id_query = """
-            SELECT id FROM Scripts WHERE resource_id = %s
-        """
-        cursor.execute(script_id_query, (resource_id,))
-        script_ids = [row['id'] for row in cursor.fetchall()]
-
-        # If there are no scripts, close the connection and return the combined details
-        if not script_ids:
-            return {
-                'resource_details': resource_details,
-                'taxonomy_details': taxonomy_details,
-                'scripts': {},
-                'user_details': {}
-            }
-
-        # Query to fetch terms and scripts details
+        # Query to fetch script IDs and associated taxonomies
         script_query = """
             SELECT
-                Terms.title AS TermTitle,
-                Taxonomies.slug AS TaxSlug,
                 Scripts.id AS ScriptId,
-                Scripts.resource_id AS ResourceId
+                Scripts.resource_id AS ResourceId,
+                Terms.title AS TermTitle,
+                Taxonomies.slug AS TaxSlug
             FROM
-                Terms
-            INNER JOIN
-                Taxonomies ON Terms.taxonomy_id = Taxonomies.id AND 
-                              Taxonomies.slug IN ('macro_areas_resources', 'dominios_resources', 'areas_resources', 'anos_resources', 'subdominios','hashtags')
-            INNER JOIN
-                script_terms ON script_terms.term_id = Terms.id
-            INNER JOIN
-                Scripts ON script_terms.script_id = Scripts.id
+                Scripts
+            LEFT JOIN
+                script_terms ON Scripts.id = script_terms.script_id
+            LEFT JOIN
+                Terms ON script_terms.term_id = Terms.id
+            LEFT JOIN
+                Taxonomies ON Terms.taxonomy_id = Taxonomies.id
             WHERE
-                script_terms.script_id IN (%s)
+                Scripts.resource_id = %s
+            AND
+                Taxonomies.slug IN ('macro_areas_resources', 'dominios_resources', 'areas_resources', 'anos_resources', 'subdominios', 'hashtags')
             ORDER BY
-                Taxonomies.id ASC, Terms.slug+0 ASC
-        """ % ','.join(['%s'] * len(script_ids))
-
-        cursor.execute(script_query, script_ids)
+                Taxonomies.id ASC, Terms.slug+0 ASC;
+        """
+        cursor.execute(script_query, (resource_id,))
         script_details = cursor.fetchall()
 
-        # Construct scripts dictionary with taxonomy slugs as keys and lists of terms as values
-        scripts = {
+        # Prepare a dictionary to store scripts grouped by taxonomy slugs
+        scripts_by_taxonomy = {
+            'idiomas': [], 
             'anos_resources': [],
+            'formato': [],
+            'modo_utilizacao': [],
+            'requisitos_tecnicos': [],
+            'anos_escolaridade': [],
             'areas_resources': [],
             'dominios_resources': [],
+            'macro_areas': [],
             'subdominios': [],
-            'hashtags':[],
+            'hashtags': []
         }
 
+        # Organize scripts into the dictionary by taxonomy slugs
         for script in script_details:
-            tax_slug = script.get('TaxSlug')  # Use .get() to safely retrieve TaxSlug
+            tax_slug = script['TaxSlug']
             term_title = script['TermTitle']
-            if tax_slug in scripts:
-                scripts[tax_slug].append(term_title)
+            scripts_by_taxonomy[tax_slug].append({
+                'ScriptId': script['ScriptId'],
+                'ResourceId': script['ResourceId'],
+                'TermTitle': term_title
+            })
 
-        # Fetch user details associated with script_ids
+        # Fetch user details associated with the scripts
+        script_ids = [script['ScriptId'] for script in script_details]
         user_details = {}
         if script_ids:
             user_query = """
                 SELECT u.id AS UserId, u.name AS UserName, u.organization AS UserOrganization
                 FROM Users u
                 JOIN Scripts s ON u.id = s.user_id
-                WHERE s.id IN (%s)
-            """ % ','.join(['%s'] * len(script_ids))
-            cursor.execute(user_query, script_ids)
+                WHERE s.id IN ({})
+            """.format(','.join(map(str, script_ids)))
+            cursor.execute(user_query)
             user_details = {row['UserId']: {'name': row['UserName'], 'organization': row['UserOrganization']} for row in cursor.fetchall()}
 
         # Combine all details into a single dictionary
@@ -230,7 +225,7 @@ def get_combined_details(resource_id):
                 'description': resource_details['description'],
                 'author': resource_details['author']
             })
-        
+
         if taxonomy_details:
             combined_details.update({
                 'idiomas_title': taxonomy_details.get('idiomas_title'),
@@ -239,23 +234,27 @@ def get_combined_details(resource_id):
                 'requisitos_tecnicos_title': taxonomy_details.get('requisitos_tecnicos_title'),
                 'anos_escolaridade_title': taxonomy_details.get('anos_escolaridade_title')
             })
-        
-        combined_details['scripts'] = scripts
+
+        combined_details['scripts_by_taxonomy'] = scripts_by_taxonomy
         combined_details['user_details'] = user_details
-        
+
         return combined_details if combined_details else None
 
     except mysql.connector.Error as e:
         # Handle database errors
         print(f"Error retrieving combined details: {e}")
         return None
-    
+
     finally:
         # Ensure cursor and connection are closed
         if cursor:
             cursor.close()
         if conn and conn.is_connected():
             conn.close()
+
+
+
+
 
 
 def no_resources(userid):

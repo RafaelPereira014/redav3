@@ -159,7 +159,7 @@
                         <div>
                             <span>Palavras-chave:</span>
                             <span>
-                                {% for hashtag in resource_details.scripts.hashtags %}
+                                {% for hashtag in resource_details.hashtags %}
                                     <a href="/search?hashtag={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             </span>
@@ -205,51 +205,69 @@
                     </div>
                     
                     <div class="proposta-op">
+
                         <h3>Proposta de operacionalização</h3>
-                        {% for operation in resource_details.operations %}
+                        {%for script in script_details%}
                         <div class="button-container">
                             <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
                         </div>
                         <div id="proposta{{ loop.index }}" style="display: none;">
                             <div class="separator">
                                 <span>Autor:</span>
-                                {% for user_id, user_info in resource_details.user_details.items() %}
-                                    <span>{{ user_info.name }}</span>
-                                {% endfor %}
+                                <span>{{ script.author }}</span>
                             </div>
                             <div class="separator">
                                 <span>Organização:</span>
-                                {% for user_id, user_info in resource_details.user_details.items() %}
-                                    <span>{{ user_info.organization }}</span>
-                                {% endfor %}
+                                
+                                <span>{{ script.organization }}</span>
                             </div>
                             <div class="separator">
                                 <span>Proposta de operacionalização:</span>
-                                <span>{{ operation | safe }}</span>
+                                <span>{{ script.operation | safe }}</span>
                             </div>
                             <div class="separator">
                                 <span>Anos de escolaridade:</span>
-                                <span>{{ resource_details.scripts.anos_resources | join(', ') }}</span>
+                                <span>
+                                    {{script.anos_escolaridade}}
+                                </span>
                             </div>
                             <div class="separator">
                                 <span>Disciplinas:</span>
-                                <span>{{ resource_details.scripts.areas_resources | join(', ') }}</span>
+                                <span>
+                                    {% for script in operation.areas_resources %}
+                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
                             </div>
                             <div class="separator">
                                 <span>Domínios/Temas:</span>
-                                <span>{{ resource_details.scripts.dominios_resources | join(', ') }}</span>
+                                <span>
+                                    {% for script in operation.dominios_resources %}
+                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
                             </div>
                             <div class="separator">
                                 <span>Subdomínios:</span>
-                                <span>{{ resource_details.scripts.subdominios | join(', ') }}</span>
+                                <span>
+                                    {% for script in operation.subdominios %}
+                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
                             </div>
                             <div class="separator">
                                 <span>Conceitos:</span>
-                                <span>{{ resource_details.scripts.hashtags | join(', ') }}</span>
+                                <span>
+                                    {% for script in operation.hashtags %}
+                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
                             </div>
                         </div>
-                        {% endfor %}
+                        {%endfor%}
                     </div>
+                  
+                    
                     
                     
                 </div>
