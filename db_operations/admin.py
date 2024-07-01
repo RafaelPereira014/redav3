@@ -212,4 +212,85 @@ def taxonomies_relations(filters=None):
     conn.close()
     return result
 
+
+def fetch_users_with_acceptance():
+    # Establish connection to the database
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    try:
+        # SQL query to fetch users with acceptance = 1
+        query = ("""
+            SELECT
+                User.id,
+                User.name,
+                User.email,
+                User.organization,
+                User.created_at,
+                User.updated_at,
+                User.status,
+                Role.id AS Role_id,
+                Role.value AS Role_value,
+                Role.type AS Role_type
+            FROM
+                Users AS User
+            INNER JOIN
+                Roles AS Role ON User.role_id = Role.id
+                AND ((Role.deleted_at > '2024-07-01 15:33:24' OR Role.deleted_at IS NULL)
+                     AND Role.status = true)
+            WHERE
+                (User.acceptance = 1)
+                AND ((User.deleted_at > '2024-07-01 15:33:24' OR User.deleted_at IS NULL))
+            ORDER BY
+                name DESC;
+        """)
+        
+        # Execute the query
+        cursor.execute(query)
+        
+        # Fetch all rows
+        users = cursor.fetchall()
+        
+      
+        
+        return users
     
+    except Error as e:
+        print(f"Error: {e}")
+        return []
+    
+    finally:
+        # Close cursor and connection
+        cursor.close()
+        conn.close()
+    
+    
+def badwords():
+    # Establish connection to the database
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    try:
+        # SQL query to fetch users with acceptance = 1
+        query = ("""
+            SELECT id, title, status, created_at, updated_at, deleted_at FROM Badwords AS Badword WHERE ((Badword.deleted_at > '2024-07-01 15:45:24' OR Badword.deleted_at IS NULL) AND Badword.status = true) ORDER BY Badword.title ASC ;
+        """)
+        
+        # Execute the query
+        cursor.execute(query)
+        
+        # Fetch all rows
+        badwords = cursor.fetchall()
+        
+      
+        
+        return badwords
+    
+    except Error as e:
+        print(f"Error: {e}")
+        return []
+    
+    finally:
+        # Close cursor and connection
+        cursor.close()
+        conn.close()
