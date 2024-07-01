@@ -7,6 +7,7 @@ from db_operations.tools import *
 from db_operations.resources_details import *
 from db_operations.users_op import *
 from db_operations.scripts import *
+from db_operations.admin import *
 
 
 
@@ -316,11 +317,15 @@ def admin_comments_prohi():
 #######----- taxonomias-----------####
 @app.route('/dashboard/taxonomias')
 def admin_taxonomies():
-    return render_template('admin/taxonomias/taxonomias.html')
+    
+    all_taxonomies = taxonomies()
+    return render_template('admin/taxonomias/taxonomias.html',all_taxonomies=all_taxonomies)
 
-@app.route('/dashboard/taxonomias/nome_taxonomia')
-def admin_edit_taxonomies():
-    return render_template('admin/taxonomias/edit_taxonomia.html')
+@app.route('/dashboard/taxonomias/<slug>')
+def admin_edit_taxonomies(slug):
+    taxonomy_title = get_taxonomy_title(slug)
+    taxonomies = edit_taxonomie(slug)  # Call your function with the provided slug
+    return render_template('admin/taxonomias/edit_taxonomia.html', taxonomies=taxonomies,taxonomy_title=taxonomy_title)
 
 @app.route('/dashboard/taxonomias/relacoes')
 def admin_taxonomies_rel():
