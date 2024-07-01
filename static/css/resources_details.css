@@ -614,3 +614,26 @@ footer {
     flex: 1; /* Adjusted button width */
     margin-right: 5px; /* Adjusted margin between buttons */
 }
+
+/* General styles for warning boxes */
+.warning {
+    background-color: #ffcccb; /* Light red background */
+    border-left: 6px solid #f44336; /* Dark red left border */
+    padding: 10px; /* Some padding for better appearance */
+    margin-bottom: 15px; /* Space below the warning */
+    font-family: Arial, sans-serif; /* Consistent font */
+    color: #333; /* Dark text color */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Slight shadow for depth */
+}
+
+/* Optional: Icons within warnings for better visibility */
+.warning .icon {
+    margin-right: 10px; /* Space between icon and text */
+    vertical-align: middle; /* Align icon with text */
+}
+
+/* Optional: Style for the text within the warning */
+.warning span {
+    font-size: 14px; /* Slightly larger font */
+}

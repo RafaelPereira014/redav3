@@ -11,6 +11,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        .pagination button.active {
+            background-color: #333;
+            color: white;
+        }
+    </style>
 
     
 </head>
@@ -76,7 +95,7 @@
 
         <hr></hr>
 
-        <table>
+        <table id="apps_table">
             <thead>
                 <tr>
                     <th>Título</th>
@@ -99,10 +118,55 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pagination" id="pagination"></div>
+
        
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("apps_table");
+            const pagination = document.getElementById("pagination");
+            const rowsPerPage = 15;
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            let currentPage = 1;
+
+            function displayRows(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = i >= start && i < end ? "" : "none";
+                }
+            }
+
+            function setupPagination() {
+                pagination.innerHTML = "";
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement("button");
+                    button.innerText = i;
+                    button.classList.add("page-btn");
+                    if (i === currentPage) button.classList.add("active");
+
+                    button.addEventListener("click", function() {
+                        currentPage = i;
+                        displayRows(currentPage);
+
+                        const currentBtn = document.querySelector(".page-btn.active");
+                        currentBtn.classList.remove("active");
+                        button.classList.add("active");
+                    });
+
+                    pagination.appendChild(button);
+                }
+            }
+
+            displayRows(currentPage);
+            setupPagination();
+        });
+
         function toggleSubmenu(submenuId) {
             var submenu = document.getElementById(submenuId);
             if (submenu.style.display === "block") {
@@ -110,18 +174,6 @@
             } else {
                 submenu.style.display = "block";
             }
-        }
-
-        function displayTodos() {
-            // Logic to display all data in the table
-        }
-
-        function displayCientifica() {
-            // Logic to display only cientifica data in the table
-        }
-
-        function displayLinguistica() {
-            // Logic to display only linguistica data in the table
         }
     </script>
 </body>

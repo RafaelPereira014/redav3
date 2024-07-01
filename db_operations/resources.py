@@ -220,6 +220,9 @@ def get_combined_details(resource_id):
             combined_details.update({
                 'resource_id': resource_id,
                 'title': resource_details['title'],
+                'approvedScientific': resource_details['approvedScientific'],
+                'approvedLinguistic': resource_details['approvedLinguistic'],
+                'hidden': resource_details['hidden'],
                 'created_at': resource_details['created_at'],
                 'organization': resource_details['organization'],
                 'description': resource_details['description'],

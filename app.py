@@ -75,7 +75,7 @@ def resources():
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     resource_details = get_combined_details(resource_id)
-    
+     
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
     

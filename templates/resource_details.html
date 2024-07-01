@@ -108,6 +108,25 @@
             <div class="resource-details">
                
                 <div class="resource-info">
+                    {% if resource_details.approvedScientific == 0 %}
+                    <div class="warning">
+                        <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <span>Aviso: Este recurso ainda não foi aprovado cientificamente.</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if resource_details.approvedLinguistic == 0 %}
+                    <div class="warning">
+                        <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <span>Aviso: Este recurso ainda não foi aprovado linguisticamente.</span>
+                    </div>
+                    {% endif %}
+                    {% if resource_details.hidden == 1 %}
+                    <div class="warning">
+                        <span class="icon"><i class="fas fa-exclamation-triangle"></i></span>
+                        <span>Aviso: Este recurso encontra-se oculto.</span>
+                    </div>
+                    {% endif %}
                     <!-- Resource details -->
                     <button id="backButton"><i class="fa fa-arrow-left"></i> Voltar</button>
                     {% if resource_details.image_url %}
