@@ -271,7 +271,8 @@ def speakwus():
 # Admin Page
 @app.route('/dashboard')
 def admin():
-    return render_template('admin/admin.html')
+    date = datetime.now()  # Get current date and time
+    return render_template('admin/admin.html', date=date)  # Pass date to template
 
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():
