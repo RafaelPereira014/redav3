@@ -11,18 +11,118 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 5px;
+            text-align: left;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        select {
+            width: 100%;
+        }
+
+        .actions {
+            text-align: center;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .show {
+            display: block;
+        }
+
+        /* Pagination styles */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pagination ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .pagination ul li {
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .pagination ul li a,
+        .pagination ul li span {
+            display: inline-block;
+            padding: 5px 10px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: #fff;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        .pagination ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .pagination ul li.active a,
+        .pagination ul li.active span {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        .pagination ul li.disabled span {
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        .pagination ul li.disabled a {
+            pointer-events: none; /* Disable clicking on disabled pages */
+            opacity: 0.6; /* Dim the disabled page link */
+        }
+
+    </style>
 </head>
 <body>
-   
     <div class="sidebar">
         <div class="logo">
-            <img src="/static/images/REDA_logo.png" alt="Logo">
+            <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="Logo">
         </div>
     
         <ul>
             <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-
             <li>
                 <a><i class="fas fa-database"></i> Recursos </a>
                 <ul class="submenu">
@@ -31,15 +131,12 @@
                     <li><a href="/dashboard/recursos/ocultos" >Ocultos</a></li>
                 </ul>
             </li>
-            
-            
             <li>
                 <a href="/dashboard/aplicacoes"><i class="fas fa-layer-group"></i> Aplicações</a>
                 <ul class="submenu">
                     <li><a href="/dashboard/aplicacoes/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
                 </ul>
             </li>
-
             <li>
                 <a href="/dashboard/ferramentas"><i class="fas fa-tools"></i> Ferramentas</a>
                 <ul class="submenu">
@@ -49,8 +146,7 @@
             <li>
                 <a><i class="fas fa-comments"></i> Comentários</a>
                 <ul class="submenu">
-                    <li><a href="/dashboard/comentarios/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
-                    <li><a href="/dashboard/comentarios/palavras-proibidas"><i class="fas fa-ban"></i> Palavras proibidas</a></li>
+                    <li><a href="/dashboard/comentarios/pendentes"><i class                    <li><a href="/dashboard/comentarios/palavras-proibidas"><i class="fas fa-ban"></i> Palavras proibidas</a></li>
                 </ul>
             </li>
             <li>
@@ -64,37 +160,109 @@
             <li><a href="#"><i class="fas fa-file-alt"></i> Artigos</a></li>
         </ul>
     </div>
-    
-    <div class="content">
-        <h2>Taxonomias: Relações</h2>
-        <div>
-            <input type="text" id="search" placeholder="Pesquisar...">
-        </div>
 
+    <div class="content">
+        <h3>Gerir relações <strong>Ano -> Disciplina -> Domínios/Temas -> Subdomínios -> Conceitos</strong></h3>
+       
         <hr></hr>
 
-        <table>
-            <tr>
-                <th>Ano</th>
-                <th>Disciplina</th>
-                <th>Domínio/Tema</th>
-                <th>Subdomínio</th>
-                <th>Conceito</th>
-                <th>Ações</th>
-            </tr>
-            <tr>
-                <td>10º</td>
-                <td>Mathematics</td>
-                <td>Algebra</td>
-                <td>Equations</td>
-                <td>Linear Equations</td>
-                <td class="actions">
-                    <i class="fa fa-pencil" onclick="showDropdownMenu(this)"></i>
-                </td>
-            </tr>
-            <!-- Additional rows go here -->
-        </table>
-       
+        <form method="GET" action="/dashboard/taxonomias/relacoes">
+            <table>
+                <!-- Table header -->
+                <tr>
+                    <th>Ano</th>
+                    <th>Disciplina</th>
+                    <th>Domínio/Tema</th>
+                    <th>Subdomínio</th>
+                    <th>Conceito</th>
+                    <th>Ações</th>
+                </tr>
+                
+                <!-- Table filters row -->
+                <tr>
+                    <td>
+                        <select name="ano">
+                            <option value="">All</option>
+                            {% for ano in anos %}
+                            <option value="{{ ano }}" {% if request.args.get('ano') == ano %}selected{% endif %}>{{ ano }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="disciplina">
+                            <option value="">All</option>
+                            {% for disciplina in disciplinas %}
+                            <option value="{{ disciplina }}" {% if request.args.get('disciplina') == disciplina %}selected{% endif %}>{{ disciplina }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="dominio">
+                            <option value="">All</option>
+                            {% for dominio in dominios %}
+                            <option value="{{ dominio }}" {% if request.args.get('dominio') == dominio %}selected{% endif %}>{{ dominio }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="subdominio">
+                            <option value="">All</option>
+                            {% for subdominio in subdominios %}
+                            <option value="{{ subdominio }}" {% if request.args.get('subdominio') == subdominio %}selected{% endif %}>{{ subdominio }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <select name="conceito">
+                            <option value="">All</option>
+                            {% for conceito in conceitos %}
+                            <option value="{{ conceito }}" {% if request.args.get('conceito') == conceito %}selected{% endif %}>{{ conceito }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit">Apply</button>
+                    </td>
+                </tr>
+                
+                <!-- Table rows -->
+                {% for taxonomy in relations %}
+                <tr>
+                    <td>{{ taxonomy.term_title_order_1 }}</td>
+                    <td>{{ taxonomy.term_title_order_2 }}</td>
+                    <td>{{ taxonomy.term_title_order_3 }}</td>
+                    <td>{{ taxonomy.term_title_order_4 }}</td>
+                    <td>{{ taxonomy.term_title_order_5 }}</td>
+                    <td class="actions">
+                        <i class="fa fa-pencil" onclick="showDropdownMenu(this)"></i>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+
+        <!-- Pagination links -->
+        <div class="pagination">
+            {% if pagination.total_pages > 1 %}
+                <ul>
+                    {% if pagination.has_prev %}
+                        <li><a href="?page=1">&laquo; First</a></li>
+                        <li><a href="?page={{ pagination.prev_num }}">&lsaquo; Prev</a></li>
+                    {% endif %}
+                    {% for num in pagination.iter_pages %}
+                        {% if num %}
+                            <li {% if num == pagination.page %}class="active"{% endif %}><a href="?page={{ num }}">{{ num }}</a></li>
+                        {% else %}
+                            <li><span>&hellip;</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}
+                        <li><a href="?page={{ pagination.next_num }}">Next &rsaquo;</a></li>
+                        <li><a href="?page={{ pagination.total_pages }}">Last &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
     </div>
 
     <script>
@@ -111,3 +279,4 @@
     </script>
 </body>
 </html>
+

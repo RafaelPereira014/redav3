@@ -1,3 +1,4 @@
+from itertools import islice
 import math
 from flask import Flask, jsonify, render_template, request
 import mysql.connector
@@ -329,7 +330,27 @@ def admin_edit_taxonomies(slug):
 
 @app.route('/dashboard/taxonomias/relacoes')
 def admin_taxonomies_rel():
-    return render_template('admin/taxonomias/relacoes.html')
+    page = request.args.get('page', 1, type=int)
+    per_page = 20
+    relations = taxonomies_relations()
+    paginated_relations = list(islice(relations, (page - 1) * per_page, page * per_page))
+    
+    # Calculate pagination variables
+    total_results = len(relations)
+    total_pages = math.ceil(total_results / per_page)
+    pagination = {
+        'page': page,
+        'per_page': per_page,
+        'total_results': total_results,
+        'total_pages': total_pages,
+        'has_prev': page > 1,
+        'has_next': page < total_pages,
+        'prev_num': page - 1 if page > 1 else None,
+        'next_num': page + 1 if page < total_pages else None,
+        'iter_pages': range(1, total_pages + 1)
+    }
+    
+    return render_template('admin/taxonomias/relacoes.html', relations=paginated_relations, pagination=pagination)
 
 #######----------------####
 @app.route('/dashboard/utilizadores')
