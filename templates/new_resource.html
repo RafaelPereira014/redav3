@@ -20,7 +20,7 @@
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
 
     <!-- Link to TinyMCE CDN -->
-    <script src="https://cdn.tiny.cloud/1/hcsdmgk5ojfti5cengfoxv1zfkb2t21ei6ue2obbe85k8lst/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/agr3kxwxb5hnsedd9yd0re9bxz0346mtqq1xe1u6ethrlj9a/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         // Initialize TinyMCE editor
         tinymce.init({
@@ -134,18 +134,11 @@
                 <input type="text" id="organizacao" name="organizacao" placeholder="Escola/organização/nome do sítio do autor do recurso" required>
             </div>
             <div class="input-group-format required">
-                <h2>Formato(MAX.2):</h2>
-                <input type="checkbox" id="formato1" name="formato" value="Opção 1">
-                <label for="formato1">Opção 1</label>
-                <input type="checkbox" id="formato2" name="formato" value="Opção 2">
-                <label for="formato2">Opção 2</label>
-                <input type="checkbox" id="formato3" name="formato" value="Opção 3">
-                <label for="formato3">Opção 3</label>
-                <input type="checkbox" id="formato4" name="formato" value="Opção 4">
-                <label for="formato4">Opção 4</label>
-                <input type="checkbox" id="formato5" name="formato" value="Opção 5">
-                <label for="formato5">Opção 5</label>
-                <!-- Add more radio options as needed -->
+                <h2>Formato (MAX. 2):</h2>
+                {% for formato in formatos %}
+                    <input type="checkbox" id="formato{{ loop.index }}" name="formato" value="{{ formato }}">
+                    <label for="formato{{ loop.index }}">{{ formato }}</label>
+                {% endfor %}
             </div>
             <div class="input-group-local required">
                 <h2>Localização do recurso:</h2>
@@ -165,20 +158,18 @@
                 <!-- Add more radio options as needed -->
             </div>
             <div class="input-group-use required">
-                <h2>Modo de utilização:</h2>
-                <input type="checkbox" id="utilizacao1" name="modo-utilizacao" value="Opção 1">
-                <label for="utilizacao1">Opção 1</label>
-                <input type="checkbox" id="utilizacao2" name="modo-utilizacao" value="Opção 2">
-                <label for="utilizacao2">Opção 2</label>
-                <!-- Add more radio options as needed -->
+                <h2>Modos de Utilização:</h2>
+                {% for modo in use_mode %}
+                    <input type="checkbox" id="modo{{ loop.index }}" name="use_mode" value="{{ modo }}">
+                    <label for="modo{{ loop.index }}">{{ modo }}</label>
+                {% endfor %}
             </div>
             <div class="input-group-req required">
-                <h2>Requisitos:</h2>
-                <input type="checkbox" id="requisitos1" name="requisitos" value="Opção 1">
-                <label for="requisitos1">Opção 1</label>
-                <input type="checkbox" id="requisitos2" name="requisitos" value="Opção 2">
-                <label for="requisitos2">Opção 2</label>
-                <!-- Add more radio options as needed -->
+                <h2>Requisitos Técnicos:</h2>
+                {% for requirement in requirements %}
+                    <input type="checkbox" id="requirement{{ loop.index }}" name="requirements" value="{{ requirement }}">
+                    <label for="requirement{{ loop.index }}">{{ requirement }}</label>
+                {% endfor %}
             </div>
             <div class="input-group required">
                 <h2>Descrição:</h2>
@@ -188,11 +179,10 @@
             </div>
             <div class="input-group-lang required">
                 <h2>Idiomas:</h2>
-                <input type="radio" id="idiomas1" name="idiomas" value="Opção 1">
-                <label for="idiomas1">Opção 1</label>
-                <input type="radio" id="idiomas2" name="idiomas" value="Opção 2">
-                <label for="idiomas2">Opção 2</label>
-                <!-- Add more radio options as needed -->
+                {% for idioma in idiomas %}
+                    <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}">
+                    <label for="idioma{{ loop.index }}">{{ idioma }}</label>
+                {% endfor %}
             </div>
             <div class="input-group-fich">
                 <h2>Ficheiro:</h2>

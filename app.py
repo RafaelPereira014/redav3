@@ -9,6 +9,7 @@ from db_operations.resources_details import *
 from db_operations.users_op import *
 from db_operations.scripts import *
 from db_operations.admin import *
+from db_operations.new_resource import *
 
 
 
@@ -235,11 +236,28 @@ def my_account():
 # New_resource
 @app.route('/novorecurso')
 def novo_recurso():
-    return render_template('new_resource.html')
+    formatos = get_formatos()
+    use_mode = get_modos_utilizacao()
+    requirements = get_requisitos_tecnicos()
+    idiomas = get_idiomas()
+    
+    return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos)
 
 @app.route('/novorecurso2')
 def novo_recurso2():
-    return render_template('new_resource2.html')
+    anos = get_unique_terms(level=1)
+    ano = request.args.get('ano')
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano)
+    disciplina = request.args.get('disciplina')
+    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina)
+    dominio = request.args.get('dominio')
+    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio)
+    
+
+    return render_template('new_resource2.html', anos=anos,disciplinas=disciplinas,dominios=dominios,subdominios=subdominios)
+
+
+
 
 # about page
 @app.route('/sobre')
