@@ -12,7 +12,6 @@
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
-    <!-- Link to TinyMCE CDN -->
     <script src="https://cdn.tiny.cloud/1/agr3kxwxb5hnsedd9yd0re9bxz0346mtqq1xe1u6ethrlj9a/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
     <style>
         .container2 {
@@ -23,8 +22,8 @@
             padding: 40px 0;
             color: #fff;
         }
-       
     </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="header-governo">
@@ -56,7 +55,6 @@
     <div class="container2">
         <h1>Novo recurso</h1>
         <p>Detalhes > Metadados </p>
-        <img src="" alt="">
     </div>
     <main>
         <div class="container">
@@ -76,26 +74,18 @@
                     <label for="disciplina{{ loop.index }}">{{ disciplina }}</label>
                 {% endfor %}
             </div>
+            
             <div class="input-group-domain required">
                 <h2>Dominios:</h2>
-                {% for dominio in dominios %}
-                    <input type="checkbox" id="dominio{{ loop.index }}" name="dominios" value="{{ dominio }}">
-                    <label for="dominio{{ loop.index }}">{{ dominio }}</label>
-                {% endfor %}            
+                <!-- Dominios will be populated by JavaScript -->
             </div>
             <div class="input-group-subdomain required">
                 <h2>Subdominios:</h2>
-                {% for subdominio in subdominios %}
-                    <input type="checkbox" id="subdominio{{ loop.index }}" name="subdominios" value="{{ subdominio }}">
-                    <label for="subdominio{{ loop.index }}">{{ subdominio }}</label>
-                {% endfor %}
+                <!-- Subdominios will be populated by JavaScript -->
             </div>
             <div class="input-group-concept required">
                 <h2>Conceitos:</h2>
-                {% for conceito in conceitos %}
-                    <input type="checkbox" id="conceito{{ loop.index }}" name="conceitos" value="{{ conceito }}">
-                    <label for="conceito{{ loop.index }}">{{ conceito }}</label>
-                {% endfor %}            
+                <!-- Conceitos will be populated by JavaScript -->
             </div>
             <div class="input-group-conceitos">
                 <h2>Outros conceitos:</h2>
@@ -168,5 +158,53 @@
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
         </div>
     </footer>
+
+    <script>
+        // dominios.js
+        $(document).ready(function() {
+            $('input[name="anos"]').change(function() {
+                var selectedAno = $(this).val();
+                fetchData(selectedAno);
+            });
+
+            function fetchData(ano) {
+                $.ajax({
+                    url: '/novorecurso2',
+                    type: 'GET',
+                    data: { ano: ano },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log('AJAX Success:', data); // Debug logging
+                        populateDisciplinas(data.disciplinas); // Assuming 'disciplinas' is the key in your JSON response
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            function populateDisciplinas(disciplinas) {
+                var disciplinasContainer = $('#disciplinas-checkboxes');
+                disciplinasContainer.empty(); // Clear previous content
+
+                if (disciplinas.length > 0) {
+                    disciplinasContainer.append('<h2>Disciplinas:</h2>');
+                    disciplinas.forEach(function(item, index) {
+                        disciplinasContainer.append(`
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="disciplina${index}" name="disciplinas" value="${item}">
+                                <label for="disciplina${index}">${item}</label>
+                            </div>
+                        `);
+                    });
+                } else {
+                    disciplinasContainer.append('<p>No disciplinas available</p>');
+                }
+            }
+        });
+
+        
+    </script>
+    
 </body>
 </html>

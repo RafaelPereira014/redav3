@@ -1,5 +1,6 @@
 from itertools import islice
 import math
+import re
 from flask import Flask, jsonify, render_template, request
 import mysql.connector
 from db_operations.resources import *
@@ -240,21 +241,33 @@ def novo_recurso():
     use_mode = get_modos_utilizacao()
     requirements = get_requisitos_tecnicos()
     idiomas = get_idiomas()
+    anos = get_anos_escolaridade()
     
     return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos)
 
-@app.route('/novorecurso2')
+@app.route('/novorecurso2', methods=['GET'])
 def novo_recurso2():
     anos = get_unique_terms(level=1)
-    ano = request.args.get('ano')
-    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano)
-    disciplina = request.args.get('disciplina')
-    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina)
-    dominio = request.args.get('dominio')
-    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio)
     
+    ano = request.args.get('ano')
+    print(ano)
+    dominios = []
+    subdominios = []
+    
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
+    print(disciplinas)
+    for disciplina in disciplinas:
+        dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
+        print(dominios)
+        for dominio in dominios:
+            subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
+            print(subdominios)
 
-    return render_template('new_resource2.html', anos=anos,disciplinas=disciplinas,dominios=dominios,subdominios=subdominios)
+
+    return render_template('new_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios)
+
+
+
 
 
 
