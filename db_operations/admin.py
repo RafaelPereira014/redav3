@@ -2,8 +2,9 @@ from aifc import Error
 from datetime import datetime
 import os
 from config import DB_CONFIG  # Import the database configuration
-from flask import current_app, session, url_for
+from flask import current_app, logging, session, url_for
 import mysql.connector  # Import MySQL Connector Python module
+import logging
 
 def connect_to_database():
     """Establishes a connection to the MySQL database."""
@@ -292,5 +293,122 @@ def badwords():
     
     finally:
         # Close cursor and connection
+        cursor.close()
+        conn.close()
+
+
+def recurso_do_mes(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set highlight='1' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} set as 'Resource of the Month'")
+    except Exception as e:
+        logging.error(f"Error setting resource {resource_id} as 'Resource of the Month': {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def retirar_recurso_do_mes(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set highlight='0' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} removed from 'Resource of the Month'")
+    except Exception as e:
+        logging.error(f"Error removing resource {resource_id} from 'Resource of the Month': {e}")
+    finally:
+        cursor.close()
+        conn.close()
+
+def recurso_do_mes(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set highlight='1' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} set as 'Resource of the Month'")
+        return f"Resource {resource_id} set as 'Resource of the Month'"
+    except Exception as e:
+        logging.error(f"Error setting resource {resource_id} as 'Resource of the Month': {e}")
+        return f"Error setting resource {resource_id} as 'Resource of the Month': {e}"
+    finally:
+        cursor.close()
+        conn.close()
+
+def retirar_recurso_do_mes(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set highlight='0' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} removed from 'Resource of the Month'")
+        return f"Resource {resource_id} removed from 'Resource of the Month'"
+    except Exception as e:
+        logging.error(f"Error removing resource {resource_id} from 'Resource of the Month': {e}")
+        return f"Error removing resource {resource_id} from 'Resource of the Month': {e}"
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_resource(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("DELETE FROM Resources where id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} deleted")
+        return f"Resource {resource_id} deleted"
+    except Exception as e:
+        logging.error(f"Error deleting resource {resource_id}: {e}")
+        return f"Error deleting resource {resource_id}: {e}"
+    finally:
+        cursor.close()
+        conn.close()
+
+def hide_resource(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set hidden='1' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} hidden")
+        return f"Resource {resource_id} hidden"
+    except Exception as e:
+        logging.error(f"Error hiding resource {resource_id}: {e}")
+        return f"Error hiding resource {resource_id}: {e}"
+    finally:
+        cursor.close()
+        conn.close()
+        
+def show_resource(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources set hidden='0' WHERE id=%s", (resource_id,))
+        conn.commit()
+        logging.info(f"Resource {resource_id} visible")
+        return f"Resource {resource_id} visible"
+    except Exception as e:
+        logging.error(f"Error showing resource {resource_id}: {e}")
+        return f"Error showing resource {resource_id}: {e}"
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_script(script_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("DELETE FROM Scripts where id=%s", (script_id,))
+        conn.commit()
+        logging.info(f"Script {script_id} deleted")
+        return f"Script {script_id} deleted"
+    except Exception as e:
+        logging.error(f"Error deleting script {script_id}: {e}")
+        return f"Error deleting script {script_id}: {e}"
+    finally:
         cursor.close()
         conn.close()

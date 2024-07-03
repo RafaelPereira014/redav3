@@ -11,6 +11,7 @@ from db_operations.users_op import *
 from db_operations.scripts import *
 from db_operations.admin import *
 from db_operations.new_resource import *
+from db_operations.user import *
 
 
 
@@ -303,7 +304,12 @@ def speakwus():
 @app.route('/dashboard')
 def admin():
     date = datetime.now()  # Get current date and time
-    return render_template('admin/admin.html', date=date)  # Pass date to template
+    active_users = get_active_month_users()
+    monthly_tools = get_current_month_tools()
+    monthly_apps = get_current_month_apps()
+    monthly_resources = get_current_month_resources()
+    monthly_users = get_current_month_users()
+    return render_template('admin/admin.html', date=date,active_users=active_users,monthly_apps=monthly_apps,monthly_tools=monthly_tools,monthly_resources=monthly_resources,monthly_users=monthly_users)  # Pass date to template
 
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():

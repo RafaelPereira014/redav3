@@ -11,6 +11,75 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        .pagination button.active {
+            background-color: #333;
+            color: white;
+        }
+      
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust the gap between panels */
+            justify-content: center; /* Center the panels horizontally */
+        }
+        
+        .panel {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white; /* Ensure text is readable against colored backgrounds */
+            width: calc(25% - 30px); /* Four panels in a row */
+            max-width: 200px;
+        }
+        
+        .panel h2 {
+            margin-bottom: 15px;
+        }
+        
+        .panel p {
+            margin: 0;
+        }
+        
+        .panel-resources {
+            background: linear-gradient(to bottom, #34a853, #b8e994);
+        }
+        
+        .panel-apps {
+            background: linear-gradient(to bottom, #4285f4, #a0c1f8);
+        }
+        
+        .panel-tools {
+            background: linear-gradient(to bottom, #fbbc05, #fce4a6);
+        }
+        
+        .panel-users {
+            background: linear-gradient(to bottom, #ea4335, #f9b3a0);
+        }
+        
+        /* Optional: Add hover effect for better user experience */
+        .panel:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        
+        
+    </style>
 
     
 </head>
@@ -69,59 +138,96 @@
     
     <div class="content">
         <h2>Resumo da REDA - {{date}}</h2>
-        <div class="panel">
-            <h2>New Resources</h2>
-            <p>Display new resources here.</p>
+        <div class="panel panel-resources">
+            <h2>novos recursos</h2>
+            <p>{{monthly_resources}}</p>
         </div>
-        <div class="panel">
-            <h2>New Apps</h2>
-            <p>Display new apps here.</p>
+        <div class="panel panel-apps">
+            <h2>novas aplicações</h2>
+            <p>{{monthly_apps}}</p>
         </div>
-        <div class="panel">
-            <h2>New Tools</h2>
-            <p>Display new tools here.</p>
+        <div class="panel panel-tools">
+            <h2>novas ferramentas</h2>
+            <p>{{monthly_tools}}</p>
         </div>
-        <div class="panel">
-            <h2>New Users</h2>
-            <p>Display new users here.</p>
+        <div class="panel panel-users">
+            <h2>novos utilizadores</h2>
+            <p>{{monthly_users}}</p>
         </div>
+        
 
         <h2>Utilizadores mais ativos -  {{date}}</h2>
     
 
-        <table>
+        <table id="main_table">
             <tr>
                 <th>Nº recursos</th>
                 <th>Nome</th>
                 <th>E-mail</th>
             </tr>
+            {% for user in active_users %}
             <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-                <td>Germany</td>
+                <td>{{ user.resource_count }}</td>
+                <td>{{ user.author }}</td>
+                <td>{{ user.email }}</td>
             </tr>
-            <tr>
-                <td>Centro comercial Moctezuma</td>
-                <td>Francisco Chang</td>
-                <td>Mexico</td>
-            </tr>
+            {% endfor %}
         </table>
+        <div class="pagination" id="pagination"></div>
     </div>
     
     <script>
-        const sidebarItems = document.querySelectorAll('.sidebar ul li');
-    
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const submenu = item.querySelector('.submenu');
-                sidebarItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.querySelector('.submenu').style.display = 'none';
-                    }
-                });
-                submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
-            });
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("main_table");
+            const pagination = document.getElementById("pagination");
+            const rowsPerPage = 15;
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            let currentPage = 1;
+
+            function displayRows(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = i >= start && i < end ? "" : "none";
+                }
+            }
+
+            function setupPagination() {
+                pagination.innerHTML = "";
+
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement("button");
+                    button.innerText = i;
+                    button.classList.add("page-btn");
+                    if (i === currentPage) button.classList.add("active");
+
+                    button.addEventListener("click", function() {
+                        currentPage = i;
+                        displayRows(currentPage);
+
+                        const currentBtn = document.querySelector(".page-btn.active");
+                        currentBtn.classList.remove("active");
+                        button.classList.add("active");
+                    });
+
+                    pagination.appendChild(button);
+                }
+            }
+
+            displayRows(currentPage);
+            setupPagination();
         });
+
+        function toggleSubmenu(submenuId) {
+            var submenu = document.getElementById(submenuId);
+            if (submenu.style.display === "block") {
+                submenu.style.display = "none";
+            } else {
+                submenu.style.display = "block";
+            }
+        }
     </script>
     </body>
     </html>

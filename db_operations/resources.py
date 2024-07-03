@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 import os
 from config import DB_CONFIG  # Import the database configuration
 from flask import current_app, session, url_for
@@ -368,3 +369,63 @@ def search_resources(search_term, page, per_page):
     cursor.close()
     conn.close()
     return resources, total_results
+
+
+def get_current_month_resources():
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get the current year and month
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # SQL query to select resources created in the current month
+        query = """
+            SELECT COUNT(*) FROM Resources 
+            WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s
+        """
+        cursor.execute(query, (current_year, current_month))
+        resources = cursor.fetchall()
+        
+        logging.info(f"Retrieved {len(resources)} resources created in the current month.")
+        
+        return resources
+    except Exception as e:
+        logging.error(f"Error retrieving resources for the current month: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+        
+
+def get_active_month_users():
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+         # Get the current year and month
+        #current_year = datetime.now().year
+        current_year = 2019
+        #current_month = datetime.now().month
+        current_month = 7
+        
+        
+        # SQL query to select count of resources by author created in the current month
+        query = """
+            SELECT author, COUNT(*) AS resource_count FROM Resources 
+            WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s
+            GROUP BY author
+        """
+        cursor.execute(query, (current_year, current_month))
+        active_users = cursor.fetchall()
+        
+        logging.info(f"Retrieved {len(active_users)} active users with resources created in the current month.")
+        
+        return active_users
+    except Exception as e:
+        logging.error(f"Error retrieving active users for the current month: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()

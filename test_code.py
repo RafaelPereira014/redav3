@@ -7,6 +7,7 @@ from db_operations.tools import *
 from db_operations.resources_details import *
 from db_operations.users_op import *
 from db_operations.scripts import *
+from db_operations.user import *
 
 # MySQL connection configuration
 config = {
@@ -27,7 +28,7 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_filtered_terms(level=2, parent_level=1, parent_term='8.º')
+        change = get_current_month_users()
         
         
 

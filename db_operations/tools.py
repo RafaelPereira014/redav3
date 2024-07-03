@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 from config import DB_CONFIG  # Import the database configuration
 from flask import session
 import mysql.connector  # Import MySQL Connector Python module
@@ -70,3 +71,31 @@ def get_tools_metadata(resource_id):
     else:
         return None
 
+def get_current_month_tools():
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Get the current year and month
+        #current_year = datetime.now().year
+        current_year = 2019
+        #current_month = datetime.now().month
+        current_month = 7
+        
+        # SQL query to select resources created in the current month
+        query = """
+            SELECT COUNT(*) FROM Resources 
+            WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s AND type_id='1'
+        """
+        cursor.execute(query, (current_year, current_month))
+        tools = cursor.fetchall()
+        
+        logging.info(f"Retrieved {len(tools)} tools created in the current month.")
+        
+        return tools
+    except Exception as e:
+        logging.error(f"Error retrieving tools for the current month: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
