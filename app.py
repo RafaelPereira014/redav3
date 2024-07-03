@@ -22,7 +22,7 @@ config = {
     'host': 'localhost',
     'user': 'root',
     'password': 'passroot',
-    'database': 'redav3'
+    'database': 'redav4'
 }
 
 connection = mysql.connector.connect(**config)
