@@ -52,6 +52,8 @@
         width: 100%;
         height: 100%;
     }
+
+    
     
 </style>
 <body>
@@ -200,8 +202,8 @@
                         <button class="Contact">Contactar utilizador</button>
                         <button>Gerir propostas</button>
                         <a href="/resources/edit/{{ resource_details.resource_id }}"><button>Editar recurso</button></a>
-                        <button class="Delete">Eliminar</button>
-                        <button class="hide">Ocultar</button>
+                        <button class="Delete" onclick="openDeleteModal()">Eliminar</button>
+                        <button class="hide" onclick="openHideModal()">Ocultar</button>
                     
                     </div>
                     <!-- Ficha Técnica -->
@@ -286,19 +288,36 @@
                             </div>
                             <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
-                        <div class="comment">
-                            <div class="comment-info">
-                                <span class="comment-author">Jane Doe:</span>
-                                <span class="comment-date">April 26, 2024</span>
-                            </div>
-                            <p>Another comment here. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    
+
+    <!--Delete resource modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDeleteModal()">&times;</span>
+            <h2>Atenção</h2>
+            <p>Tem a certeza de que deseja eliminar este recurso?</p>
+            <button onclick="deleteResource()">Sim</button>
+            <button onclick="closeDeleteModal()">Não</button>
+        </div>
+    </div>
+
+    <!--Hide resource modal -->
+    <div id="hideModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHideModal()">&times;</span>
+            <h2>Atenção</h2>
+            <p>Tem a certeza de que deseja ocultar este recurso?</p>
+            <button onclick="hideResource()">Sim</button>
+            <button onclick="closeHideModal()">Não</button>
+        </div>
+    </div>
+
+     <!--Share resource modal -->
     <div id="shareModal" class="modal">
         <div class="modal-content">
           <span class="close" onclick="closeShareModal()">&times;</span>
@@ -420,6 +439,49 @@
                 propostaElement.style.display = 'none';
             }
         }
+        // Get the modal
+        var hideModal = document.getElementById("hideModal");
+
+        // Function to open the modal
+        function openHideModal() {
+            hideModal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeHideModal() {
+            hideModal.style.display = "none";
+        }
+
+        // Function to hide the resource (replace this with your actual logic)
+        function hideResource() {
+            alert("Recurso ocultado com sucesso!"); // Placeholder action
+            hideModal.style.display = "none"; // Close the modal
+        }
+
+        // Event listener for the 'Ocultar' button
+        document.querySelector('.hide').addEventListener('click', openHideModal);
+        // Get the modal
+        var deleteModal = document.getElementById("deleteModal");
+
+        // Function to open the modal
+        function openDeleteModal() {
+            deleteModal.style.display = "block";
+        }
+
+        // Function to close the modal
+        function closeDeleteModal() {
+            deleteModal.style.display = "none";
+        }
+
+        // Function to hide the resource (replace this with your actual logic)
+        function deleteResource() {
+            alert("Recurso eliminado com sucesso!"); // Placeholder action
+            deleteModal.style.display = "none"; // Close the modal
+        }
+
+        // Event listener for the 'Ocultar' button
+        document.querySelector('.delete').addEventListener('click', openDeleteModal);
+
         
     </script>
 </body>
