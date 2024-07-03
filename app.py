@@ -79,11 +79,14 @@ def resources():
 
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
-    resource_details = get_combined_details(resource_id)
+    combined_details = get_combined_details(resource_id)
      
-    if not resource_details:
+    if not combined_details:
         return render_template('error.html', message='Resource not found'), 404
     
+    # Extract combined details
+    resource_details = combined_details
+
     # Fetch and append additional details
     slug = get_resouce_slug(resource_id)
     resource_details['image_url'] = get_resource_image_url(slug)
@@ -99,7 +102,11 @@ def resource_details(resource_id):
         related['image_url'] = get_resource_image_url(related_slug)
         related['embed'] = get_resource_embed(related['id'])
     
+    # Add scripts by id to resource details
+    resource_details['scripts_by_id'] = combined_details['scripts_by_id']
+
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+
 
 
 

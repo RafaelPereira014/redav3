@@ -224,67 +224,48 @@
                     </div>
                     
                     <div class="proposta-op">
-
                         <h3>Proposta de operacionalização</h3>
-                        {%for script in script_details%}
-                        <div class="button-container">
-                            <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
-                        </div>
-                        <div id="proposta{{ loop.index }}" style="display: none;">
-                            <div class="separator">
-                                <span>Autor:</span>
-                                <span>{{ script.author }}</span>
+                        {% for script_id, script in resource_details.scripts_by_id.items() %}
+                            <div class="button-container">
+                                <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
                             </div>
-                            <div class="separator">
-                                <span>Organização:</span>
-                                
-                                <span>{{ script.organization }}</span>
+                            <div id="proposta{{ loop.index }}" style="display: none;">
+                                <div class="separator">
+                                    <span>Autor:</span>
+                                    <span>{{ resource_details.user_details[script.user_id].name if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Organização:</span>
+                                    <span>{{ resource_details.user_details[script.user_id].organization if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Proposta de operacionalização:</span>
+                                    <span>{{ script.operation | safe }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Anos de escolaridade:</span>
+                                    <span>{{ script.anos_resources | join(', ') }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Disciplinas:</span>
+                                    <span>{{ script.areas_resources | join(', ') }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Domínios/Temas:</span>
+                                    <span>{{ script.dominios_resources | join(', ') }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Subdomínios:</span>
+                                    <span>{{ script.subdominios | join(', ') }}</span>
+                                </div>
+                                <div class="separator">
+                                    <span>Conceitos:</span>
+                                    <span>{{ script.hashtags | join(', ') }}</span>
+                                </div>
                             </div>
-                            <div class="separator">
-                                <span>Proposta de operacionalização:</span>
-                                <span>{{ script.operation | safe }}</span>
-                            </div>
-                            <div class="separator">
-                                <span>Anos de escolaridade:</span>
-                                <span>
-                                    {{script.anos_escolaridade}}
-                                </span>
-                            </div>
-                            <div class="separator">
-                                <span>Disciplinas:</span>
-                                <span>
-                                    {% for script in operation.areas_resources %}
-                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                            </div>
-                            <div class="separator">
-                                <span>Domínios/Temas:</span>
-                                <span>
-                                    {% for script in operation.dominios_resources %}
-                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                            </div>
-                            <div class="separator">
-                                <span>Subdomínios:</span>
-                                <span>
-                                    {% for script in operation.subdominios %}
-                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                            </div>
-                            <div class="separator">
-                                <span>Conceitos:</span>
-                                <span>
-                                    {% for script in operation.hashtags %}
-                                    {{ script.TermTitle }}{% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                            </div>
-                        </div>
-                        {%endfor%}
+                        {% endfor %}
                     </div>
+                    
                   
                     
                     

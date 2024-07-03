@@ -152,11 +152,13 @@ def get_combined_details(resource_id):
         cursor.execute(taxonomy_query, (resource_id,))
         taxonomy_details = cursor.fetchone()
 
-        # Query to fetch script IDs and associated taxonomies
+        # Query to fetch script IDs, associated taxonomies, and operation
         script_query = """
             SELECT
                 Scripts.id AS ScriptId,
                 Scripts.resource_id AS ResourceId,
+                Scripts.operation AS Operation,
+                Scripts.user_id AS UserId,
                 Terms.title AS TermTitle,
                 Taxonomies.slug AS TaxSlug
             FROM
@@ -177,41 +179,43 @@ def get_combined_details(resource_id):
         cursor.execute(script_query, (resource_id,))
         script_details = cursor.fetchall()
 
-        # Prepare a dictionary to store scripts grouped by taxonomy slugs
-        scripts_by_taxonomy = {
-            'idiomas': [], 
-            'anos_resources': [],
-            'formato': [],
-            'modo_utilizacao': [],
-            'requisitos_tecnicos': [],
-            'anos_escolaridade': [],
-            'areas_resources': [],
-            'dominios_resources': [],
-            'macro_areas': [],
-            'subdominios': [],
-            'hashtags': []
-        }
-
-        # Organize scripts into the dictionary by taxonomy slugs
+        # Prepare a dictionary to store scripts grouped by script id and taxonomy slugs
+        scripts_by_id = {}
+        user_ids = []
         for script in script_details:
+            script_id = script['ScriptId']
+            user_id = script['UserId']
             tax_slug = script['TaxSlug']
             term_title = script['TermTitle']
-            scripts_by_taxonomy[tax_slug].append({
-                'ScriptId': script['ScriptId'],
-                'ResourceId': script['ResourceId'],
-                'TermTitle': term_title
-            })
+            operation = script['Operation']
+
+            if script_id not in scripts_by_id:
+                scripts_by_id[script_id] = {
+                    'operation': operation,
+                    'user_id': user_id,
+                    'idiomas': [],
+                    'anos_resources': [],
+                    'formato': [],
+                    'modo_utilizacao': [],
+                    'requisitos_tecnicos': [],
+                    'anos_escolaridade': [],
+                    'areas_resources': [],
+                    'dominios_resources': [],
+                    'macro_areas': [],
+                    'subdominios': [],
+                    'hashtags': [],
+                }
+                user_ids.append(user_id)
+            scripts_by_id[script_id][tax_slug].append(term_title)
 
         # Fetch user details associated with the scripts
-        script_ids = [script['ScriptId'] for script in script_details]
         user_details = {}
-        if script_ids:
+        if user_ids:
             user_query = """
                 SELECT u.id AS UserId, u.name AS UserName, u.organization AS UserOrganization
                 FROM Users u
-                JOIN Scripts s ON u.id = s.user_id
-                WHERE s.id IN ({})
-            """.format(','.join(map(str, script_ids)))
+                WHERE u.id IN ({})
+            """.format(','.join(map(str, user_ids)))
             cursor.execute(user_query)
             user_details = {row['UserId']: {'name': row['UserName'], 'organization': row['UserOrganization']} for row in cursor.fetchall()}
 
@@ -239,7 +243,7 @@ def get_combined_details(resource_id):
                 'anos_escolaridade_title': taxonomy_details.get('anos_escolaridade_title')
             })
 
-        combined_details['scripts_by_taxonomy'] = scripts_by_taxonomy
+        combined_details['scripts_by_id'] = scripts_by_id
         combined_details['user_details'] = user_details
 
         return combined_details if combined_details else None
@@ -255,6 +259,9 @@ def get_combined_details(resource_id):
             cursor.close()
         if conn and conn.is_connected():
             conn.close()
+
+
+
 
 
 

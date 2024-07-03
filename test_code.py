@@ -28,7 +28,7 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_current_month_users()
+        change = get_combined_details(3974)
         
         
 
