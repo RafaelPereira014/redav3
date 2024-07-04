@@ -205,14 +205,14 @@
                     <small>Geografia</small>
                     <h2>
                         {% if resource.title|length > 25 %}
-                            {{ resource.title[:25] ~ '...' | safe }}
+                            {{ resource.title[:25] ~ '...'  }}
                         {% else %}
                             {{ resource.title | safe }}
                         {% endif %}
                     </h2>
                     <p>
                         {% if resource.description|length > 100 %}
-                            {{ resource.description[:100] ~ '...' | safe }}
+                            {{ resource.description[:100] ~ '...'  }}
                         {% else %}
                             {{ resource.description | safe }}
                         {% endif %}
@@ -220,7 +220,7 @@
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
-                        <a href="/resources/add_proposal/{{ resource.id }}"><button>Adicionar proposta de operacionalização</button></a>
+                        <a href="/novaproposta/{{ resource.slug }}"><button>Adicionar proposta de operacionalização</button></a>
                     </div>
                     <div class="year-cycle">
                         <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
@@ -229,12 +229,13 @@
                     {% if resource.details and resource.details.formato_title %}
                     <p>{{ resource.details.formato_title }}</p>
                     <p class="formato_title {% if resource.details.formato_title == 'Video/Animação' %}video{% endif %}">
-                        {{ resource.duration}}
+                        {{ resource.duration }}
                     </p>
                     {% endif %}
                 </div>
                 {% endfor %}
             </div>
+            
     
             <div class="pagination">
                 {% if page > 1 %}

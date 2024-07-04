@@ -53,12 +53,12 @@
         </div>
     </header>
     <div class="container2">
-        <h1>Novo recurso</h1>
-        <p>Detalhes > Metadados </p>
+        <h1>Nova proposta de operacionalização</h1>
+        <p>{{Detalhes}} > <strong>Nova proposta de opreacionalização</strong> </p>
     </div>
     <main>
         <div class="container">
-            <h1>Detalhes</h1>
+            <h1>Metadados</h1>
             <div class="input-group-escolaridade required">
                 <h2>Ano de Escolaridade:</h2>
                 {% for ano in anos %}
@@ -99,9 +99,14 @@
                 <input type="file" id="ficheiro" name="ficheiro">
             </div>
             <div class="input-group-destinatario">
-                <h2>Destinatarios:</h2>
-                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
+                <h2>Destinatários:</h2>
+                <select id="destinatario" name="destinatario">
+                    <option value="alunos">Alunos</option>
+                    <option value="docentes">Docentes</option>
+                    <option value="outros">Outros</option>
+                </select>
             </div>
+            
             <!-- Terms and Conditions -->
             <div class="terms-and-conditions">
                 <p><strong>Termos e condições</strong></p>
@@ -125,11 +130,13 @@
                 <input type="checkbox" id="acceptTerms" name="acceptTerms">
                 <label for="acceptTerms">Aceito os Termos e Condições</label>
             </div>
+
+            
             <small class="small-text">
                 <span class="text-danger">*</span>
                 Campo obrigatório
             </small>
-            <button type="submit">Criar recurso</button>
+            <button type="submit">Criar proposta</button>
             <button type="submit">Cancelar</button>
         </div>
     </main>

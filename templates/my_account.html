@@ -112,19 +112,18 @@
                 <!-- Content for "Meus Recursos" section -->
                 <!-- Display user's resources here -->
                 <h1>Os meus recursos</h1>
-                <p> {{resources_count}} resultados </p>
-                <button-pag href="/novorecurso"> + Novo recurso </button-pag>
+                <p>{{ resources_count }} resultados</p>
+                <a href="/novorecurso"><button> + Novo recurso </button></a>
                 <div class="search-container">
                     <input type="text" placeholder="Palavras-chave...">
                     <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
                     <button class="clear-button"> Limpar Filtros </button>
                 </div>
-                    {% for resource in my_resources %}
-
+                {% for resource in my_resources %}
                     <div class="resource-card">
                         <h3>{{ resource.title | safe }}</h3>
                         <p>Criado a {{ resource.created_at }}</p>
-                        <p>{{ resource.description | escape}}</p>
+                        <p>{{ resource.description | escape }}</p>
                         <div class="icon-bar">
                             <!-- Flag Icon -->
                             <i class="fas fa-flag"></i>
@@ -137,19 +136,21 @@
                     </div>
                 {% endfor %}
                 
-                
                 <div class="pagination">
-                    <a href="#" class="active">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <!-- Add more pagination links as needed -->
+                    {% if page > 1 %}
+                        <a href="?page=1">&laquo; Inicio</a>
+                        <a href="?page={{ page - 1 }}">Anterior</a>
+                    {% endif %}
+                    
+                    <span class="current">Page {{ page }} of {{ total_pages }}</span>
+                    
+                    {% if page < total_pages %}
+                        <a href="?page={{ page + 1 }}">Próximo</a>
+                        <a href="?page={{ total_pages }}">Fim &raquo;</a>
+                    {% endif %}
                 </div>
-                <div class="pagination">
-                    <button-pag onclick="previousPage()">Previous</button-pag>
-                    <button-pag onclick="nextPage()">Next</button-pag>
-                </div>
-                <!-- Repeat the above rectangle for each resource -->
             </section>
+            
             <section id="my-proposals" class="content-section" style="display: none;">
                 <!-- Content for "Minhas Propostas" section -->
                 <h1>Recrusos com a minha contribuição</h1>

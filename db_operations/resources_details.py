@@ -22,7 +22,7 @@ def get_related_resources(resource_title, limit=3):
         # Build the query to find related resources
         query = """
             SELECT * FROM Resources
-            WHERE (
+            WHERE  ( 
         """
         
         # Add conditions for each keyword pattern
@@ -30,7 +30,7 @@ def get_related_resources(resource_title, limit=3):
         
         # Close the WHERE clause and add the limit
         query += """
-            ) AND title != %s
+            ) AND title != %s AND (approvedScientific = 1 AND approvedLinguistic = 1)
             ORDER BY CASE
         """
         

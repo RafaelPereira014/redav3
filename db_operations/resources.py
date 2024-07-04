@@ -31,7 +31,7 @@ def get_all_resources(page, per_page):
     offset = (page - 1) * per_page
 
     query = """
-        SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 AND type_id='2'
+        SELECT * FROM Resources WHERE (approvedScientific = 1 AND approvedLinguistic = 1)  AND type_id='2'
         ORDER BY id DESC
         LIMIT %s OFFSET %s
     """
@@ -231,7 +231,8 @@ def get_combined_details(resource_id):
                 'created_at': resource_details['created_at'],
                 'organization': resource_details['organization'],
                 'description': resource_details['description'],
-                'author': resource_details['author']
+                'author': resource_details['author'],
+                'duration': resource_details['duration']
             })
 
         if taxonomy_details:

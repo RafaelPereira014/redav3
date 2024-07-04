@@ -107,10 +107,26 @@ def resource_details(resource_id):
 
     return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
 
+@app.route('/novaproposta/<slug>')
+def nova_proposta(slug):
+    anos = get_unique_terms(level=1)
+    
+    ano = request.args.get('ano')
+    print(ano)
+    dominios = []
+    subdominios = []
+    
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
+    print(disciplinas)
+    for disciplina in disciplinas:
+        dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
+        print(dominios)
+        for dominio in dominios:
+            subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
+            print(subdominios)
 
 
-
-
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios)
 
 # Edit resources
 @app.route('/resources/edit/<int:resource_id>')
@@ -233,13 +249,33 @@ def my_account():
         return "User not found", 404
     
     my_resources = get_resources_from_user(userid)
-    apps_user,apps_count = get_apps_from_user(userid)
+    apps_user, apps_count = get_apps_from_user(userid)
     tools_user, tools_count = get_tools_from_user(userid)
     user_details = get_details(userid)
-    resources_count=no_resources(userid)
-    scripts_user,scripts_count=get_script_details(userid)
+    resources_count = no_resources(userid)
+    scripts_user, scripts_count = get_script_details(userid)
     
-    return render_template('my_account.html', my_resources=my_resources,apps_count=apps_count,apps_user=apps_user, tools_user=tools_user,tools_count=tools_count,user_details=user_details,resources_count=resources_count,scripts_user=scripts_user,scripts_count=scripts_count)
+    # Pagination
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    total_resources = len(my_resources)
+    total_pages = math.ceil(total_resources / per_page)
+    paginated_resources = my_resources[(page - 1) * per_page:page * per_page]
+    
+    return render_template(
+        'my_account.html',
+        my_resources=paginated_resources,
+        apps_count=apps_count,
+        apps_user=apps_user,
+        tools_user=tools_user,
+        tools_count=tools_count,
+        user_details=user_details,
+        resources_count=resources_count,
+        scripts_user=scripts_user,
+        scripts_count=scripts_count,
+        page=page,
+        total_pages=total_pages
+    )
 
 
 # New_resource
