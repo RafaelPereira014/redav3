@@ -436,3 +436,4 @@ def get_active_month_users():
     finally:
         cursor.close()
         conn.close()
+    

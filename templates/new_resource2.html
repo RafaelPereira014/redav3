@@ -75,6 +75,35 @@
             });
         });
     </script>
+    <script>
+        // Initialize TinyMCE editor
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
+            menubar: false,
+            setup: function (editor) {
+                editor.on('input', function () {
+                    updateCounter(editor);
+                });
+                editor.on('keyup', function () {
+                    updateCounter(editor);
+                });
+                editor.on('change', function () {
+                    updateCounter(editor);
+                });
+            }
+        });
+    
+        // Function to update the character counter
+        function updateCounter(editor) {
+            const maxLength = editor.getElement().maxLength || 1500;
+            const content = editor.getContent({ format: 'text' }).trim();
+            const currentLength = content.length;
+            const counterEle = document.getElementById('counter');
+            counterEle.innerHTML = `${currentLength}/${maxLength}`;
+        }
+    </script>
 </head>
 <body>
     <div class="header-governo">
@@ -133,15 +162,53 @@
                 </div>
             </div>
         
-            <div class="input-group-subdomain required">
-                <h2>Subdominios:</h2>
-                <div id="subdominiosContainer">
-                    <!-- Subdominios checkboxes will be populated dynamically by JavaScript -->
+            <div class="input-group-concept required">
+                <h2>Conceitos:</h2>
+                <!-- Conceitos will be populated by JavaScript -->
+            </div>
+            <div class="input-group-conceitos">
+                <h2>Outros conceitos:</h2>
+            </div>
+            <div class="input-group-descricao-proposta required">
+                <h2>Descrição da proposta de operacionalização:</h2>
+                <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+                <div id="counter"></div>
+                <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
+            </div>
+            <div class="input-group-helpfile">
+                <h2>Documento de apoio:</h2>
+                <input type="file" id="ficheiro" name="ficheiro">
+            </div>
+            <div class="input-group-destinatario">
+                <h2>Destinatarios:</h2>
+            </div>
+            <!-- Terms and Conditions -->
+            <div class="terms-and-conditions">
+                <p><strong>Termos e condições</strong></p>
+                <p>
+                    Aceito os "Termos e condições" e autorizo que o conteúdo seja distribuído sob os termos da licença Creative Commons com a Atribuição designada como Atribuição-Não Comercial-Compartilha Igual (CC BY-NC-SA).
+                </p>
+                <ul>
+                    <li>Mantenho os direitos autorais do trabalho submetido;</li>
+                    <li>Sou o autor ou o proprietário da obra ou tenho a permissão do autor para a distribuir;</li>
+                    <li>Pretendo que este trabalho seja distribuído sob os termos da licença CC-BY-NC-SA.</li>
+                </ul>
+                <!-- Image linking to CC BY-NC-SA license -->
+                <div class="cc-license">
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
+                        <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="CC BY-NC-SA 4.0 License">
+                    </a>
                 </div>
             </div>
-        
-            <!-- Other form elements -->
-        
+            
+            <div class="accept-terms">
+                <input type="checkbox" id="acceptTerms" name="acceptTerms">
+                <label for="acceptTerms">Aceito os Termos e Condições</label>
+            </div>
+            <small class="small-text">
+                <span class="text-danger">*</span>
+                Campo obrigatório
+            </small>
             <button type="submit">Criar recurso</button>
             <button type="submit">Cancelar</button>
         </div>
