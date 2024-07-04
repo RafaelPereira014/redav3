@@ -132,13 +132,36 @@ def nova_proposta(slug):
 @app.route('/resources/edit/<int:resource_id>')
 def resource_edit(resource_id):
     resource_details = get_combined_details(resource_id)
+    formatos = get_formatos()
+    use_mode = get_modos_utilizacao()
+    requirements = get_requisitos_tecnicos()
+    idiomas = get_idiomas()
     
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
     
+    # Extract titles from resource_details
+    formato_title = resource_details.get('formato_title')
+    modo_utilizacao_title = resource_details.get('modo_utilizacao_title')
+    req_tecnicos_title = resource_details.get('requisitos_tecnicos_title')
+    idiomas_title = resource_details.get('idiomas_title')
+    
     related_resources = get_related_resources(resource_details['title'])
     
-    return render_template('edit_resource.html', resource_details=resource_details, related_resources=related_resources)
+    return render_template(
+        'edit_resource.html',
+        resource_details=resource_details,
+        related_resources=related_resources,
+        formatos=formatos,
+        use_mode=use_mode,
+        requirements=requirements,
+        idiomas=idiomas,
+        formato_title=formato_title,
+        modo_utilizacao_title=modo_utilizacao_title,
+        req_tecnicos_title=req_tecnicos_title,
+        idiomas_title=idiomas_title
+    )
+
 
 
 @app.route('/apps', methods=['GET'])
@@ -292,23 +315,29 @@ def novo_recurso():
 @app.route('/novorecurso2', methods=['GET'])
 def novo_recurso2():
     anos = get_unique_terms(level=1)
-    
-    ano = request.args.get('ano')
-    print(ano)
-    dominios = []
-    subdominios = []
-    
-    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
-    print(disciplinas)
-    for disciplina in disciplinas:
-        dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
-        print(dominios)
-        for dominio in dominios:
-            subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
-            print(subdominios)
+    return render_template('new_resource2.html', anos=anos)
+
+@app.route('/fetch_disciplinas')
+def fetch_disciplinas():
+    anos = request.args.get('ano').split(',')
+    disciplinas_set = set()
+    for ano in anos:
+        disciplinas_set.update(get_filtered_terms(level=2, parent_level=1, parent_term=ano))
+    disciplinas = list(disciplinas_set)
+    return jsonify(disciplinas)
 
 
-    return render_template('new_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios)
+@app.route('/fetch_dominios')
+def fetch_dominios():
+    disciplina = request.args.get('disciplina')
+    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina)
+    return jsonify(dominios)
+
+@app.route('/fetch_subdominios')
+def fetch_subdominios():
+    dominio = request.args.get('dominio')
+    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio)
+    return jsonify(subdominios)
 
 
 

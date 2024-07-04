@@ -231,8 +231,7 @@ def get_combined_details(resource_id):
                 'created_at': resource_details['created_at'],
                 'organization': resource_details['organization'],
                 'description': resource_details['description'],
-                'author': resource_details['author'],
-                'duration': resource_details['duration']
+                'author': resource_details['author']
             })
 
         if taxonomy_details:

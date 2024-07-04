@@ -24,6 +24,57 @@
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function fetchDisciplinas() {
+            let selectedAnos = [];
+            $('input[name="anos"]:checked').each(function() {
+                selectedAnos.push($(this).val());
+            });
+
+            $.get('/fetch_disciplinas', {ano: selectedAnos.join(',')}, function(data) {
+                let disciplinasContainer = $('#disciplinasContainer');
+                disciplinasContainer.empty();
+                data.forEach(function(disciplina) {
+                    disciplinasContainer.append(`
+                        <input type="checkbox" id="disciplina${disciplina}" name="disciplinas" value="${disciplina}" onchange="fetchDominios('${disciplina}')">
+                        <label for="disciplina${disciplina}">${disciplina}</label>
+                    `);
+                });
+            });
+        }
+
+        function fetchDominios(disciplina) {
+            $.get('/fetch_dominios', {disciplina: disciplina}, function(data) {
+                let dominiosContainer = $('#dominiosContainer');
+                dominiosContainer.empty();
+                data.forEach(function(dominio) {
+                    dominiosContainer.append(`
+                        <input type="checkbox" id="dominio${dominio}" name="dominios" value="${dominio}" onchange="fetchSubdominios('${dominio}')">
+                        <label for="dominio${dominio}">${dominio}</label>
+                    `);
+                });
+            });
+        }
+
+        function fetchSubdominios(dominio) {
+            $.get('/fetch_subdominios', {dominio: dominio}, function(data) {
+                let subdominiosContainer = $('#subdominiosContainer');
+                subdominiosContainer.empty();
+                data.forEach(function(subdominio) {
+                    subdominiosContainer.append(`
+                        <input type="checkbox" id="subdominio${subdominio}" name="subdominios" value="${subdominio}">
+                        <label for="subdominio${subdominio}">${subdominio}</label>
+                    `);
+                });
+            });
+        }
+
+        $(document).ready(function() {
+            $('input[name="anos"]').change(function() {
+                fetchDisciplinas();
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="header-governo">
@@ -59,6 +110,7 @@
     <main>
         <div class="container">
             <h1>Detalhes</h1>
+            
             <div class="input-group-escolaridade required">
                 <h2>Ano de Escolaridade:</h2>
                 {% for ano in anos %}
@@ -66,72 +118,34 @@
                     <label for="ano{{ loop.index }}">{{ ano }}</label>
                 {% endfor %}
             </div>
-            
+        
             <div class="input-group-disci required">
                 <h2>Disciplinas:</h2>
-                {% for disciplina in disciplinas %}
-                    <input type="checkbox" id="disciplina{{ loop.index }}" name="disciplinas" value="{{ disciplina }}">
-                    <label for="disciplina{{ loop.index }}">{{ disciplina }}</label>
-                {% endfor %}
-            </div>
-            
-            <div class="input-group-domain required">
-                <h2>Dominios:</h2>
-                <!-- Dominios will be populated by JavaScript -->
-            </div>
-            <div class="input-group-subdomain required">
-                <h2>Subdominios:</h2>
-                <!-- Subdominios will be populated by JavaScript -->
-            </div>
-            <div class="input-group-concept required">
-                <h2>Conceitos:</h2>
-                <!-- Conceitos will be populated by JavaScript -->
-            </div>
-            <div class="input-group-conceitos">
-                <h2>Outros conceitos:</h2>
-            </div>
-            <div class="input-group-descricao-proposta required">
-                <h2>Descrição da proposta de operacionalização:</h2>
-                <textarea id="descricao" name="descricao" rows="5" class="tinymce" required></textarea>
-            </div>
-            <div class="input-group-helpfile">
-                <h2>Documento de apoio:</h2>
-                <input type="file" id="ficheiro" name="ficheiro">
-            </div>
-            <div class="input-group-destinatario">
-                <h2>Destinatarios:</h2>
-                <script src="{{ url_for('static', filename='js/scripts/new_resource/dominios.js') }}"></script>
-            </div>
-            <!-- Terms and Conditions -->
-            <div class="terms-and-conditions">
-                <p><strong>Termos e condições</strong></p>
-                <p>
-                    Aceito os "Termos e condições" e autorizo que o conteúdo seja distribuído sob os termos da licença Creative Commons com a Atribuição designada como Atribuição-Não Comercial-Compartilha Igual (CC BY-NC-SA).
-                </p>
-                <ul>
-                    <li>Mantenho os direitos autorais do trabalho submetido;</li>
-                    <li>Sou o autor ou o proprietário da obra ou tenho a permissão do autor para a distribuir;</li>
-                    <li>Pretendo que este trabalho seja distribuído sob os termos da licença CC-BY-NC-SA.</li>
-                </ul>
-                <!-- Image linking to CC BY-NC-SA license -->
-                <div class="cc-license">
-                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">
-                        <img src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" alt="CC BY-NC-SA 4.0 License">
-                    </a>
+                <div id="disciplinasContainer">
+                    <!-- Disciplinas checkboxes will be populated dynamically by JavaScript -->
                 </div>
             </div>
-            
-            <div class="accept-terms">
-                <input type="checkbox" id="acceptTerms" name="acceptTerms">
-                <label for="acceptTerms">Aceito os Termos e Condições</label>
+        
+            <div class="input-group-domain required">
+                <h2>Dominios:</h2>
+                <div id="dominiosContainer">
+                    <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
+                </div>
             </div>
-            <small class="small-text">
-                <span class="text-danger">*</span>
-                Campo obrigatório
-            </small>
+        
+            <div class="input-group-subdomain required">
+                <h2>Subdominios:</h2>
+                <div id="subdominiosContainer">
+                    <!-- Subdominios checkboxes will be populated dynamically by JavaScript -->
+                </div>
+            </div>
+        
+            <!-- Other form elements -->
+        
             <button type="submit">Criar recurso</button>
             <button type="submit">Cancelar</button>
         </div>
+                
     </main>
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -183,6 +197,7 @@
     </footer>
 
     <script>
+        
         // dominios.js
         $(document).ready(function() {
             $('input[name="anos"]').change(function() {
@@ -225,6 +240,7 @@
                 }
             }
         });
+        
 
         
     </script>
