@@ -203,33 +203,35 @@
             <hr>
             <div class="rectangles">
                 {% for resource in all_resources %}
-                <div class="rectangle">
+                <div class="rectangle {% if not admin %} smaller-rectangle {% endif %}">
                     {% if resource.image_url %}
-                        <img src="{{ resource.image_url }}" alt="Resource Image">
+                    <img src="{{ resource.image_url }}" alt="Resource Image">
                     {% else %}
-                        <div class="video-container">
-                            {{ resource.embed | safe }}
-                        </div>
+                    <div class="video-container">
+                        {{ resource.embed | safe }}
+                    </div>
                     {% endif %}
                     <small>Geografia</small>
                     <h2>
                         {% if resource.title|length > 25 %}
-                            {{ resource.title[:25] ~ '...'  }}
+                        {{ resource.title[:25] ~ '...' }}
                         {% else %}
-                            {{ resource.title | safe }}
+                        {{ resource.title | safe }}
                         {% endif %}
                     </h2>
                     <p>
                         {% if resource.description|length > 100 %}
-                            {{ resource.description[:100] ~ '...'  }}
+                        {{ resource.description[:100] ~ '...' }}
                         {% else %}
-                            {{ resource.description | safe }}
+                        {{ resource.description | safe }}
                         {% endif %}
                     </p>
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
+                        {% if admin %}
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <a href="/novaproposta/{{ resource.slug }}"><button>Adicionar proposta de operacionalização</button></a>
+                        {% endif %}
                     </div>
                     <div class="year-cycle">
                         <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
@@ -244,6 +246,7 @@
                 </div>
                 {% endfor %}
             </div>
+            
             
     
             <div class="pagination">

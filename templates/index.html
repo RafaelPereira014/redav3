@@ -103,6 +103,7 @@
             <div class="carousel">
                 <div class="carousel-inner">
                     {% for resource in highlighted_resources %}
+                    
                     <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="carousel-item-{{ loop.index }}">
                         <div class="carousel-caption">
                             <h3>
@@ -155,13 +156,13 @@
             <h1>Últimos recursos</h1>
             <div class="rectangles">
                 {% for resource in recent_resources %}
-                <div class="rectangle">
+                <div class="rectangle {% if not admin %} smaller-rectangle {% endif %}">
                     <!-- Assuming this is within your HTML template -->
                     {% if resource.image_url %}
                     <img src="{{ resource.image_url }}" >
                     {% else %}
                     <div class="video-container">
-                        {{resource.embed | safe}}
+                        {{ resource.embed | safe }}
                     </div>
                     {% endif %}                    
                     <!-- <span class="image-meta">{{ resource.slug }}</span>-->
@@ -169,26 +170,26 @@
                     <i class="fas fa-flag"></i>
                     <h2>
                         {% if resource.title|length > 25 %}
-                            {{ resource.title[:25]}} ...
+                        {{ resource.title[:25] }} ...
                         {% else %}
-                            {{ resource.title|safe}}
+                        {{ resource.title | safe }}
                         {% endif %}
                     </h2>
                     <p>
                         {% if resource.description|length > 100 %}
-                            {{ resource.description[:100] }} ...
+                        {{ resource.description[:100] }} ...
                         {% else %}
-                            {{ resource.description |safe }}
+                        {{ resource.description | safe }}
                         {% endif %}
                     </p>
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
-                        {%if admin%}
+                        {% if admin %}
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <a href="/novaproposta/{{ resource.slug }}"><button>Adicionar proposta de operacionalização</button></a>
-                        {%endif%}
+                        {% endif %}
                     </div>
-                                
+                                                
                     <div class="year-cycle">
                         <span>{{ resource.year_cycle }}</span> | <span>{{ resource.level }}</span>
                     </div>
@@ -197,8 +198,8 @@
                 </div>
                 {% endfor %}
             </div>
-            
         </div>
+        
         <!-- Testimonial Carousel -->
         <div class="testimonial-carousel">
             <h1>Testemunhos</h1>

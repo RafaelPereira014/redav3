@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>Sobre</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/sobre.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
@@ -18,7 +17,7 @@
             height: 250px;
             position: relative;
         }
-        
+        /* Add more custom styles here */
     </style>
 </head>
 <body>
@@ -31,28 +30,29 @@
         <div class="container">
             <a href="/">
                 <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-            </a>            <nav>
+            </a>
+            <nav>
                 <ul>
-                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/">Início</a></li>
                     <li><a href="/apps">Aplicações</a></li>
                     <li><a href="/tools">Ferramentas</a></li>
                     <li>
                         <button class="resource-button" onclick="location.href='/resources'">
                             <i class="fa fa-search"></i> Recursos
                         </button>
-                    </li>                    
-                    {%if admin%}
+                    </li>
+                    {% if admin %}
                     <li>
                         <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
-                    </li>  
-                    {%endif%} 
+                    </li>
+                    {% endif %}
                 </ul>
             </nav>
             <div class="container2">
                 <h2>Procure os seus recursos</h2>
-                <p>Recursos Educativos Digitais e Abertos(REDA) é uma plataforma dedicada à disponibilização de conteúdos educativos para a comunidade escolar.</p>
+                <p>Recursos Educativos Digitais e Abertos (REDA) é uma plataforma dedicada à disponibilização de conteúdos educativos para a comunidade escolar.</p>
                 <a href="/"><button>Como utilizar a REDA?</button></a>
                 <a href="/"><button>Leia os "Termos e condições"</button></a>
                 <a href="#"><button>Manual de identidade visual</button></a>
@@ -60,16 +60,13 @@
             <nav class="top-nav">
                 <ul>
                     {% if admin %}
-                    <!-- Render admin-specific links or buttons -->
                     <li><a href="/myaccount">Minha Conta</a></li>
-
                     <li><a href="/dashboard" target="_blank">Administração</a></li>
                     <li><a href="/logout">Sair</a></li>
-                {% else %}
-                    <!-- Render non-admin links or buttons -->
+                    {% else %}
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Registar</a></li>
-                {% endif %}
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -78,46 +75,44 @@
     <!-- Main Content -->
     <main>
         <div class="container">
-            <div class="first-container">
+            <section class="first-container">
                 <h2>Aceda a uma ampla biblioteca de recursos</h2>
                 <div class="icons">
                     <div class="icon">
                         <i class="fas fa-search"></i>
                         <p>Pesquise de forma aprofundada pelo recurso pretendido</p>
-                        <button>Pesquisar</button>
+                        <button aria-label="Pesquisar">Pesquisar</button>
                     </div>
                     <div class="icon">
                         <i class="fas fa-tools"></i>
                         <p>Recorra às nossas ferramentas e dicas para auxílio na utilização da REDA</p>
-                        <button>Ferramentas</button>
+                        <button aria-label="Ferramentas">Ferramentas</button>
                     </div>
                     <div class="icon">
                         <i class="fas fa-phone"></i>
                         <p>Temos uma variedade de aplicações para a educação ao seu dispor</p>
-                        <button>Aplicações</button>
+                        <button aria-label="Aplicações">Aplicações</button>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="second-container" style="background-image: url('static/images/teacher.jpg');">
+            <section class="second-container" style="background-image: url('static/images/teacher.jpg');">
                 <h2>Aceda a uma ampla biblioteca de recursos</h2>
                 <p>Se é docente ou, simplesmente, pretende contribuir para o crescimento da biblioteca, poderá entrar na plataforma e utilizar as nossas ferramentas. Poderá combinar texto, imagens, áudio, vídeo e muitos mais formatos de modo a serem partilhados com professores, alunos e educadores.</p>
-            </div>
+            </section>
 
-            <div class="third-container">
+            <section class="third-container">
                 <h2>Vídeos de ajuda</h2>
                 <p>Aceda a um conjunto de vídeos que o podem auxiliar na utilização da plataforma.</p>
-                <button>Ver todos os vídeos</button>
-            </div>
+                <button aria-label="Ver todos os vídeos">Ver todos os vídeos</button>
+            </section>
 
-            <div class="fourth-container" style="background-image: url('static/images/identity-bg.jpg');">
-                <h2>Identidate REDA</h2>
+            <section class="fourth-container" style="background-image: url('static/images/identity-bg.jpg');">
+                <h2>Identidade REDA</h2>
                 <p>Se pretender utilizar a marca REDA nos seus recursos, projetos ou qualquer tipo de suporte digital ou analógico, deve respeitar um conjunto de regras que contribuem para a consistência de utilização da identidade visual.</p>
-                <button id="downloadBtn" ><i class="fas fa-download"></i>Descarregue o manual de identidade visual</button>
+                <button id="downloadBtn" aria-label="Descarregue o manual de identidade visual"><i class="fas fa-download"></i>Descarregue o manual de identidade visual</button>
                 <a href="static/files/Manual_de_Normas_-_REDA_1.pdf" download id="fileLink" style="display: none;"></a>
-
-                
-            </div>
+            </section>
         </div>
     </main>
 
@@ -143,7 +138,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
-            <div class="footer-nav">
+            <nav class="footer-nav">
                 <a href="/sobre">Sobre</a>
                 <a href="/ajuda">Ajuda</a>
                 <a href="#">Ficha Técnica</a>
@@ -151,23 +146,19 @@
                 <a href="/faleconnosco">
                     <button>Fale connosco</button>
                 </a>
-
-            </div>
-            
+            </nav>
             <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-youtube"></i></a>
-                <a href="#"><i class="fab fa-pinterest"></i></a>
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
             </div>
-            
             <div class="additional-images">
-                <img src="static/images/dre_transparent.png" alt="Image 1">
-                <img src="static/images/gov_acores_transparent.png" alt="Image 2">
+                <img src="static/images/dre_transparent.png" alt="Direção Regional da Educação">
+                <img src="static/images/gov_acores_transparent.png" alt="Governo dos Açores">
             </div>
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
-
         </div>
     </footer>
 
@@ -176,31 +167,22 @@
         document.getElementById('downloadBtn').addEventListener('click', function() {
             document.getElementById('fileLink').click();
         });
-        
-        
-        // Get the login modal
+
         var loginModal = document.getElementById("loginModal");
-
-        // Get the button that opens the login modal
         var loginBtn = document.querySelector("nav ul li:last-child a");
-
-        // Get the <span> element that closes the login modal
         var span = document.getElementsByClassName("close")[0];
 
-        // When the user clicks the button, open the login modal
         function openLoginModal() {
             loginModal.style.display = "block";
         }
 
-        // When the user clicks on <span> (x), close the login modal
         function closeLoginModal() {
             loginModal.style.display = "none";
         }
 
-        // When the user clicks anywhere outside of the login modal, close it
         window.onclick = function(event) {
             if (event.target == loginModal) {
-                loginModal.style.display = "none";
+                closeLoginModal();
             }
         }
     </script>

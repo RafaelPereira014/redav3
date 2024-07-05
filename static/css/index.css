@@ -192,6 +192,19 @@ nav ul li a:hover {
     border: 1px solid #b4b4b4;
 }
 
+.smaller-rectangle {
+    position: relative;
+    width: calc(24% - 20px); /* Adjust the width here */
+    height: 420px; /* Adjust the height here */
+    margin: 1%;
+    background-color: #f1f0f0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+    border: 1px solid #b4b4b4;
+}
+
 .rectangle img {
     width: 100%;
     height: 150px;

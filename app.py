@@ -47,7 +47,7 @@ def login():
 
         conn = connect_to_database()
         cursor = conn.cursor()
-        cursor.execute("SELECT id, role_id, password FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT id, role_id, password FROM Users WHERE email = %s", (email,))
         user_data = cursor.fetchone()  # Fetch the user ID, type, and hashed password from the database
         cursor.close()
         
