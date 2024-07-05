@@ -23,6 +23,20 @@ def get_userid(username):
         return user['id']
     else:
         return None
+    
+def get_username(user_id):
+    """Get the user ID for the given username."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT name FROM Users WHERE id=%s", (user_id,))
+    username = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if username:
+        return username['name']
+    else:
+        return None
 
 def get_all_resources(page, per_page):
     conn = connect_to_database()
@@ -231,7 +245,8 @@ def get_combined_details(resource_id):
                 'created_at': resource_details['created_at'],
                 'organization': resource_details['organization'],
                 'description': resource_details['description'],
-                'author': resource_details['author']
+                'author': resource_details['author'],
+                'user_id': resource_details['user_id']
             })
 
         if taxonomy_details:
@@ -413,9 +428,9 @@ def get_active_month_users():
         
          # Get the current year and month
         #current_year = datetime.now().year
-        current_year = 2019
+        current_year = 2024
         #current_month = datetime.now().month
-        current_month = 7
+        current_month = 5
         
         
         # SQL query to select count of resources by author created in the current month

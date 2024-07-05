@@ -92,24 +92,35 @@
                             <i class="fa fa-search"></i> Recursos
                         </button>
                     </li>                    
+                    {%if admin%}
                     <li>
                         <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
                     </li>  
+                    {%endif%}
                 </ul>
             </nav>
             <div class="container2">
                 <h1>Aplicações</h1>
                 <p>Descubra as aplicações para dispositivos móveis que encontrámos sobre educação, gestão de trabalho, jogos, formação, ciências, matemática, português, física e química.</p>
+                {%if admin%}
                 <a href="/novaapp"><button>Introduzir aplicação</button></a>
+                {%endif%}
             </div>
             <nav class="top-nav">
                 <ul>
-                    <li><a href="/ajuda">Ajuda</a></li>
-                    <li><a href="/myaccount">Minha Conta</a></li>
-                    <li><a href="/dashboard" target="_blank">Administração</a></li>
-                    <li><a href="#">Sair</a></li>
+                    {% if admin %}
+                        <!-- Render admin-specific links or buttons -->
+                        <li><a href="/myaccount">Minha Conta</a></li>
+                        <li><a href="/dashboard" target="_blank">Administração</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                    {% else %}
+                        <!-- Render non-admin links or buttons -->
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Registar</a></li>
+                    {% endif %}
+
                 </ul>
             </nav>
         </div>

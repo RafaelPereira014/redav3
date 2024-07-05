@@ -78,9 +78,9 @@ def get_current_month_tools():
         
         # Get the current year and month
         #current_year = datetime.now().year
-        current_year = 2019
+        current_year = 2024
         #current_month = datetime.now().month
-        current_month = 7
+        current_month = 5
         
         # SQL query to select resources created in the current month
         query = """

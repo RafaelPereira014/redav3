@@ -90,11 +90,13 @@
                             <i class="fa fa-search"></i> Recursos
                         </button>
                     </li>                    
+                    {%if admin%}
                     <li>
                         <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
                     </li>  
+                    {%endif%}
                 </ul>
             </nav>
 
@@ -126,16 +128,20 @@
         
             <nav class="top-nav">
                 <ul>
-                    <!--
-                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Help</a></li>
-                    -->
+                    {% if admin %}
+                        <!-- Render admin-specific links or buttons -->
+                        <li><a href="/myaccount">Minha Conta</a></li>
 
-                    <li><a href="/ajuda">Ajuda</a></li>
-                    <li><a href="/myaccount">Minha Conta</a></li>
-                    <li><a href="/dashboard" target="_blank">Administração</a></li>
-                    <li><a href="#">Sair</a></li>
+                        <li><a href="/dashboard" target="_blank">Administração</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                    {% else %}
+                        <!-- Render non-admin links or buttons -->
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Registar</a></li>
+                    {% endif %}
+
+
+                    
                 </ul>
             </nav>
         </div>
@@ -177,8 +183,10 @@
                     </p>
                     <div class="buttons">
                         <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
+                        {%if admin%}
                         <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <a href="/novaproposta/{{ resource.slug }}"><button>Adicionar proposta de operacionalização</button></a>
+                        {%endif%}
                     </div>
                                 
                     <div class="year-cycle">

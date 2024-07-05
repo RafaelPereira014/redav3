@@ -1,7 +1,8 @@
 from itertools import islice
 import math
+import bcrypt
 import re
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, redirect, render_template, request
 import mysql.connector
 from db_operations.resources import *
 from db_operations.apps import *
@@ -17,6 +18,8 @@ from db_operations.user import *
 
 app = Flask(__name__)
 
+app.secret_key = 'your_secret_key'  # Needed for session management
+
 
 config = {
     'host': 'localhost',
@@ -27,16 +30,69 @@ config = {
 
 connection = mysql.connector.connect(**config)
 
-# Homepage
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        email = request.form.get('username')
+        password = request.form.get('password')
+        print(email)  # Check if email is correctly received
+        print(password)  # Check if password is correctly received
+        
+        if not email or not password:
+            error = 'Username and password are required'
+            return render_template('login.html', error=error)
+
+        conn = connect_to_database()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, role_id, password FROM users WHERE email = %s", (email,))
+        user_data = cursor.fetchone()  # Fetch the user ID, type, and hashed password from the database
+        cursor.close()
+        
+        if user_data:
+            stored_password = user_data[2].encode('utf-8')  # Ensure stored password is encoded as bytes
+            if bcrypt.checkpw(password.encode('utf-8'), stored_password):
+                session['user_id'] = user_data[0]  # Store user ID in session
+                session['user_type'] = user_data[1]  # Store user type in session
+                return redirect('/')  # Redirect to dashboard or another page upon successful login
+            else:
+                error = 'Invalid username or password'
+        else:
+            error = 'Invalid username or password'
+
+    return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+
+@app.route('/register')
+def register():
+    
+    return render_template('register.html')
+
+def user_logged_in():
+    return 'user_id' in session  # Modify this based on your session setup
+
 @app.route('/')
 def homepage():
     recent_resources = get_recent_approved_resources()
-    
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+
+    # Modify recent_resources to include image_url and embed
     for resource in recent_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
-    highlighted_resources = get_highlighted_resources()  # Corrected variable name
-    return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources)
+
+    highlighted_resources = get_highlighted_resources()
+
+    return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources, admin=admin)
+
 
 
 @app.route('/resources')
@@ -44,6 +100,9 @@ def resources():
     search_term = request.args.get('search', '')
     page = request.args.get('page', 1, type=int)
     per_page = 12
+    
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
 
     if search_term:
         # If search term is provided, search for resources
@@ -71,7 +130,7 @@ def resources():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term)
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term,admin=admin)
 
 
 
@@ -84,6 +143,8 @@ def resource_details(resource_id):
     if not combined_details:
         return render_template('error.html', message='Resource not found'), 404
     
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     # Extract combined details
     resource_details = combined_details
 
@@ -94,6 +155,7 @@ def resource_details(resource_id):
     resource_details['files'] = get_resource_files(slug)
     resource_details['link'] = get_resource_link(resource_id)
     resource_details['operations'] = get_propostasOp(resource_id)  # Fetching operations
+    resource_details['username']=get_username(resource_details['user_id'])
     
     # Fetch related resources and append additional details
     related_resources = get_related_resources(resource_details['title'])
@@ -105,10 +167,12 @@ def resource_details(resource_id):
     # Add scripts by id to resource details
     resource_details['scripts_by_id'] = combined_details['scripts_by_id']
 
-    return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources)
+    return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources,admin=admin)
 
 @app.route('/novaproposta/<slug>')
 def nova_proposta(slug):
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
     
     ano = request.args.get('ano')
@@ -126,11 +190,14 @@ def nova_proposta(slug):
             print(subdominios)
 
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios)
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios,admin=admin)
 
 # Edit resources
 @app.route('/resources/edit/<int:resource_id>')
 def resource_edit(resource_id):
+    
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     resource_details = get_combined_details(resource_id)
     formatos = get_formatos()
     use_mode = get_modos_utilizacao()
@@ -159,13 +226,16 @@ def resource_edit(resource_id):
         formato_title=formato_title,
         modo_utilizacao_title=modo_utilizacao_title,
         req_tecnicos_title=req_tecnicos_title,
-        idiomas_title=idiomas_title
+        idiomas_title=idiomas_title,
+        admin=admin
     )
 
 
 
 @app.route('/apps', methods=['GET'])
 def apps():
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     page = request.args.get('page', default=1, type=int)
     apps_per_page = 12
 
@@ -198,7 +268,7 @@ def apps():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('apps.html', all_apps=paginated_apps, page=page, total_pages=total_pages, page_range=page_range)
+    return render_template('apps.html', all_apps=paginated_apps, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -211,11 +281,15 @@ def search():
 
 @app.route('/novaapp')
 def novaapp():
-    return render_template('novaapp.html')
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+    return render_template('novaapp.html',admin=admin)
 
 # Tools
 @app.route('/tools')
 def tools():
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     page = request.args.get('page', 1, type=int)
     per_page = 8
     offset = (page - 1) * per_page
@@ -256,27 +330,28 @@ def tools():
             
     
 
-    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range)
+    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
 
 
 
 @app.route('/novaferramenta')
 def newtool():
-    return render_template('novaferramenta.html')
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+    return render_template('novaferramenta.html',admin=admin)
 
 # My Account
 @app.route('/myaccount')
 def my_account():
-    userid = '5'
-    if userid is None:
-        return "User not found", 404
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     
-    my_resources = get_resources_from_user(userid)
-    apps_user, apps_count = get_apps_from_user(userid)
-    tools_user, tools_count = get_tools_from_user(userid)
-    user_details = get_details(userid)
-    resources_count = no_resources(userid)
-    scripts_user, scripts_count = get_script_details(userid)
+    my_resources = get_resources_from_user(user_id)
+    apps_user, apps_count = get_apps_from_user(user_id)
+    tools_user, tools_count = get_tools_from_user(user_id)
+    user_details = get_details(user_id)
+    resources_count = no_resources(user_id)
+    scripts_user, scripts_count = get_script_details(user_id)
     
     # Pagination
     page = request.args.get('page', 1, type=int)
@@ -297,25 +372,30 @@ def my_account():
         scripts_user=scripts_user,
         scripts_count=scripts_count,
         page=page,
-        total_pages=total_pages
+        total_pages=total_pages,
+        admin=admin
     )
 
 
 # New_resource
 @app.route('/novorecurso')
 def novo_recurso():
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     formatos = get_formatos()
     use_mode = get_modos_utilizacao()
     requirements = get_requisitos_tecnicos()
     idiomas = get_idiomas()
     anos = get_anos_escolaridade()
     
-    return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos)
+    return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos,admin=admin)
 
 @app.route('/novorecurso2', methods=['GET'])
 def novo_recurso2():
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
-    return render_template('new_resource2.html', anos=anos)
+    return render_template('new_resource2.html', anos=anos,admin=admin)
 
 @app.route('/fetch_disciplinas')
 def fetch_disciplinas():

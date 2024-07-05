@@ -77,25 +77,28 @@
                             <i class="fa fa-search"></i> Recursos
                         </button>
                     </li>                    
+                    {%if admin%}
                     <li>
                         <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
                     </li>  
+                    {%endif%}
                 </ul>
             </nav>
             <nav class="top-nav">
                 <ul>
-                    <!--
-                    <li><a href="#" onclick="openLoginModal()">Login</a></li>
-                    <li><a href="#">Register</a></li>
-                    <li><a href="#">Help</a></li>
-                    -->
+                    {% if admin %}
+                        <!-- Render admin-specific links or buttons -->
+                        <li><a href="/myaccount">Minha Conta</a></li>
 
-                    <li><a href="/ajuda">Ajuda</a></li>
-                    <li><a href="/myaccount">Minha Conta</a></li>
-                    <li><a href="/dashboard" target="_blank">Administração</a></li>
-                    <li><a href="#">Sair</a></li>
+                        <li><a href="/dashboard" target="_blank">Administração</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                    {% else %}
+                        <!-- Render non-admin links or buttons -->
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Registar</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -166,6 +169,10 @@
                             <span>{{resource_details.formato_title}}</span>
                         </div>
                         <div>
+                            <span>Submetido por:</span>
+                            <span>{{resource_details.username}}</span>
+                        </div>
+                        <div>
                             <span>Criado a:</span>
                             <span>{{resource_details.created_at}}</span>
                         </div>
@@ -199,6 +206,7 @@
                             </ul>
                         {% endif %}
                     </div>
+                    {%if admin%}
                     <div class="actions">
                         <button class="Contact">Contactar utilizador</button>
                         <button>Gerir propostas</button>
@@ -207,6 +215,7 @@
                         <button class="hide" onclick="openHideModal()">Ocultar</button>
                     
                     </div>
+                    {%endif%}
                     <!-- Ficha Técnica -->
                     <div class="ficha-tecnica">
                         <h3>Ficha Técnica</h3>

@@ -17,5 +17,31 @@ def get_details(userid):
     cursor.close()
     conn.close()
     return user
-    
-    
+
+def is_admin(user_id):
+    """Checks if the user is an Admin"""
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    # Fetch role_id from Users table
+    cursor.execute("SELECT role_id FROM Users WHERE id = %s", (user_id,))
+    user_type = cursor.fetchone()
+
+    if user_type:
+        role_id = user_type[0]
+
+        # Query Roles table to check if role_id corresponds to 'admin'
+        cursor.execute("SELECT type FROM Roles WHERE id = %s AND type = 'admin'", (role_id,))
+        admin_role = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if admin_role:
+            return True
+        else:
+            return False
+    else:
+        cursor.close()
+        conn.close()
+        return False
