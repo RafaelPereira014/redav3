@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 import os
+import re
 from config import DB_CONFIG  # Import the database configuration
 from flask import current_app, session, url_for
 import mysql.connector  # Import MySQL Connector Python module
@@ -275,6 +276,16 @@ def get_combined_details(resource_id):
         if conn and conn.is_connected():
             conn.close()
 
+def get_recent_approved_resources_with_details(limit=8):
+    """Get the most recent approved resources with combined details."""
+    recent_resources = get_recent_approved_resources(limit=limit)
+    
+    if recent_resources:
+        for resource in recent_resources:
+            resource['combined_details'] = get_combined_details(resource['id'])
+    
+    return recent_resources
+
 
 
 
@@ -452,3 +463,11 @@ def get_active_month_users():
         cursor.close()
         conn.close()
     
+
+
+def strip_html_tags(text):
+    """Remove HTML tags from a string."""
+    if not isinstance(text, str):
+        return text
+    clean = re.compile(r'<.*?>')
+    return re.sub(clean, '', text)

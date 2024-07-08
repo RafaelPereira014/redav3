@@ -124,9 +124,20 @@
                 </div>
                 {% for resource in my_resources %}
                     <div class="resource-card">
-                        <h3>{{ resource.title | safe }}</h3>
+                        <h2>
+                            {% if resource.title %}
+                            {{ resource.title | strip_html}}
+                            
+                            {% endif %}
+                        </h2>
                         <p>Criado a {{ resource.created_at }}</p>
-                        <p>{{ resource.description | escape }}</p>
+                        <p>
+                            {% if resource.description %}
+                            {{ resource.description | strip_html  }}
+                            
+                            {% endif %}
+                        </p>
+                        
                         <div class="icon-bar">
                             <!-- Flag Icon -->
                             <i class="fas fa-flag"></i>

@@ -28,7 +28,8 @@ try:
         cursor = connection.cursor(dictionary=True)
         
         # Call the function to get combined details
-        change = get_combined_details(3974)
+        
+        change = get_recent_approved_resources_with_details()
         
         
 

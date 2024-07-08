@@ -3,6 +3,7 @@ import math
 import bcrypt
 import re
 from flask import Flask, jsonify, redirect, render_template, request
+from markupsafe import Markup
 import mysql.connector
 from db_operations.resources import *
 from db_operations.apps import *
@@ -38,8 +39,7 @@ def login():
     if request.method == 'POST':
         email = request.form.get('username')
         password = request.form.get('password')
-        print(email)  # Check if email is correctly received
-        print(password)  # Check if password is correctly received
+        
         
         if not email or not password:
             error = 'Username and password are required'
@@ -88,11 +88,20 @@ def homepage():
     for resource in recent_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
+        resource['details'] = get_combined_details(resource['id'])  # Fetch resource details
+
 
     highlighted_resources = get_highlighted_resources()
 
     return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources, admin=admin)
 
+
+@app.template_filter('strip_html')
+def strip_html_filter(text):
+    """Remove HTML tags from a string."""
+    return strip_html_tags(text)
+
+app.jinja_env.filters['strip_html'] = strip_html_filter
 
 
 @app.route('/resources')
@@ -130,7 +139,7 @@ def resources():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term,admin=admin)
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term, admin=admin)
 
 
 
