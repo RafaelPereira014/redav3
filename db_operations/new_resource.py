@@ -159,3 +159,21 @@ def get_filtered_terms(level, parent_level, parent_term):
     
     conn.close()
     return [row['term_title'] for row in result]
+
+
+def create_resource(title,autor,org,descricao):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    insert_query = """
+        INSERT INTO resources (title, autor, organizacao, descricao)
+        VALUES (%s, %s, %s, %s)
+        """
+    # Execute the insert query
+    cursor.execute(insert_query, (title, autor, org, descricao))
+    
+    # Commit the transaction
+    conn.commit()
+    
+    cursor.close()
+    conn.close()

@@ -8,7 +8,7 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 
-def get_related_resources(resource_title, limit=3):
+def get_related_resources(resource_title, limit=4):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
 

@@ -29,7 +29,7 @@ try:
         
         # Call the function to get combined details
         
-        change = get_recent_approved_resources_with_details()
+        change = get_filtered_terms(level=5, parent_level=4, parent_term='Healthy diet')
         
         
 

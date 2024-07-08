@@ -122,6 +122,7 @@ def resources():
         total_resources = get_total_resource_count()
 
     total_pages = (total_resources + per_page - 1) // per_page
+    total_resources = get_total_resource_count()
 
     for resource in paginated_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
@@ -139,7 +140,7 @@ def resources():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term, admin=admin)
+    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term, admin=admin,total_resources=total_resources)
 
 
 
@@ -188,18 +189,19 @@ def nova_proposta(slug):
     print(ano)
     dominios = []
     subdominios = []
+    conceitos = []
     
     disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
-    print(disciplinas)
     for disciplina in disciplinas:
         dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
-        print(dominios)
         for dominio in dominios:
             subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
-            print(subdominios)
+            for subdominio in subdominios:
+                conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio) if ano else []
+                print(conceitos)
 
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios,admin=admin)
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios,admin=admin,conceitos=conceitos)
 
 # Edit resources
 @app.route('/resources/edit/<int:resource_id>')
@@ -389,6 +391,9 @@ def my_account():
 # New_resource
 @app.route('/novorecurso')
 def novo_recurso():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     formatos = get_formatos()
@@ -396,6 +401,25 @@ def novo_recurso():
     requirements = get_requisitos_tecnicos()
     idiomas = get_idiomas()
     anos = get_anos_escolaridade()
+    title = request.args.get('titulo')
+    autor = request.args.get('autor')
+    org = request.args.get('organizacao')
+    descricao = request.args.get('descricao')
+    
+    # insert_query = """
+    #     INSERT INTO Resources (title, author, organization, description)
+    #     VALUES (%s, %s, %s, %s)
+    #     """
+    # # Execute the insert query
+    # cursor.execute(insert_query, (title, autor, org, descricao))
+    
+    # # Commit the transaction
+    # conn.commit()
+    
+    cursor.close()
+    conn.close()
+    
+    
     
     return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos,admin=admin)
 
@@ -427,6 +451,12 @@ def fetch_subdominios():
     dominio = request.args.get('dominio')
     subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio)
     return jsonify(subdominios)
+
+@app.route('/fetch_conceitos')
+def fetch_conceitos():
+    subdominio = request.args.get('subdominio')
+    conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio)
+    return jsonify(conceitos)
 
 
 

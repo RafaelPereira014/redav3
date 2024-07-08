@@ -63,7 +63,7 @@ def get_total_resource_count():
     conn = connect_to_database()
     cursor = conn.cursor()
     
-    query = "SELECT COUNT(*) FROM Resources"
+    query = "SELECT COUNT(*) FROM Resources where type_id='2'"
     
     cursor.execute(query)
     total_count = cursor.fetchone()[0]

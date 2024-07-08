@@ -22,6 +22,38 @@
             padding: 40px 0;
             color: #fff;
         }
+        .keyword-input-container input {
+            width: calc(80% - 80px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .keyword-input-container button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .keyword-item {
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+        }
+        .keyword-item button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 2px 5px;
+            cursor: pointer;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -62,8 +94,21 @@
                 subdominiosContainer.empty();
                 data.forEach(function(subdominio) {
                     subdominiosContainer.append(`
-                        <input type="checkbox" id="subdominio${subdominio}" name="subdominios" value="${subdominio}">
+                        <input type="checkbox" id="subdominio${subdominio}" name="subdominios" value="${subdominio}" onchange="fetchConceitos('${subdominio}')">
                         <label for="subdominio${subdominio}">${subdominio}</label>
+                    `);
+                });
+            });
+        }
+
+        function fetchConceitos(subdominio) {
+            $.get('/fetch_conceitos', {subdominio: subdominio}, function(data) {
+                let conceitosContainer = $('#conceitosContainer');
+                conceitosContainer.empty();
+                data.forEach(function(conceito) {
+                    conceitosContainer.append(`
+                        <input type="checkbox" id="conceito${conceito}" name="conceitos" value="${conceito}" onchange="addKeyword('${conceito}')">
+                        <label for="conceito${conceito}">${conceito}</label>
                     `);
                 });
             });
@@ -74,8 +119,7 @@
                 fetchDisciplinas();
             });
         });
-    </script>
-    <script>
+
         // Initialize TinyMCE editor
         tinymce.init({
             selector: 'textarea',
@@ -94,7 +138,7 @@
                 });
             }
         });
-    
+
         // Function to update the character counter
         function updateCounter(editor) {
             const maxLength = editor.getElement().maxLength || 1500;
@@ -103,6 +147,85 @@
             const counterEle = document.getElementById('counter');
             counterEle.innerHTML = `${currentLength}/${maxLength}`;
         }
+
+        let keywords = [];
+
+        function addKeyword(keyword) {
+            if (typeof keyword === 'undefined') {
+                const keywordInput = document.getElementById('keywordInput');
+                keyword = keywordInput.value.trim();
+                keywordInput.value = '';
+            }
+
+            if (keyword && !keywords.includes(keyword) && keywords.length < 5) {
+                keywords.push(keyword);
+                updateKeywordsContainer();
+            } else if (keywords.length >= 5) {
+                alert('Você só pode adicionar até 5 palavras-chave.');
+            } else if (keywords.includes(keyword)) {
+                alert('Essa palavra-chave já foi adicionada.');
+            }
+        }
+
+        function removeKeyword(keyword) {
+            keywords = keywords.filter(k => k !== keyword);
+            updateKeywordsContainer();
+        }
+
+        function updateKeywordsContainer() {
+            const keywordsContainer = document.getElementById('keywordsContainer');
+            keywordsContainer.innerHTML = '';
+            keywords.forEach(keyword => {
+                const keywordElement = document.createElement('div');
+                keywordElement.className = 'keyword-item';
+                keywordElement.innerHTML = `
+                    ${keyword} <button type="button" onclick="removeKeyword('${keyword}')">X</button>
+                `;
+                keywordsContainer.appendChild(keywordElement);
+            });
+        }
+
+        $(document).ready(function() {
+            $('input[name="anos"]').change(function() {
+                var selectedAno = $(this).val();
+                fetchData(selectedAno);
+            });
+
+            function fetchData(ano) {
+                $.ajax({
+                    url: '/novorecurso2',
+                    type: 'GET',
+                    data: { ano: ano },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log('AJAX Success:', data); // Debug logging
+                        populateDisciplinas(data.disciplinas); // Assuming 'disciplinas' is the key in your JSON response
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching data:', error);
+                    }
+                });
+            }
+
+            function populateDisciplinas(disciplinas) {
+                var disciplinasContainer = $('#disciplinas-checkboxes');
+                disciplinasContainer.empty(); // Clear previous content
+
+                if (disciplinas.length > 0) {
+                    disciplinasContainer.append('<h2>Disciplinas:</h2>');
+                    disciplinas.forEach(function(item, index) {
+                        disciplinasContainer.append(`
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="disciplina${index}" name="disciplinas" value="${item}" onchange="fetchDominios('${item}')">
+                                <label for="disciplina${index}">${item}</label>
+                            </div>
+                        `);
+                    });
+                } else {
+                    disciplinasContainer.append('<p>No disciplinas available.</p>');
+                }
+            }
+        });
     </script>
 </head>
 <body>
@@ -168,14 +291,31 @@
                     <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
                 </div>
             </div>
+            
+            <div class="input-group-domain required">
+                <h2>Subdominios:</h2>
+                <div id="subdominiosContainer">
+                    <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
+                </div>
+            </div>
         
-            <div class="input-group-concept required">
+            <div class="input-group-domain required">
                 <h2>Conceitos:</h2>
-                <!-- Conceitos will be populated by JavaScript -->
+                <div id="conceitosContainer">
+                    <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
+                </div>
             </div>
             <div class="input-group-conceitos">
                 <h2>Outros conceitos:</h2>
+                <div class="keyword-input-container">
+                    <input type="text" id="keywordInput" placeholder="Digite uma palavra-chave" maxlength="20">
+                    <button type="button" onclick="addKeyword()">Adicionar</button>
+                </div>
+                <div id="keywordsContainer"></div>
+                <small class="small-text">Pode adicionar até 5 palavras-chave.</small>
             </div>
+            
+            
             <div class="input-group-descricao-proposta required">
                 <h2>Descrição da proposta de operacionalização:</h2>
                 <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
@@ -270,54 +410,7 @@
         </div>
     </footer>
 
-    <script>
-        
-        // dominios.js
-        $(document).ready(function() {
-            $('input[name="anos"]').change(function() {
-                var selectedAno = $(this).val();
-                fetchData(selectedAno);
-            });
-
-            function fetchData(ano) {
-                $.ajax({
-                    url: '/novorecurso2',
-                    type: 'GET',
-                    data: { ano: ano },
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log('AJAX Success:', data); // Debug logging
-                        populateDisciplinas(data.disciplinas); // Assuming 'disciplinas' is the key in your JSON response
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching data:', error);
-                    }
-                });
-            }
-
-            function populateDisciplinas(disciplinas) {
-                var disciplinasContainer = $('#disciplinas-checkboxes');
-                disciplinasContainer.empty(); // Clear previous content
-
-                if (disciplinas.length > 0) {
-                    disciplinasContainer.append('<h2>Disciplinas:</h2>');
-                    disciplinas.forEach(function(item, index) {
-                        disciplinasContainer.append(`
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="disciplina${index}" name="disciplinas" value="${item}">
-                                <label for="disciplina${index}">${item}</label>
-                            </div>
-                        `);
-                    });
-                } else {
-                    disciplinasContainer.append('<p>No disciplinas available</p>');
-                }
-            }
-        });
-        
-
-        
-    </script>
+    
     
 </body>
 </html>
