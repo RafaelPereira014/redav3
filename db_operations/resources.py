@@ -289,11 +289,6 @@ def get_recent_approved_resources_with_details(limit=8):
 
 
 
-
-
-
-
-
 def no_resources(userid):
     conn = connect_to_database()
     cursor = conn.cursor()

@@ -29,6 +29,18 @@
             background-color: #333;
             color: white;
         }
+        .approval-icon {
+            cursor: pointer;
+        }
+        .approval-icon i {
+            margin: 0 5px;
+        }
+        .approval-icon .fa-check {
+            color: green;
+        }
+        .approval-icon .fa-times {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -85,9 +97,6 @@
     <div class="content">
         <h2>Recursos pendentes de aprovação</h2>
         <div>
-            <button onclick="displayTodos()">Todos</button>
-            <button onclick="displayCientifica()">Científica</button>
-            <button onclick="displayLinguistica()">Linguística</button>
             <input type="text" id="search" placeholder="Pesquisar...">
         </div>
         <hr>
@@ -113,8 +122,20 @@
                     </td>
                     <td>{{ resource.created_at }}</td>
                     <td>{{ resource.author }}</td>
-                    <td>{{ resource.approvedLinguistic }}</td>
-                    <td>{{ resource.approvedScientific }}</td>
+                    <td class="approval-icon" data-value="{{ resource.approvedLinguistic }}">
+                        {% if resource.approvedLinguistic == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
+                    </td>
+                    <td class="approval-icon" data-value="{{ resource.approvedScientific }}">
+                        {% if resource.approvedScientific == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -125,58 +146,33 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const table = document.getElementById("resourcesTable");
-            const pagination = document.getElementById("pagination");
-            const rowsPerPage = 15;
             const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-            const totalPages = Math.ceil(rows.length / rowsPerPage);
-            let currentPage = 1;
 
-            function displayRows(page) {
-                const start = (page - 1) * rowsPerPage;
-                const end = start + rowsPerPage;
+            function toggleApprovalStatus(cell) {
+                const currentValue = parseInt(cell.getAttribute("data-value"));
+                const newValue = currentValue === 1 ? 0 : 1;
+                cell.setAttribute("data-value", newValue);
 
-                for (let i = 0; i < rows.length; i++) {
-                    rows[i].style.display = i >= start && i < end ? "" : "none";
+                if (newValue === 1) {
+                    cell.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    cell.innerHTML = '<i class="fas fa-times"></i>';
                 }
             }
 
-            function setupPagination() {
-                pagination.innerHTML = "";
-
-                for (let i = 1; i <= totalPages; i++) {
-                    const button = document.createElement("button");
-                    button.innerText = i;
-                    button.classList.add("page-btn");
-                    if (i === currentPage) button.classList.add("active");
-
-                    button.addEventListener("click", function() {
-                        currentPage = i;
-                        displayRows(currentPage);
-
-                        const currentBtn = document.querySelector(".page-btn.active");
-                        currentBtn.classList.remove("active");
-                        button.classList.add("active");
-                    });
-
-                    pagination.appendChild(button);
+            function confirmToggle(cell) {
+                const confirmation = confirm("Are you sure you want to toggle approval status?");
+                if (confirmation) {
+                    toggleApprovalStatus(cell);
+                    // Here you can add logic to update the approval status in your backend via AJAX or form submission.
                 }
             }
 
-            displayRows(currentPage);
-            setupPagination();
-        });
-
-        const sidebarItems = document.querySelectorAll('.sidebar ul li');
-
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', () => {
-                const submenu = item.querySelector('.submenu');
-                sidebarItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        otherItem.querySelector('.submenu').style.display = 'none';
-                    }
-                });
-                submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+            table.addEventListener("click", function(event) {
+                const targetCell = event.target.closest(".approval-icon");
+                if (targetCell) {
+                    confirmToggle(targetCell);
+                }
             });
         });
     </script>
