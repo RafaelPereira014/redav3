@@ -378,7 +378,7 @@ def my_account():
     tools_user, tools_count = get_tools_from_user(user_id)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
-    scripts_user, scripts_count = get_script_details(user_id)
+    
     
     # Pagination
     page = request.args.get('page', 1, type=int)
@@ -543,6 +543,7 @@ def update_approved_linguistic(resource_id):
 
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():
+    scripts, scripts_count = get_script_details()
     return render_template('admin/recursos/po_pendentes.html')
 
 @app.route('/dashboard/recursos/ocultos')

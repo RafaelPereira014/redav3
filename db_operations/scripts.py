@@ -13,16 +13,41 @@ def get_script_details(userid):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
-    scripts_user = []
+    scripts = []
     scripts_count = 0
     
     try:
         # Query to fetch all tools
         cursor.execute("SELECT * FROM Scripts WHERE user_id=%s ORDER BY id DESC", (userid, ))
-        scripts_user = cursor.fetchall()
+        scripts = cursor.fetchall()
         
         # Query to count the tools
         cursor.execute("SELECT COUNT(*) AS count FROM Scripts WHERE user_id=%s ", (userid,))
+        scripts_count = cursor.fetchone()['count']
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return scripts, scripts_count
+
+
+def get_script_details():
+    """Get all tools from user and their count."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    scripts_user = []
+    scripts_count = 0
+    
+    try:
+        # Query to fetch all tools
+        cursor.execute("SELECT * FROM Scripts  ORDER BY id DESC")
+        scripts_user = cursor.fetchall()
+        
+        # Query to count the tools
+        cursor.execute("SELECT COUNT(*) AS count FROM Scripts ")
         scripts_count = cursor.fetchone()['count']
     except Exception as e:
         print(f"Error: {e}")
