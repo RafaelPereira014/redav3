@@ -28,9 +28,9 @@ def get_related_resources(resource_title, limit=4):
         # Add conditions for each keyword pattern
         query += " OR ".join(["title LIKE %s"] * len(like_patterns))
         
-        # Close the WHERE clause and add the limit
+        # Close the WHERE clause and add the conditions and limit
         query += """
-            ) AND title != %s AND (approvedScientific = 1 AND approvedLinguistic = 1)
+            ) AND title != %s AND author IS NOT NULL AND (approvedScientific = 1 AND approvedLinguistic = 1) AND hidden='0' 
             ORDER BY CASE
         """
         

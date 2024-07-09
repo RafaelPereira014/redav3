@@ -2,7 +2,7 @@ from itertools import islice
 import math
 import bcrypt
 import re
-from flask import Flask, jsonify, redirect, render_template, request
+from flask import Flask, flash, jsonify, redirect, render_template, request
 from markupsafe import Markup
 import mysql.connector
 from db_operations.resources import *
@@ -149,12 +149,13 @@ def resources():
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     combined_details = get_combined_details(resource_id)
-     
+
     if not combined_details:
         return render_template('error.html', message='Resource not found'), 404
-    
+
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
+
     # Extract combined details
     resource_details = combined_details
 
@@ -165,19 +166,26 @@ def resource_details(resource_id):
     resource_details['files'] = get_resource_files(slug)
     resource_details['link'] = get_resource_link(resource_id)
     resource_details['operations'] = get_propostasOp(resource_id)  # Fetching operations
-    resource_details['username']=get_username(resource_details['user_id'])
-    
+    resource_details['username'] = get_username(resource_details['user_id'])
+
     # Fetch related resources and append additional details
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:
-        related_slug = get_resouce_slug(related['id'])
-        related['image_url'] = get_resource_image_url(related_slug)
-        related['embed'] = get_resource_embed(related['id'])
-    
-    # Add scripts by id to resource details
-    resource_details['scripts_by_id'] = combined_details['scripts_by_id']
+        related_combined_details = get_combined_details(related['id'])
+        if related_combined_details:
+            related.update(related_combined_details)
+            related_slug = get_resouce_slug(related['id'])
+            related['image_url'] = get_resource_image_url(related_slug)
+            related['embed'] = get_resource_embed(related['id'])
+            related['files'] = get_resource_files(related_slug)
+            related['link'] = get_resource_link(related['id'])
+            related['operations'] = get_propostasOp(related['id'])
+            related['username'] = get_username(related_combined_details['user_id'])
 
-    return render_template('resource_details.html', resource_details=resource_details, related_resources=related_resources,admin=admin)
+    return render_template('resource_details.html', 
+                           resource_details=resource_details, 
+                           related_resources=related_resources, 
+                           admin=admin)
 
 @app.route('/novaproposta/<slug>')
 def nova_proposta(slug):
@@ -388,12 +396,8 @@ def my_account():
     )
 
 
-# New_resource
-@app.route('/novorecurso')
+@app.route('/novorecurso', methods=['GET', 'POST'])
 def novo_recurso():
-    conn = connect_to_database()
-    cursor = conn.cursor(dictionary=True)
-    
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     formatos = get_formatos()
@@ -401,27 +405,39 @@ def novo_recurso():
     requirements = get_requisitos_tecnicos()
     idiomas = get_idiomas()
     anos = get_anos_escolaridade()
-    title = request.args.get('titulo')
-    autor = request.args.get('autor')
-    org = request.args.get('organizacao')
-    descricao = request.args.get('descricao')
-    
-    # insert_query = """
-    #     INSERT INTO Resources (title, author, organization, description)
-    #     VALUES (%s, %s, %s, %s)
-    #     """
-    # # Execute the insert query
-    # cursor.execute(insert_query, (title, autor, org, descricao))
-    
-    # # Commit the transaction
-    # conn.commit()
-    
-    cursor.close()
-    conn.close()
-    
-    
-    
-    return render_template('new_resource.html',formatos=formatos,use_mode=use_mode,requirements=requirements,idiomas=idiomas,anos=anos,admin=admin)
+
+    if request.method == 'POST':
+        title = request.form.get('titulo')
+        autor = request.form.get('autor')
+        org = request.form.get('organizacao')
+        descricao = request.form.get('descricao')
+
+        # Taxonomy details from form
+        idiomas_title = request.form.get('idiomas')
+        formato_title = request.form.get('formato')
+        modo_utilizacao_title = request.form.get('modo_utilizacao')
+        requisitos_tecnicos_title = request.form.get('requisitos_tecnicos')
+        anos_escolaridade_title = request.form.get('anos_escolaridade')
+        
+        # Scripts by id (assuming this is handled as a nested form or similar structure)
+        scripts_by_id = request.form.get('scripts_by_id')  # This needs to be parsed from the form
+
+        # Create the new resource
+        resource_id = create_new_resource(
+            title, autor, org, descricao,
+            idiomas_title=idiomas_title, formato_title=formato_title,
+            modo_utilizacao_title=modo_utilizacao_title, requisitos_tecnicos_title=requisitos_tecnicos_title,
+            anos_escolaridade_title=anos_escolaridade_title, scripts_by_id=scripts_by_id
+        )
+
+        if resource_id:
+            flash('Resource created successfully!', 'success')
+            return redirect(url_for('some_success_page'))  # Redirect to a success page
+        else:
+            flash('Error creating resource.', 'danger')
+
+    return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
+
 
 @app.route('/novorecurso2', methods=['GET'])
 def novo_recurso2():
@@ -505,6 +521,8 @@ def admin():
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():
     recursos_pendentes = get_pendent_resources()
+    # aprovar_cientificamente = update_approvedScientific()
+    # aprovar_linguisticamente = update_approvedLinguistic()
     return render_template('admin/recursos/pendentes.html',recursos_pendentes=recursos_pendentes)
 
 @app.route('/dashboard/recursos/po/pendentes')

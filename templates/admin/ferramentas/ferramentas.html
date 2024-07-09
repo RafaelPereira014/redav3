@@ -99,8 +99,8 @@
                 <tr>
                     <th>Título</th>
                     <th>Data de criação</th>
-                    <th>Submetido por</th>
-                    <th>Ações</th>
+                    <th>Aprovado linguisticamente</th>
+                    <th>Aprovado cientificamente</th>
                 </tr>
             </thead>
             <tbody>
@@ -108,10 +108,19 @@
                 <tr>
                     <td>{{ tool.title }}</td>
                     <td>{{ tool.created_at}}</td>
-                    <td>{{ tool.author }}</td>
-                    <td>
-                        <i class="fa fa-pencil"></i>
-                        <i class="fas fa-trash"></i>
+                    <td class="approval-icon" data-value="{{ tool.approvedLinguistic }}">
+                        {% if tool.approvedLinguistic == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
+                    </td>
+                    <td class="approval-icon" data-value="{{ tool.approvedScientific }}">
+                        {% if tool.approvedScientific == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

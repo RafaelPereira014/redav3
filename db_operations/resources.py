@@ -84,6 +84,22 @@ def get_pendent_resources():
     conn.close()
     return pendent_resources
 
+def update_approvedScientific(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("UPDATE Resources set approvedScientific='1' where id=%s",(resource_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+def update_approvedLinguistic(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("UPDATE Resources set approvedLinguistic='1' where id=%s",(resource_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 def get_hidden_resources():
     """Get all approved resources from the DB."""
     conn = connect_to_database()
@@ -218,7 +234,7 @@ def get_combined_details(resource_id):
                     'dominios_resources': [],
                     'macro_areas': [],
                     'subdominios': [],
-                    'hashtags': [],
+                    'hashtags': []
                 }
                 user_ids.append(user_id)
             scripts_by_id[script_id][tax_slug].append(term_title)

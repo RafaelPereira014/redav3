@@ -174,7 +174,7 @@
                         </div>
                         <div>
                             <span>Criado a:</span>
-                            <span>{{resource_details.created_at}}</span>
+                            <span class='created_at'>{{resource_details.created_at}}</span>
                         </div>
                         <div>
                             <span>Autor:</span>
@@ -352,23 +352,27 @@
                 {% for related in related_resources%}
                 <div class="rectangle">
                     
-                        <img src="{{ url_for('static', filename='images/identity-bg.jpg') }}" alt="Image 1">
-                        <span class="image-meta">Multidisciplinar</span>
+                        {% if related.image_url %}
+                        <img src="{{ related.image_url }}" >
+                        {% else %}
+                        <div class="video-container">
+                            {{related.embed | safe}}
+                        </div>
+                        {% endif %}       
 
-                        <i class="fas fa-heart"></i>
-                        <i class="fas fa-flag"></i>
+                        
                         <h2>
                             {% if related.title|length > 25 %}
-                                {{ related.title[:25] }} ...
+                            {{ related.title[:25] | strip_html ~ '...' }}
                             {% else %}
-                                {{ related.title|safe}}
+                            {{ related.title | strip_html }}
                             {% endif %}
                         </h2>
                         <p>
                             {% if related.description|length > 100 %}
-                                {{ related.description[:100] }} ...
+                            {{ related.description[:100] | strip_html ~ '...' }}
                             {% else %}
-                                {{ related.description |safe }}
+                            {{ related.description | strip_html }}
                             {% endif %}
                         </p>
                         <div class="buttons">
@@ -377,7 +381,17 @@
 
                             
                         </div>
-                        <p>Simulação</p>
+                        <p class="created_at">{{ related.created_at }}</p>
+                        {% if related and related.formato_title %}
+                        <p class="formato_title">{{ related.formato_title | strip_html }}</p>
+                        {% if related and related.formato_title %}
+                            {% if related.formato_title == 'Vídeo/Animação' %}
+                                <p class="formato_title video">
+                                    {{ related.duration | strip_html }}
+                                </p>
+                            {% endif %}
+                        {% endif %}
+                        {%endif %}
                     
                 </div>
                 {%endfor%}
@@ -417,6 +431,29 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        // Get all elements with class 'created_at'
+        const createdAtElements = document.querySelectorAll('.created_at');
+        
+        // Array of month names in Portuguese
+        const months = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", 
+                        "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+        
+        // Loop through each element and format its date
+        createdAtElements.forEach(element => {
+            // Extract the date string
+            const dateString = element.textContent.trim();
+            
+            // Convert the date string to a JavaScript Date object
+            const date = new Date(dateString);
+            
+            // Format the date in the desired format
+            const formattedDate = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+            
+            // Update the content of the element with the formatted date
+            element.textContent = formattedDate;
+        });
+    </script>
     <script>
         document.getElementById('backButton').addEventListener('click', function() {
             window.history.back();
