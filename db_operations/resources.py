@@ -78,7 +78,7 @@ def get_pendent_resources():
     """Get all approved resources from the DB."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 0 OR approvedScientific = 0 AND approvedLinguistic = 1 ORDER BY id DESC")
+    cursor.execute("SELECT * FROM Resources WHERE (approvedScientific = 1 AND approvedLinguistic = 0) OR (approvedScientific = 0 AND approvedLinguistic = 1) OR (approvedScientific = 0 AND approvedLinguistic = 0) ORDER BY id DESC")
     pendent_resources = cursor.fetchall()
     cursor.close()
     conn.close()

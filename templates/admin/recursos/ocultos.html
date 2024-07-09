@@ -110,12 +110,23 @@
                     <td>{{ resource.created_at }}</td>
                     <td>{{ resource.author }}</td>
                     <td>{{ resource.approved }}</td>
-                    <td><button class="ativar-button">Ativar</button></td>
+                    <td>
+                        <a href="{{ url_for('show_resource_route', resource_id=resource.id) }}" class="btn btn-primary">Ativar</a>
+                    </td>
 
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <div class="pagination" id="pagination"></div>
     </div>
     

@@ -39,6 +39,19 @@ def get_user_email(user_id):
     else:
         return None
 
+def get_usertype(role_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT type FROM Roles WHERE id=%s", (role_id,))
+    user_type = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if user_type:
+        return user_type['type']
+    else:
+        return None
+
 def get_user_password(email):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
@@ -105,6 +118,27 @@ def get_current_month_users():
         return users
     except Exception as e:
         logging.error(f"Error retrieving users for the current month: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+        
+def get_all_users():
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+        query = """
+            SELECT name,email,organization,created_at,role_id FROM Users ORDER BY id DESC
+        """
+        cursor.execute(query)
+        users = cursor.fetchall()
+        
+        logging.info(f"Retrieved {len(users)} users from DB.")
+        
+        return users
+    except Exception as e:
+        logging.error(f"Error retrieving users for the DB: {e}")
         return None
     finally:
         cursor.close()

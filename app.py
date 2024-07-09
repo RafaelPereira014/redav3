@@ -249,6 +249,14 @@ def resource_edit(resource_id):
         admin=admin
     )
 
+@app.route('/resources/edit2/<int:resource_id>')
+def resource_edit2(resource_id):
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+    resource_details = get_combined_details(resource_id)
+    
+    return render_template('edit_resource2.html')
+    
 
 
 @app.route('/apps', methods=['GET'])
@@ -521,9 +529,17 @@ def admin():
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():
     recursos_pendentes = get_pendent_resources()
-    # aprovar_cientificamente = update_approvedScientific()
-    # aprovar_linguisticamente = update_approvedLinguistic()
     return render_template('admin/recursos/pendentes.html',recursos_pendentes=recursos_pendentes)
+
+@app.route('/update_approved_scientific/<int:resource_id>', methods=['POST'])
+def update_approved_scientific(resource_id):
+    result = update_approvedScientific(resource_id)
+    return result
+
+@app.route('/update_approved_linguistic/<int:resource_id>', methods=['POST'])
+def update_approved_linguistic(resource_id):
+    result = update_approvedLinguistic(resource_id)
+    return result
 
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():
@@ -532,7 +548,15 @@ def po_pendentes():
 @app.route('/dashboard/recursos/ocultos')
 def hidden():
     ocultos = get_hidden_resources()
+    
     return render_template('admin/recursos/ocultos.html',ocultos=ocultos)
+
+@app.route('/resources/show/<int:resource_id>')
+def show_resource_route(resource_id):
+    result = show_resource(resource_id)
+    flash(result)
+    return redirect(url_for('hidden'))
+
 
 @app.route('/dashboard/aplicacoes')
 def admin_apps():
@@ -602,7 +626,8 @@ def admin_taxonomies_rel():
 #######----------------####
 @app.route('/dashboard/utilizadores')
 def admin_users():
-    return render_template('admin/utilizadores/utilizadores.html')
+    all_users = get_all_users()
+    return render_template('admin/utilizadores/utilizadores.html',all_users=all_users)
 
 
 

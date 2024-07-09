@@ -11,7 +11,46 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            margin: 0 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            color: #007bff;
+            font-size: 14px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+        
+        .pagination button:hover:not(.active) {
+            background-color: #e9ecef;
+            border-color: #ddd;
+        }
+        
+        .pagination span {
+            margin: 0 5px;
+            padding: 10px 15px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+    </style>    
 </head>
 <body>
    
@@ -80,42 +119,111 @@
 
         <hr></hr>
 
-        <table>
-            <tr>
-              <th>Nome</th>
-              <th>E-mail</th>
-              <th>Organização</th>
-              <th>Criado a</th>
-              <th>Tipo de utilizador</th>
-              <th>Ações</th>
-            </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-              <td>Germany</td>
-              <td>Germany</td>
-              <td>
-                <i class="fa fa-pencil"></i>
-                <i class="fas fa-trash"></i>
-            </td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-              <td>Mexico</td>
-              <td>Mexico</td>
-                  <td>
-                <i class="fa fa-pencil"></i>
-                <i class="fas fa-trash"></i>
-            </td>
-            </tr>
-          </table>
+        <table id="users_table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>Organização</th>
+                    <th>Criado a </th>
+                    <th>Tipo de utilizador</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in all_users %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.organization }}</td>
+                    <td>{{ user.created_at}}</td>
+                    <td>{{ user.type}}</td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination" id="pagination"></div>
        
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("users_table");
+            const pagination = document.getElementById("pagination");
+            const rowsPerPage = 15;
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            let currentPage = 1;
+        
+            function displayRows(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+        
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = i >= start && i < end ? "" : "none";
+                }
+            }
+        
+            function createPageButton(page) {
+                const button = document.createElement("button");
+                button.innerText = page;
+                button.classList.add("page-btn");
+                if (page === currentPage) button.classList.add("active");
+        
+                button.addEventListener("click", function() {
+                    currentPage = page;
+                    displayRows(currentPage);
+        
+                    const currentBtn = document.querySelector(".page-btn.active");
+                    if (currentBtn) {
+                        currentBtn.classList.remove("active");
+                    }
+                    button.classList.add("active");
+        
+                    setupPagination();
+                });
+        
+                return button;
+            }
+        
+            function setupPagination() {
+                pagination.innerHTML = "";
+                const maxDisplayedPages = 3; // Number of pages to display before and after the current page
+                const range = maxDisplayedPages * 2 + 1;
+        
+                // Add the first page button
+                pagination.appendChild(createPageButton(1));
+        
+                if (currentPage > maxDisplayedPages + 2) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add page buttons around the current page
+                const start = Math.max(2, currentPage - maxDisplayedPages);
+                const end = Math.min(totalPages - 1, currentPage + maxDisplayedPages);
+        
+                for (let i = start; i <= end; i++) {
+                    pagination.appendChild(createPageButton(i));
+                }
+        
+                if (currentPage < totalPages - maxDisplayedPages - 1) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add the last page button if there are more than one page
+                if (totalPages > 1) {
+                    pagination.appendChild(createPageButton(totalPages));
+                }
+            }
+        
+            displayRows(currentPage);
+            setupPagination();
+        });
+        
         function toggleSubmenu(submenuId) {
             var submenu = document.getElementById(submenuId);
             if (submenu.style.display === "block") {
