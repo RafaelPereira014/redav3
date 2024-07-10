@@ -238,45 +238,55 @@
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
                         {% for script_id, script in resource_details.scripts_by_id.items() %}
-                            <div class="button-container">
-                                <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
-                            </div>
-                            <div id="proposta{{ loop.index }}" style="display: none;">
-                                <div class="separator">
-                                    <span>Autor:</span>
-                                    <span>{{ resource_details.user_details[script.user_id].name if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                    
+                            {% if script.approved or admin %}
+                                <div class="button-container">
+                                    <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }} </button>
+                                    {% if admin and not script.approved %}
+                                        <button onclick="aprovarProposta({{ script_id }})">Aprovar proposta de operacionalização</button>
+                                    {% endif %}
                                 </div>
-                                <div class="separator">
-                                    <span>Organização:</span>
-                                    <span>{{ resource_details.user_details[script.user_id].organization if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                    
+                                <div id="proposta{{ loop.index }}" style="display: none;">
+                                    <div class="separator">
+                                        <span>Autor:</span>
+                                        <span>{{ resource_details.user_details[script.user_id].name if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Organização:</span>
+                                        <span>{{ resource_details.user_details[script.user_id].organization if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Proposta de operacionalização:</span>
+                                        <span>{{ script.operation | safe }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Anos de escolaridade:</span>
+                                        <span>{{ script.anos_resources | join(', ') }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Disciplinas:</span>
+                                        <span>{{ script.areas_resources | join(', ') }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Domínios/Temas:</span>
+                                        <span>{{ script.dominios_resources | join(', ') }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Subdomínios:</span>
+                                        <span>{{ script.subdominios | join(', ') }}</span>
+                                    </div>
+                                    <div class="separator">
+                                        <span>Conceitos:</span>
+                                        <span>{{ script.hashtags | join(', ') }}</span>
+                                    </div>
                                 </div>
-                                <div class="separator">
-                                    <span>Proposta de operacionalização:</span>
-                                    <span>{{ script.operation | safe }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Anos de escolaridade:</span>
-                                    <span>{{ script.anos_resources | join(', ') }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Disciplinas:</span>
-                                    <span>{{ script.areas_resources | join(', ') }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Domínios/Temas:</span>
-                                    <span>{{ script.dominios_resources | join(', ') }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Subdomínios:</span>
-                                    <span>{{ script.subdominios | join(', ') }}</span>
-                                </div>
-                                <div class="separator">
-                                    <span>Conceitos:</span>
-                                    <span>{{ script.hashtags | join(', ') }}</span>
-                                </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
+                    
+                    
+                    
                     
                   
                     
@@ -311,7 +321,7 @@
             <span class="close" onclick="closeDeleteModal()">&times;</span>
             <h2>Atenção</h2>
             <p>Tem a certeza de que deseja eliminar este recurso?</p>
-            <button onclick="deleteResource()">Sim</button>
+            <button onclick="deleteResource({{ resource_details.resource_id }})">Sim</button>
             <button onclick="closeDeleteModal()">Não</button>
         </div>
     </div>
@@ -322,10 +332,12 @@
             <span class="close" onclick="closeHideModal()">&times;</span>
             <h2>Atenção</h2>
             <p>Tem a certeza de que deseja ocultar este recurso?</p>
-            <button onclick="hideResource()">Sim</button>
+            <!-- Pass the resource ID to the hideResource function -->
+            <button onclick="hideResource({{ resource_details.resource_id }})">Sim</button>
             <button onclick="closeHideModal()">Não</button>
         </div>
     </div>
+
 
      <!--Share resource modal -->
     <div id="shareModal" class="modal">
@@ -499,11 +511,38 @@
             hideModal.style.display = "none";
         }
 
-        // Function to hide the resource (replace this with your actual logic)
-        function hideResource() {
-            alert("Recurso ocultado com sucesso!"); // Placeholder action
+       // Function to hide the resource
+       function hideResource(resourceId) {
+        // Make an AJAX request to hide the resource
+        fetch(`/hide_resource/${resourceId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(data => {
+            if (data.includes("Resource hidden successfully")) {
+                alert("Recurso ocultado com sucesso!");
+                // Reload the page after hiding the resource
+                location.reload();
+            } else {
+                alert("Erro ao ocultar o recurso: " + data);
+            }
             hideModal.style.display = "none"; // Close the modal
-        }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Erro ao ocultar o recurso: " + error.message);
+            hideModal.style.display = "none"; // Close the modal in case of error
+        });
+    }
+    
 
         // Event listener for the 'Ocultar' button
         document.querySelector('.hide').addEventListener('click', openHideModal);
@@ -518,13 +557,42 @@
         // Function to close the modal
         function closeDeleteModal() {
             deleteModal.style.display = "none";
+            
         }
 
         // Function to hide the resource (replace this with your actual logic)
-        function deleteResource() {
-            alert("Recurso eliminado com sucesso!"); // Placeholder action
-            deleteModal.style.display = "none"; // Close the modal
+        function deleteResource(resourceId) {
+            // Make an AJAX request to delete the resource
+            fetch(`/delete_resource/${resourceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                if (data.includes("Resource deleted successfully")) {
+                    alert("Recurso eliminado com sucesso!");
+                    // Redirect to the resources page after deletion
+                    window.location.href = '/resources';
+                } else {
+                    alert("Erro ao eliminar o recurso: " + data);
+                    window.location.href = '/resources';
+                }
+                deleteModal.style.display = "none"; // Close the modal
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Erro ao eliminar o recurso: " + error.message);
+                deleteModal.style.display = "none"; // Close the modal in case of error
+            });
         }
+        
 
         // Event listener for the 'Ocultar' button
         document.querySelector('.delete').addEventListener('click', openDeleteModal);

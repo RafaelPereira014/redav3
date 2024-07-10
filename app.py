@@ -150,11 +150,10 @@ def resources():
 def resource_details(resource_id):
     combined_details = get_combined_details(resource_id)
 
-    if not combined_details:
-        return render_template('error.html', message='Resource not found'), 404
-
+   
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
+   
 
     # Extract combined details
     resource_details = combined_details
@@ -186,6 +185,17 @@ def resource_details(resource_id):
                            resource_details=resource_details, 
                            related_resources=related_resources, 
                            admin=admin)
+
+@app.route('/hide_resource/<int:resource_id>', methods=['POST'])
+def hide_resource_route(resource_id):
+    result = hide_resource(resource_id)
+    return result
+
+@app.route('/delete_resource/<int:resource_id>', methods=['POST'])
+def delete_resource_route(resource_id):
+    result = delete_resource(resource_id)
+    return result
+
 
 @app.route('/novaproposta/<slug>')
 def nova_proposta(slug):
@@ -378,7 +388,7 @@ def my_account():
     tools_user, tools_count = get_tools_from_user(user_id)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
-    
+    scripts_user,scripts_count = get_script_details()
     
     # Pagination
     page = request.args.get('page', 1, type=int)

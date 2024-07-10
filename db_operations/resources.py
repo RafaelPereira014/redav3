@@ -46,7 +46,7 @@ def get_all_resources(page, per_page):
     offset = (page - 1) * per_page
 
     query = """
-        SELECT * FROM Resources WHERE (approvedScientific = 1 AND approvedLinguistic = 1)  AND type_id='2'
+        SELECT * FROM Resources WHERE (approvedScientific = 1 AND approvedLinguistic = 1)  AND type_id='2' AND hidden='0'
         ORDER BY id DESC
         LIMIT %s OFFSET %s
     """
@@ -189,6 +189,7 @@ def get_combined_details(resource_id):
                 Scripts.id AS ScriptId,
                 Scripts.resource_id AS ResourceId,
                 Scripts.operation AS Operation,
+                Scripts.approved AS Approved,
                 Scripts.user_id AS UserId,
                 Terms.title AS TermTitle,
                 Taxonomies.slug AS TaxSlug
@@ -219,11 +220,13 @@ def get_combined_details(resource_id):
             tax_slug = script['TaxSlug']
             term_title = script['TermTitle']
             operation = script['Operation']
+            approved = script['Approved']
 
             if script_id not in scripts_by_id:
                 scripts_by_id[script_id] = {
                     'operation': operation,
                     'user_id': user_id,
+                    'approved': approved,
                     'idiomas': [],
                     'anos_resources': [],
                     'formato': [],

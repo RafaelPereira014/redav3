@@ -8,29 +8,7 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 
-def get_script_details(userid):
-    """Get all tools from user and their count."""
-    conn = connect_to_database()
-    cursor = conn.cursor(dictionary=True)
-    
-    scripts = []
-    scripts_count = 0
-    
-    try:
-        # Query to fetch all tools
-        cursor.execute("SELECT * FROM Scripts WHERE user_id=%s ORDER BY id DESC", (userid, ))
-        scripts = cursor.fetchall()
-        
-        # Query to count the tools
-        cursor.execute("SELECT COUNT(*) AS count FROM Scripts WHERE user_id=%s ", (userid,))
-        scripts_count = cursor.fetchone()['count']
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        cursor.close()
-        conn.close()
-    
-    return scripts, scripts_count
+
 
 
 def get_script_details():
