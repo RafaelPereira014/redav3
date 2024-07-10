@@ -149,6 +149,7 @@ def resources():
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     combined_details = get_combined_details(resource_id)
+    slug= get_resouce_slug(resource_id)
 
    
     user_id = session.get('user_id')  # Retrieve user ID from session
@@ -184,7 +185,7 @@ def resource_details(resource_id):
     return render_template('resource_details.html', 
                            resource_details=resource_details, 
                            related_resources=related_resources, 
-                           admin=admin)
+                           admin=admin,slug=slug)
 
 @app.route('/hide_resource/<int:resource_id>', methods=['POST'])
 def hide_resource_route(resource_id):
@@ -196,15 +197,20 @@ def delete_resource_route(resource_id):
     result = delete_resource(resource_id)
     return result
 
+@app.route('/gerirpropostas/<slug>')
+def gerir_propostas(slug):
+    
+    return render_template('gerirpropostas.html')
 
-@app.route('/novaproposta/<slug>')
+
+@app.route('/novaproposta/<slug>', methods=['GET', 'POST'])
 def nova_proposta(slug):
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
+    resource_id = get_resouce_id(slug)
     
     ano = request.args.get('ano')
-    print(ano)
     dominios = []
     subdominios = []
     conceitos = []
@@ -216,10 +222,26 @@ def nova_proposta(slug):
             subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
             for subdominio in subdominios:
                 conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio) if ano else []
-                print(conceitos)
+
+    if request.method == 'POST':
+        data = request.form
+        selected_anos = list(set(data.getlist('anos')))  # Use set to remove duplicates
+        selected_disciplinas = list(set(data.getlist('disciplinas')))  # Use set to remove duplicates
+        selected_dominios = list(set(data.getlist('dominios')))  # Use set to remove duplicates
+        selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
+        selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
+        outros_conceitos = data.get('outros_conceitos', '')
+        descricao = data.get('descricao', '')
+
+        
+        
+        # Optionally, you can return a JSON response indicating success
+        return jsonify({'message': 'Proposta adicionada com sucesso!'})
+
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug)
 
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios,admin=admin,conceitos=conceitos)
+
 
 # Edit resources
 @app.route('/resources/edit/<int:resource_id>')
@@ -416,7 +438,7 @@ def my_account():
 
 @app.route('/novorecurso', methods=['GET', 'POST'])
 def novo_recurso():
-    user_id = session.get('user_id')  # Retrieve user ID from session
+    user_id = session.get('user_id')
     admin = is_admin(user_id)
     formatos = get_formatos()
     use_mode = get_modos_utilizacao()
@@ -430,31 +452,45 @@ def novo_recurso():
         org = request.form.get('organizacao')
         descricao = request.form.get('descricao')
 
-        # Taxonomy details from form
-        idiomas_title = request.form.get('idiomas')
-        formato_title = request.form.get('formato')
-        modo_utilizacao_title = request.form.get('modo_utilizacao')
-        requisitos_tecnicos_title = request.form.get('requisitos_tecnicos')
-        anos_escolaridade_title = request.form.get('anos_escolaridade')
-        
-        # Scripts by id (assuming this is handled as a nested form or similar structure)
-        scripts_by_id = request.form.get('scripts_by_id')  # This needs to be parsed from the form
+        # Retrieving lists of selected items
+        idiomas_title = request.form.getlist('idiomas')
+        formato_title = request.form.getlist('formato')
+        modo_utilizacao_title = request.form.getlist('use_mode')
+        requisitos_tecnicos_title = request.form.getlist('requirements')
+        anos_escolaridade_title = request.form.getlist('anos')
+        slug = generate_slug(title)
 
-        # Create the new resource
+        # Print the selected elements for debugging or verification
+        print("Título:", title)
+        print("Autor/Fonte:", autor)
+        print("Organização:", org)
+        print("Descrição:", descricao)
+        print("Idiomas selecionados:", idiomas_title)
+        print("Formato(s) selecionado(s):", formato_title)
+        print("Modo(s) de Utilização selecionado(s):", modo_utilizacao_title)
+        print("Requisitos Técnicos selecionados:", requisitos_tecnicos_title)
+        print("Anos de Escolaridade selecionados:", anos_escolaridade_title)
+
+        # Handle file upload if needed
+        file = request.files.get('ficheiro')
+
+        # Create the new resource using your function
         resource_id = create_new_resource(
-            title, autor, org, descricao,
+            title, autor, org, descricao,slug,
             idiomas_title=idiomas_title, formato_title=formato_title,
             modo_utilizacao_title=modo_utilizacao_title, requisitos_tecnicos_title=requisitos_tecnicos_title,
-            anos_escolaridade_title=anos_escolaridade_title, scripts_by_id=scripts_by_id
+            anos_escolaridade_title=anos_escolaridade_title
         )
 
         if resource_id:
-            flash('Resource created successfully!', 'success')
-            return redirect(url_for('some_success_page'))  # Redirect to a success page
+            flash('Recurso criado com sucesso!', 'success')
+            return redirect(url_for('alguma_pagina_de_sucesso'))  # Redirect to a success page
         else:
-            flash('Error creating resource.', 'danger')
+            flash('Erro ao criar recurso.', 'danger')
 
     return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
+
+
 
 
 @app.route('/novorecurso2', methods=['GET'])

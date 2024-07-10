@@ -359,6 +359,25 @@ def get_resouce_slug(resource_id):
     else:
         return None
     
+def get_resouce_id(slug):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT id FROM Resources WHERE slug=%s", (slug,))
+    id = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if id:
+        return id['id']
+    else:
+        return None
+    
+def generate_slug(title):
+    # Remove special characters and convert spaces to dashes
+    slug = re.sub(r'[^\w\s-]', '', title.lower().strip())
+    slug = re.sub(r'\s+', '-', slug)
+    return slug
+    
 def get_resource_embed(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)

@@ -179,15 +179,15 @@ def create_resource(title,autor,org,descricao):
     conn.close()
 
 
-def create_new_resource(title, author, organization, description, idiomas_title=None, formato_title=None, modo_utilizacao_title=None, requisitos_tecnicos_title=None, anos_escolaridade_title=None, scripts_by_id=None):
+def create_new_resource(title, author, organization, description, slug,idiomas_title=None, formato_title=None, modo_utilizacao_title=None, requisitos_tecnicos_title=None, anos_escolaridade_title=None, scripts_by_id=None):
     conn = connect_to_database()
     cursor = conn.cursor()
 
     try:
         # Insert into Resources table
         insert_query = """
-            INSERT INTO Resources (title, author, organization, description)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO Resources (title, author, organization, description,slug)
+            VALUES (%s, %s, %s, %s,%s)
         """
         cursor.execute(insert_query, (title, author, organization, description))
         resource_id = cursor.lastrowid  # Get the last inserted resource ID

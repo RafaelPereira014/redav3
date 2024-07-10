@@ -94,6 +94,11 @@ header .container img {
     color: white;
 }
 
+.actions a {
+    text-decoration: none;
+}
+
+
 
 header {
     background-color: #f9f9f9;

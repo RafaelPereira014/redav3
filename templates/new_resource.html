@@ -15,41 +15,18 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    
 
     <title>Novo/Editar recurso - REDA</title>
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    
 
     <!-- Link to TinyMCE CDN -->
     <script src="https://cdn.tiny.cloud/1/agr3kxwxb5hnsedd9yd0re9bxz0346mtqq1xe1u6ethrlj9a/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        // Initialize TinyMCE editor
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'lists',
-            toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
-            menubar: false,
-            setup: function (editor) {
-                editor.on('input', function () {
-                    updateCounter(editor);
-                });
-                editor.on('keyup', function () {
-                    updateCounter(editor);
-                });
-                editor.on('change', function () {
-                    updateCounter(editor);
-                });
-            }
-        });
     
-        // Function to update the character counter
-        function updateCounter(editor) {
-            const maxLength = editor.getElement().maxLength || 1500;
-            const content = editor.getContent({ format: 'text' }).trim();
-            const currentLength = content.length;
-            const counterEle = document.getElementById('counter');
-            counterEle.innerHTML = `${currentLength}/${maxLength}`;
-        }
-    </script>
     
     <style>
         .container2 {
@@ -120,6 +97,8 @@
     </div>
     <main>
         <div class="container">
+        <form action="/novorecurso" method="POST">
+
             <h1>Detalhes</h1>
             <div class="input-group required">
                 <h2>Título:</h2>
@@ -171,9 +150,10 @@
                     <label for="requirement{{ loop.index }}">{{ requirement }}</label>
                 {% endfor %}
             </div>
-            <div class="input-group required">
-                <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+            <div class="input-group-descricao-proposta required">
+                <h2>Descrição do recurso:</h2>
+                <div id="editor-container" style="height: 300px;"></div>
+                <textarea id="descricao" name="descricao" style="display: none;"></textarea>
                 <div id="counter"></div>
                 <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
             </div>
@@ -196,6 +176,7 @@
             
             <button onclick="window.location.href='/novorecurso2'">Continuar</button>
             <button onclick="window.location.href='/'">Cancelar</button>
+        </form>
 
         </div>
     </main>
@@ -232,27 +213,34 @@
         </div>
     </footer>
 
+    
     <script>
-        const localizacao1 = document.getElementById('localizacao1');
-        const localizacao2 = document.getElementById('localizacao2');
-        const enderecoInput = document.getElementById('enderecoInput');
-        const fileInput = document.getElementById('fileInput');
-
-        localizacao1.addEventListener('change', function() {
-            if (this.checked) {
-                enderecoInput.style.display = 'block';
-                fileInput.style.display = 'none';
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',  // Use 'snow' theme for a cleaner editor interface
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image'],
+                    ['clean']                                         // Remove formatting button.
+                ]
             }
         });
-
-        localizacao2.addEventListener('change', function() {
-            if (this.checked) {
-                enderecoInput.style.display = 'none';
-                fileInput.style.display = 'block';
-            }
+    
+        // Sync Quill's content to the hidden textarea
+        quill.on('text-change', function() {
+            document.getElementById('descricao').value = quill.root.innerHTML;
+            updateCounter();
         });
-        
-
+    
+        // Function to update the character counter
+        function updateCounter() {
+            const maxLength = 1500;
+            const content = quill.getText().trim();
+            const currentLength = content.length;
+            const counterEle = document.getElementById('counter');
+            counterEle.innerHTML = `${currentLength}/${maxLength}`;
+        }
     </script>
 </body>
 </html>
