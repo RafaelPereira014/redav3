@@ -295,6 +295,106 @@ def get_combined_details(resource_id):
         if conn and conn.is_connected():
             conn.close()
 
+
+def insert_resource_details(cursor, resource_details):
+    resource_insert_query = """
+        INSERT INTO Resources 
+        (title, slug, description, operation, operation_author, techResources, email, organization, 
+        duration, highlight, exclusive, embed, link, author, approved, approvedScientific, approvedLinguistic, 
+        status, accepted_terms, created_at, updated_at, deleted_at, user_id, type_id, image_id, hidden)
+        VALUES 
+        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    resource_data = (
+        resource_details['title'],
+        resource_details['slug'],  # Make sure resource_details includes 'slug' key
+        resource_details['description'],
+        resource_details['operation'],
+        resource_details['operation_author'],
+        resource_details['techResources'],
+        resource_details['email'],
+        resource_details['organization'],
+        resource_details['duration'],
+        resource_details['highlight'],
+        resource_details['exclusive'],
+        resource_details['embed'],
+        resource_details['link'],
+        resource_details['author'],
+        resource_details['approved'],
+        resource_details['approvedScientific'],
+        resource_details['approvedLinguistic'],
+        resource_details['status'],
+        resource_details['accepted_terms'],
+        resource_details['created_at'],
+        resource_details['updated_at'],
+        resource_details['deleted_at'],
+        resource_details['user_id'],
+        resource_details['type_id'],
+        resource_details['image_id'],
+        resource_details['hidden']
+    )
+    cursor.execute(resource_insert_query, resource_data)
+    return cursor.lastrowid
+
+def insert_taxonomy_details(cursor,resource_id, taxonomy_details):
+    taxonomy_insert_query = """
+        INSERT INTO Terms (title, taxonomy_id, created_at, updated_at)
+        VALUES (%s, %s, NOW(), NOW())
+    """
+    
+    taxonomy_data = [
+        (taxonomy_details['idiomas_title'], get_taxonomy_id_for_title('Idiomas')),
+        (taxonomy_details['formato_title'], get_taxonomy_id_for_title('Formato')),
+        (taxonomy_details['modo_utilizacao_title'], get_taxonomy_id_for_title('Modos de utilização')),
+        (taxonomy_details['requisitos_tecnicos_title'], get_taxonomy_id_for_title('Requisitos Técnicos')),
+        (taxonomy_details['anos_escolaridade_title'], get_taxonomy_id_for_title('Anos de escolaridade'))
+    ]
+
+    for data in taxonomy_data:
+        cursor.execute(taxonomy_insert_query, data)
+        term_id = cursor.lastrowid
+
+        # Insert into resource_terms
+        resource_term_insert_query = """
+            INSERT INTO resource_terms (resource_id, term_id,created_at,updated_at)
+            VALUES (%s, %s,NOW(),NOW())
+        """
+        resource_term_data = (resource_id, term_id)
+        cursor.execute(resource_term_insert_query, resource_term_data)
+
+def insert_script_details(cursor, resource_id, scripts_by_id):
+    for script_id, script_data in scripts_by_id.items():
+        # Insert into Scripts table
+        script_insert_query = """
+            INSERT INTO Scripts (id, resource_id, operation, approved, user_id,created_at,updated_at)
+            VALUES (%s, %s, %s, %s, %s,NOW(),NOW())
+        """
+        script_data_tuple = (
+            script_id,
+            resource_id,
+            script_data['operation'],
+            script_data['approved'],
+            script_data['user_id']
+        )
+        cursor.execute(script_insert_query, script_data_tuple)
+        script_id = cursor.lastrowid  # Assuming Scripts.id is auto-incremented
+
+        # Insert into script_terms (for each taxonomy slug and term title combination)
+        for tax_slug, term_titles in script_data.items():
+            if tax_slug in ['idiomas_title', 'formato_title', 'modo_utilizacao_title', 'requisitos_tecnicos_title', 'anos_escolaridade_title']:
+                taxonomy_id = get_taxonomy_id_for_slug(tax_slug)
+                for term_title in term_titles:
+                    term_id = get_term_id_for_title(term_title)
+                    if term_id is not None:
+                        script_term_insert_query = """
+                            INSERT INTO script_terms (script_id, term_id)
+                            VALUES (%s, %s)
+                        """
+                        script_term_data = (script_id, term_id)
+                        cursor.execute(script_term_insert_query, script_term_data)
+
+
+
 def get_recent_approved_resources_with_details(limit=8):
     """Get the most recent approved resources with combined details."""
     recent_resources = get_recent_approved_resources(limit=limit)
@@ -343,6 +443,85 @@ def get_resource_files(resource_slug):
                     files.append(file_url)
 
     return files  # Return a list of file URLs
+
+
+def get_taxonomy_id_for_title(title):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT id FROM Taxonomies WHERE title = %s"
+        cursor.execute(query, (title,))
+        result = cursor.fetchone()
+
+        if result:
+            taxonomy_id = result[0]
+            return taxonomy_id
+        else:
+            print(f"Taxonomy with title '{title}' not found.")
+            return None
+
+    except mysql.connector.Error as e:
+        print(f"Error retrieving taxonomy id for title '{title}': {e}")
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+def get_taxonomy_id_for_slug(slug):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT id FROM Taxonomies WHERE slug = %s"
+        cursor.execute(query, (slug,))
+        result = cursor.fetchone()
+
+        if result:
+            taxonomy_id = result[0]
+            return taxonomy_id
+        else:
+            print(f"Taxonomy with slug '{slug}' not found.")
+            return None
+
+    except mysql.connector.Error as e:
+        print(f"Error retrieving taxonomy id for slug '{slug}': {e}")
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
+
+def get_term_id_for_title(term_title):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT id FROM Terms WHERE title = %s"
+        cursor.execute(query, (term_title,))
+        result = cursor.fetchone()
+
+        if result:
+            term_id = result[0]
+            return term_id
+        else:
+            print(f"Term with title '{term_title}' not found.")
+            return None
+
+    except mysql.connector.Error as e:
+        print(f"Error retrieving term id for title '{term_title}': {e}")
+        return None
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 
@@ -504,3 +683,4 @@ def strip_html_tags(text):
         return text
     clean = re.compile(r'<.*?>')
     return re.sub(clean, '', text)
+

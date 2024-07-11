@@ -14,7 +14,7 @@ config = {
     'host': 'localhost',
     'user': 'root',
     'password': 'passroot',
-    'database': 'redav3'
+    'database': 'redav4'
 }
 
 try:
@@ -29,14 +29,28 @@ try:
         
         # Call the function to get combined details
         
-        change = get_combined_details(4010)
+        # Example usage of insert_combined_details function
+
+        # Sample data for resource_details
+        taxonomy_details = {
+            'idiomas_title': 'Portuguese',
+            'formato_title': 'PDF',
+            'modo_utilizacao_title': 'Online',
+            'requisitos_tecnicos_title': 'None',
+            'anos_escolaridade_title': '1st Grade',
+            'created_at': '2024-07-11 12:00:00'
+        }
+        
+        insert_taxonomy_details(cursor,4027,taxonomy_details)
+        # After calling the function, commit the transaction and handle any errors appropriately.
+        connection.commit()
         
         
 
        
 
         # Print the formatted string
-        print(change)
+        
     
     # Close the cursor
     cursor.close()

@@ -14,6 +14,7 @@ from db_operations.scripts import *
 from db_operations.admin import *
 from db_operations.new_resource import *
 from db_operations.user import *
+from db_operations.new_operations import *
 
 
 
@@ -232,6 +233,8 @@ def nova_proposta(slug):
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
         outros_conceitos = data.get('outros_conceitos', '')
         descricao = data.get('descricao', '')
+        
+        insert_script(resource_id,user_id,selected_anos,selected_disciplinas,selected_dominios,selected_subdominios,selected_conceitos,outros_conceitos,descricao)
 
         
         
@@ -438,6 +441,8 @@ def my_account():
 
 @app.route('/novorecurso', methods=['GET', 'POST'])
 def novo_recurso():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')
     admin = is_admin(user_id)
     formatos = get_formatos()
@@ -454,41 +459,69 @@ def novo_recurso():
 
         # Retrieving lists of selected items
         idiomas_title = request.form.getlist('idiomas')
+        print(idiomas_title)
         formato_title = request.form.getlist('formato')
         modo_utilizacao_title = request.form.getlist('use_mode')
         requisitos_tecnicos_title = request.form.getlist('requirements')
         anos_escolaridade_title = request.form.getlist('anos')
         slug = generate_slug(title)
 
-        # Print the selected elements for debugging or verification
-        print("Título:", title)
-        print("Autor/Fonte:", autor)
-        print("Organização:", org)
-        print("Descrição:", descricao)
-        print("Idiomas selecionados:", idiomas_title)
-        print("Formato(s) selecionado(s):", formato_title)
-        print("Modo(s) de Utilização selecionado(s):", modo_utilizacao_title)
-        print("Requisitos Técnicos selecionados:", requisitos_tecnicos_title)
-        print("Anos de Escolaridade selecionados:", anos_escolaridade_title)
-
         # Handle file upload if needed
         file = request.files.get('ficheiro')
 
-        # Create the new resource using your function
-        resource_id = create_new_resource(
-            title, autor, org, descricao,slug,
-            idiomas_title=idiomas_title, formato_title=formato_title,
-            modo_utilizacao_title=modo_utilizacao_title, requisitos_tecnicos_title=requisitos_tecnicos_title,
-            anos_escolaridade_title=anos_escolaridade_title
-        )
+        resource_details = {
+            'title': title,
+            'slug': slug,
+            'description': descricao,
+            'operation': 'create',  # Fill with actual data if available
+            'operation_author': autor,
+            'techResources': None,  # Fill with actual data if available
+            'email': None,  # Fill with actual data if available
+            'organization': org,
+            'duration': None,  # Fill with actual data if available
+            'highlight': 0,  # Adjust as needed
+            'exclusive': 0,  # Adjust as needed
+            'embed': None,  # Fill with actual data if available
+            'link': None,  # Fill with actual data if available
+            'author': autor,
+            'approved': 0,  # Adjust as needed
+            'approvedScientific': 0,  # Adjust as needed
+            'approvedLinguistic': 0,  # Adjust as needed
+            'status': 1,  # Adjust as needed
+            'accepted_terms': 0,  # Adjust as needed
+            'created_at': datetime.now(),  # Replace with actual timestamp
+            'updated_at': datetime.now(),  # Replace with actual timestamp
+            'deleted_at': None,  # Adjust as needed
+            'user_id': user_id,  # Replace with actual user ID
+            'type_id': 1,  # Replace with actual type ID
+            'image_id': 1,  # Replace with actual image ID
+            'hidden': 0  # Adjust as needed
+        }
 
-        if resource_id:
-            flash('Recurso criado com sucesso!', 'success')
-            return redirect(url_for('alguma_pagina_de_sucesso'))  # Redirect to a success page
-        else:
-            flash('Erro ao criar recurso.', 'danger')
+        resource_id = insert_resource_details(cursor, resource_details)
+
+        # Print resource_id for debugging
+        print(resource_id)
+
+        taxonomy_details = {
+            'idiomas_title': idiomas_title[0] if idiomas_title else None,
+            'formato_title': formato_title[0] if formato_title else None,
+            'modo_utilizacao_title': modo_utilizacao_title[0] if modo_utilizacao_title else None,
+            'requisitos_tecnicos_title': requisitos_tecnicos_title[0] if requisitos_tecnicos_title else None,
+            'anos_escolaridade_title': anos_escolaridade_title[0] if anos_escolaridade_title else None,
+            'created_at': datetime.now()
+        }
+
+
+        insert_taxonomy_details(cursor,resource_id,taxonomy_details)
+        conn.commit()
+
+    conn.close()
+    cursor.close()
 
     return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
+
+
 
 
 
