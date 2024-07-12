@@ -31,17 +31,20 @@ try:
         
         # Example usage of insert_combined_details function
 
-        # Sample data for resource_details
-        taxonomy_details = {
-            'idiomas_title': 'Portuguese',
-            'formato_title': 'PDF',
-            'modo_utilizacao_title': 'Online',
-            'requisitos_tecnicos_title': 'None',
-            'anos_escolaridade_title': '1st Grade',
-            'created_at': '2024-07-11 12:00:00'
+        scripts_by_id = {
+            5000: {
+                'operation': 'Operation details',
+                'approved': 0,
+                'user_id': 5,
+                'anos_resources': ['1st Grade'],
+                'areas_resources': ['Math'],
+                'dominios_resources': ['Science'],
+                'subdominios': ['Physics'],
+                'hashtags': ['#Learning']
+            }
         }
         
-        insert_taxonomy_details(cursor,4027,taxonomy_details)
+        insert_script_details(cursor,4027,scripts_by_id)
         # After calling the function, commit the transaction and handle any errors appropriately.
         connection.commit()
         

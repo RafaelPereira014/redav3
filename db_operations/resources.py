@@ -363,25 +363,24 @@ def insert_taxonomy_details(cursor,resource_id, taxonomy_details):
         cursor.execute(resource_term_insert_query, resource_term_data)
 
 def insert_script_details(cursor, resource_id, scripts_by_id):
-    for script_id, script_data in scripts_by_id.items():
-        # Insert into Scripts table
+    for script_data in scripts_by_id.values():
+        # Insert into Scripts table without passing the script_id
         script_insert_query = """
-            INSERT INTO Scripts (id, resource_id, operation, approved, user_id,created_at,updated_at)
-            VALUES (%s, %s, %s, %s, %s,NOW(),NOW())
+            INSERT INTO Scripts (resource_id, operation, approved, user_id, created_at, updated_at)
+            VALUES (%s, %s, %s, %s, NOW(), NOW())
         """
         script_data_tuple = (
-            script_id,
             resource_id,
             script_data['operation'],
             script_data['approved'],
             script_data['user_id']
         )
         cursor.execute(script_insert_query, script_data_tuple)
-        script_id = cursor.lastrowid  # Assuming Scripts.id is auto-incremented
+        script_id = cursor.lastrowid  # Retrieve the auto-incremented script_id
 
         # Insert into script_terms (for each taxonomy slug and term title combination)
         for tax_slug, term_titles in script_data.items():
-            if tax_slug in ['idiomas_title', 'formato_title', 'modo_utilizacao_title', 'requisitos_tecnicos_title', 'anos_escolaridade_title']:
+            if tax_slug in ['idiomas', 'anos_resources', 'formato', 'modo_utilizacao', 'requisitos_tecnicos', 'anos_escolaridade', 'areas_resources', 'dominios_resources', 'macro_areas', 'subdominios', 'hashtags']:
                 taxonomy_id = get_taxonomy_id_for_slug(tax_slug)
                 for term_title in term_titles:
                     term_id = get_term_id_for_title(term_title)
@@ -392,7 +391,6 @@ def insert_script_details(cursor, resource_id, scripts_by_id):
                         """
                         script_term_data = (script_id, term_id)
                         cursor.execute(script_term_insert_query, script_term_data)
-
 
 
 def get_recent_approved_resources_with_details(limit=8):

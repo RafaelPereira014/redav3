@@ -206,6 +206,8 @@ def gerir_propostas(slug):
 
 @app.route('/novaproposta/<slug>', methods=['GET', 'POST'])
 def nova_proposta(slug):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
@@ -234,14 +236,17 @@ def nova_proposta(slug):
         outros_conceitos = data.get('outros_conceitos', '')
         descricao = data.get('descricao', '')
         
-        insert_script(resource_id,user_id,selected_anos,selected_disciplinas,selected_dominios,selected_subdominios,selected_conceitos,outros_conceitos,descricao)
-
-        
-        
+        insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
+        conn.commit()
+    
         # Optionally, you can return a JSON response indicating success
         return jsonify({'message': 'Proposta adicionada com sucesso!'})
 
+    conn.close()
+    cursor.close()
+
     return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug)
+
 
 
 
@@ -511,7 +516,6 @@ def novo_recurso():
             'anos_escolaridade_title': anos_escolaridade_title[0] if anos_escolaridade_title else None,
             'created_at': datetime.now()
         }
-
 
         insert_taxonomy_details(cursor,resource_id,taxonomy_details)
         conn.commit()
