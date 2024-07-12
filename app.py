@@ -498,7 +498,7 @@ def novo_recurso():
             'updated_at': datetime.now(),  # Replace with actual timestamp
             'deleted_at': None,  # Adjust as needed
             'user_id': user_id,  # Replace with actual user ID
-            'type_id': 1,  # Replace with actual type ID
+            'type_id': 2,  # Replace with actual type ID
             'image_id': 1,  # Replace with actual image ID
             'hidden': 0  # Adjust as needed
         }

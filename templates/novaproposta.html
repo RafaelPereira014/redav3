@@ -336,7 +336,10 @@
                     <span class="text-danger">*</span>
                     Campo obrigatório
                 </small>
-                <button type="submit">Adicionar proposta</button>
+                <form id="propostaForm" method="POST">
+                    <!-- Your form inputs and submit button -->
+                    <button type="submit">Adicionar proposta</button>
+                </form>
                 <button type="submit">Cancelar</button>
             </form>
         </div>
@@ -390,6 +393,44 @@
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
         </div>
     </footer>
+    <script>
+        // Function to show pop-up message
+        function showSuccessMessage() {
+            alert("Proposta adicionada com sucesso!");
+        }
+    
+        // Function to redirect after 3 seconds
+        function redirectToResourceDetails(resource_id) {
+            setTimeout(function() {
+                window.location.href = `/resources/details/${resource_id}`;
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+    
+        // Add event listener to form submission
+        document.getElementById("propostaForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+    
+            // Perform AJAX request or any necessary form submission logic here
+            fetch('/novaproposta/<slug>', {
+                method: 'POST',
+                body: new FormData(event.target)
+            })
+            .then(response => {
+                if (response.ok) {
+                    showSuccessMessage(); // Show success pop-up
+                    // Assuming you have resource_id available in your context
+                    const resource_id = /* Obtain resource_id from somewhere */;
+                    redirectToResourceDetails(resource_id); // Redirect after 3 seconds
+                } else {
+                    alert('Erro ao adicionar proposta. Por favor, tente novamente.'); // Handle errors
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error); // Log any fetch errors
+            });
+        });
+    </script>
+    
     <script>
         var quill = new Quill('#editor-container', {
             theme: 'snow',  // Use 'snow' theme for a cleaner editor interface
