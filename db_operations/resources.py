@@ -393,6 +393,75 @@ def insert_script_details(cursor, resource_id, scripts_by_id):
                         cursor.execute(script_term_insert_query, script_term_data)
 
 
+def update_resource_details(cursor, resource_id, resource_details):
+    resource_update_query = """
+        UPDATE Resources SET
+        title = %s,
+        slug = %s,
+        description = %s,
+        operation = %s,
+        operation_author = %s,
+        organization = %s,
+        link = %s,
+        author = %s,
+        updated_at = %s,
+        user_id = %s,
+        type_id = %s,
+        image_id = %s,
+        hidden = %s
+        WHERE id = %s
+    """
+    
+    resource_data = (
+        resource_details['title'],
+        resource_details['slug'],  # Make sure resource_details includes 'slug' key
+        resource_details['description'],
+        resource_details['operation'],
+        resource_details['operation_author'],
+        resource_details['organization'],
+        resource_details['link'],
+        resource_details['author'],
+        resource_details['updated_at'],
+        resource_details['user_id'],
+        resource_details['type_id'],
+        resource_details['image_id'],
+        resource_details['hidden'],
+        resource_id  # Include the resource ID
+    )
+    
+    cursor.execute(resource_update_query, resource_data)
+    return cursor.lastrowid
+
+def update_taxonomy_details(cursor, resource_id, taxonomy_details):
+    taxonomy_update_query = """
+        UPDATE Terms SET 
+        title = %s,
+        updated_at = NOW()
+        WHERE id = %s
+    """
+    
+    resource_term_update_query = """
+        UPDATE resource_terms SET
+        updated_at = NOW()
+        WHERE resource_id = %s AND term_id = %s
+    """
+
+    # A helper function to get the term id by title and taxonomy
+    def get_term_id(title, taxonomy_title):
+        taxonomy_id = get_taxonomy_id_for_title(taxonomy_title)
+        cursor.execute("SELECT id FROM Terms WHERE title = %s AND taxonomy_id = %s", (title, taxonomy_id))
+        term = cursor.fetchone()
+        return term['id'] if term else None
+
+    # Process each taxonomy detail
+    for taxonomy_title, titles in taxonomy_details.items():
+        for title in titles:
+            term_id = get_term_id(title, taxonomy_title)
+            if term_id:
+                cursor.execute(taxonomy_update_query, (title, term_id))
+                cursor.execute(resource_term_update_query, (resource_id, term_id))
+
+
 def get_recent_approved_resources_with_details(limit=8):
     """Get the most recent approved resources with combined details."""
     recent_resources = get_recent_approved_resources(limit=limit)

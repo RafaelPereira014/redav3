@@ -121,89 +121,100 @@
     <main>
         <div class="container">
             <h1>Detalhes</h1>
-            <div class="input-group required">
-                <h2>Título:</h2>
-                <textarea id="titulo" name="titulo" rows="3" class="tinymce">{{ resource_details.title }}</textarea>
-            </div>
-            
-            <div class="input-group required">
-                <h2>Autor/fonte:</h2>
-                <input type="text" id="autor" name="autor" placeholder="Nome do autor/fonte do recurso" value="{{ resource_details.author }}" required>
-            </div>
-            
-            <div class="input-group-org required">
-                <h2>Organização:</h2>
-                <input type="text" id="organizacao" name="organizacao" placeholder="Escola/organização/nome do sítio do autor do recurso"value="{{ resource_details.organization }}" required>
-            </div>
-            <div class="input-group-format required">
-                <h2>Formato (MAX. 2):</h2>
-                {% for formato in formatos %}
-                    <input type="checkbox" id="formato{{ loop.index }}" name="formato" value="{{ formato }}" 
-                        {% if formato in formato_title %}checked{% endif %}>
-                    <label for="formato{{ loop.index }}">{{ formato }}</label>
-                {% endfor %}
-            </div>
-            <div class="input-group-local required">
-                <h2>Localização do recurso:</h2>
-                <input type="radio" id="localizacao1" name="localizacao" value="Opção 1" 
-                    {% if resource_details.localizacao == 'Opção 1' %}checked{% endif %}>
-                <label for="localizacao1">Endereço e/ou código de incorporação</label>
-                <input type="radio" id="localizacao2" name="localizacao" value="Opção 2" 
-                    {% if resource_details.localizacao == 'Opção 2' %}checked{% endif %}>
-                <label for="localizacao2">Ficheiro</label>
-            
-                <div id="enderecoInput" style="display: {% if resource_details.localizacao == 'Opção 1' %}block{% else %}none{% endif %};">
-                    <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço" value="{{ resource_details.endereco }}">
+
+            <form method="POST" enctype="multipart/form-data" action="/resources/edit/{{ resource_details.resource_id }}">
+
+                <div class="input-group required">
+                    <h2>Título:</h2>
+                    <textarea id="titulo" name="titulo" rows="3" class="tinymce">{{ resource_details.title }}</textarea>
                 </div>
-            
-                <div id="fileInput" style="display: {% if resource_details.localizacao == 'Opção 2' %}block{% else %}none{% endif %};">
-                    <input type="file" id="file" name="file">
+                
+                <div class="input-group required">
+                    <h2>Autor/fonte:</h2>
+                    <input type="text" id="autor" name="autor" placeholder="Nome do autor/fonte do recurso" value="{{ resource_details.author }}" required>
                 </div>
-            </div>
-            <div class="input-group-use required">
-                <h2>Modos de Utilização:</h2>
-                {% for modo in use_mode %}
-                    <input type="checkbox" id="modo{{ loop.index }}" name="use_mode" value="{{ modo }}" 
-                        {% if modo in modo_utilizacao_title %}checked{% endif %}>
-                    <label for="modo{{ loop.index }}">{{ modo }}</label>
-                {% endfor %}
-            </div>
-            <div class="input-group-req ">
-                <h2>Requisitos Técnicos:</h2>
-                {% for requirement in requirements %}
-                    <input type="checkbox" id="requirement{{ loop.index }}" name="requirements" value="{{ requirement }}" 
-                        {% if req_tecnicos_title and requirement in req_tecnicos_title %}checked{% endif %}>
-                    <label for="requirement{{ loop.index }}">{{ requirement }}</label>
-                {% endfor %}
-            </div>
-            
-            <div class="input-group required">
-                <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required>{{ resource_details.description }}</textarea>
-                <div id="counter"></div>
-                <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
-            </div>
-            <div class="input-group-lang required">
-                <h2>Idiomas:</h2>
-                {% for idioma in idiomas %}
-                    <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}" 
-                        {% if idioma in idiomas_title %}checked{% endif %}>
-                    <label for="idioma{{ loop.index }}">{{ idioma }}</label>
-                {% endfor %}
-            </div>
-            
-            <div class="input-group-fich">
-                <h2>Ficheiro:</h2>
-                <input type="file" id="ficheiro" name="ficheiro" >
-                <!-- Add more radio options as needed -->
-            </div>
-            <small class="small-text">
-                <span class="text-danger">*</span>
-                Campo obrigatório
-            </small>
-            
-            <button onclick="window.location.href='/edit'">Continuar</button>
-            <button onclick="window.location.href='/'">Cancelar</button>
+                
+                <div class="input-group-org required">
+                    <h2>Organização:</h2>
+                    <input type="text" id="organizacao" name="organizacao" placeholder="Escola/organização/nome do sítio do autor do recurso" value="{{ resource_details.organization }}" required>
+                </div>
+    
+                <div class="input-group-format required">
+                    <h2>Formato (MAX. 2):</h2>
+                    {% for formato in formatos %}
+                        <input type="checkbox" id="formato{{ loop.index }}" name="formato" value="{{ formato }}" 
+                            {% if formato in formato_title %}checked{% endif %}>
+                        <label for="formato{{ loop.index }}">{{ formato }}</label>
+                    {% endfor %}
+                </div>
+    
+                <div class="input-group-local required">
+                    <h2>Localização do recurso:</h2>
+                    <input type="radio" id="localizacao1" name="localizacao" value="Opção 1" 
+                        {% if resource_details.localizacao == 'Opção 1' %}checked{% endif %}>
+                    <label for="localizacao1">Endereço e/ou código de incorporação</label>
+                    <input type="radio" id="localizacao2" name="localizacao" value="Opção 2" 
+                        {% if resource_details.localizacao == 'Opção 2' %}checked{% endif %}>
+                    <label for="localizacao2">Ficheiro</label>
+                
+                    <div id="enderecoInput" style="display: {% if resource_details.localizacao == 'Opção 1' %}block{% else %}none{% endif %};">
+                        <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço" value="{{ resource_details.endereco }}">
+                    </div>
+                
+                    <div id="fileInput" style="display: {% if resource_details.localizacao == 'Opção 2' %}block{% else %}none{% endif %};">
+                        <input type="file" id="file" name="file">
+                    </div>
+                </div>
+    
+                <div class="input-group-use required">
+                    <h2>Modos de Utilização:</h2>
+                    {% for modo in use_mode %}
+                        <input type="checkbox" id="modo{{ loop.index }}" name="use_mode" value="{{ modo }}" 
+                            {% if modo in modo_utilizacao_title %}checked{% endif %}>
+                        <label for="modo{{ loop.index }}">{{ modo }}</label>
+                    {% endfor %}
+                </div>
+    
+                <div class="input-group-req">
+                    <h2>Requisitos Técnicos:</h2>
+                    {% for requirement in requirements %}
+                        <input type="checkbox" id="requirement{{ loop.index }}" name="requirements" value="{{ requirement }}" 
+                            {% if req_tecnicos_title and requirement in req_tecnicos_title %}checked{% endif %}>
+                        <label for="requirement{{ loop.index }}">{{ requirement }}</label>
+                    {% endfor %}
+                </div>
+                
+                <div class="input-group required">
+                    <h2>Descrição:</h2>
+                    <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required>{{ resource_details.description }}</textarea>
+                    <div id="counter"></div>
+                    <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
+                </div>
+    
+                <div class="input-group-lang required">
+                    <h2>Idiomas:</h2>
+                    {% for idioma in idiomas %}
+                        <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}" 
+                            {% if idioma in idiomas_title %}checked{% endif %}>
+                        <label for="idioma{{ loop.index }}">{{ idioma }}</label>
+                    {% endfor %}
+                </div>
+                
+                <div class="input-group-fich">
+                    <h2>Ficheiro:</h2>
+                    <input type="file" id="ficheiro" name="ficheiro">
+                </div>
+    
+                <small class="small-text">
+                    <span class="text-danger">*</span>
+                    Campo obrigatório
+                </small>
+                
+                <button type="submit" onclick="showPopupAndRedirect()">Editar recurso</button>
+                <button type="button" onclick="window.location.href='/'">Cancelar</button>
+    
+            </form>
+    
 
         </div>
     </main>

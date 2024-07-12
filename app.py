@@ -252,9 +252,8 @@ def nova_proposta(slug):
 
 
 # Edit resources
-@app.route('/resources/edit/<int:resource_id>')
+@app.route('/resources/edit/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit(resource_id):
-    
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     resource_details = get_combined_details(resource_id)
@@ -262,10 +261,62 @@ def resource_edit(resource_id):
     use_mode = get_modos_utilizacao()
     requirements = get_requisitos_tecnicos()
     idiomas = get_idiomas()
-    
+
     if not resource_details:
         return render_template('error.html', message='Resource not found'), 404
-    
+
+    if request.method == 'POST':
+        title = request.form.get('titulo')
+        autor = request.form.get('autor')
+        org = request.form.get('organizacao')
+        descricao = request.form.get('descricao')
+        idiomas_title = request.form.getlist('idiomas')
+        formato_title = request.form.getlist('formato')
+        modo_utilizacao_title = request.form.getlist('use_mode')
+        requisitos_tecnicos_title = request.form.getlist('requirements')
+        slug = generate_slug(title)
+        file = request.files.get('ficheiro')
+        
+        resource_details.update({
+            'title': title,
+            'slug': slug,
+            'description': descricao,
+            'operation': 'update',
+            'operation_author': autor,
+            'organization': org,
+            'link': request.form.get('link'),  # Add any other fields as needed
+            'author': autor,
+            'updated_at': datetime.now(),
+            'user_id': user_id,
+            'type_id': 2,
+            'image_id': 1,
+            'hidden': 0
+        })
+
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Update resource details
+        update_resource_details(cursor, resource_id, resource_details)
+        
+        # Update taxonomy details
+        taxonomy_details = {
+            'idiomas_title': idiomas_title,
+            'formato_title': formato_title,
+            'modo_utilizacao_title': modo_utilizacao_title,
+            'requisitos_tecnicos_title': requisitos_tecnicos_title,
+            # Add 'Anos de escolaridade' if it's a part of your form data
+        }
+        
+        update_taxonomy_details(cursor, resource_id, taxonomy_details)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        flash('Resource updated successfully', 'success')
+        return redirect(url_for('resource_details', resource_id=resource_id))
+
     # Extract titles from resource_details
     formato_title = resource_details.get('formato_title')
     modo_utilizacao_title = resource_details.get('modo_utilizacao_title')
@@ -498,7 +549,7 @@ def novo_recurso():
             'updated_at': datetime.now(),  # Replace with actual timestamp
             'deleted_at': None,  # Adjust as needed
             'user_id': user_id,  # Replace with actual user ID
-            'type_id': 2,  # Replace with actual type ID
+            'type_id': 1,  # Replace with actual type ID
             'image_id': 1,  # Replace with actual image ID
             'hidden': 0  # Adjust as needed
         }
