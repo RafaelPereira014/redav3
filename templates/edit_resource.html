@@ -10,55 +10,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-9Lf9+4Mjcjy5uDZ4AdK6GhpOj76lwhVbl2+uYvs1zLoXgRUeGNCZXz0aTl+1S9NpBUrKb9ICbpZMWZ3BhHrT7w==" crossorigin="anonymous" />
-
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-
-
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <title>Novo/Editar recurso - REDA</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
 
-    <!-- Link to TinyMCE CDN -->
-    <script src="https://cdn.tiny.cloud/1/hcsdmgk5ojfti5cengfoxv1zfkb2t21ei6ue2obbe85k8lst/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        // Initialize TinyMCE editor
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'lists',
-            toolbar: 'undo redo | styleselect | bold italic | bullist numlist',
-            menubar: false,
-            setup: function (editor) {
-                editor.on('input', function () {
-                    updateCounter(editor);
-                });
-                editor.on('keyup', function () {
-                    updateCounter(editor);
-                });
-                editor.on('change', function () {
-                    updateCounter(editor);
-                });
-            }
-        });
-    
-        // Function to update the character counter
-        function updateCounter(editor) {
-            const maxLength = editor.getElement().maxLength || 1500;
-            const content = editor.getContent({ format: 'text' }).trim();
-            const currentLength = content.length;
-            const counterEle = document.getElementById('counter');
-            counterEle.innerHTML = `${currentLength}/${maxLength}`;
-        }
-    </script>
-    
     <style>
         .container2 {
             background-image: url('/static/images/new-form-bg.jpg');
-            background-size: cover; /* Adjust the background size */
-            background-position: center; /* Center the background image */
-            text-align: center; /* Center the text horizontally */
-            padding: 40px 0; /* Add padding for better spacing */
-            color: #fff; /* Change text color to white for better contrast */
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: 40px 0;
+            color: #fff;
             height: 80px;
         }
         .required {
@@ -69,14 +37,18 @@
             content: '*';
             position: absolute;
             top: 0;
-            right:absolute;
+            right: 0;
             color: red;
             font-size: 1.4rem;
             line-height: 0.3;
         }
+        #editor-container {
+            height: 200px;
+        }
+        #counter {
+            margin-top: 5px;
+        }
     </style>
-
-    
 </head>
 <body>
     <div class="header-governo">
@@ -88,8 +60,6 @@
             <a href="/">
                 <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
             </a>
-            <!-- second div , above the header div with background image-->
-            
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
@@ -100,12 +70,10 @@
             <nav class="top-nav">
                 <ul>
                     {% if admin %}
-                        <!-- Render admin-specific links or buttons -->
                         <li><a href="/myaccount">Minha Conta</a></li>
                         <li><a href="/dashboard" target="_blank">Administração</a></li>
                         <li><a href="/logout">Sair</a></li>
                     {% else %}
-                        <!-- Render non-admin links or buttons -->
                         <li><a href="/login">Login</a></li>
                         <li><a href="/register">Registar</a></li>
                     {% endif %}
@@ -126,7 +94,7 @@
 
                 <div class="input-group required">
                     <h2>Título:</h2>
-                    <textarea id="titulo" name="titulo" rows="3" class="tinymce">{{ resource_details.title }}</textarea>
+                    <input type="text" id="titulo" name="titulo" value="{{ resource_details.title }}">
                 </div>
                 
                 <div class="input-group required">
@@ -186,7 +154,8 @@
                 
                 <div class="input-group required">
                     <h2>Descrição:</h2>
-                    <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required>{{ resource_details.description }}</textarea>
+                    <div id="editor-container">{{ resource_details.description }}</div>
+                    <textarea id="descricao" name="descricao" rows="5" style="display:none;" required></textarea>
                     <div id="counter"></div>
                     <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
                 </div>
@@ -214,14 +183,10 @@
                 <button type="button" onclick="window.location.href='/'">Cancelar</button>
     
             </form>
-    
-
         </div>
     </main>
 
-    
-     <!-- Footer -->
-     <footer class="footer">
+    <footer class="footer">
         <div class="container footer-container">
             <div class="footer-nav">
                 <a href="/sobre">Sobre</a>
@@ -231,7 +196,6 @@
                 <a href="/faleconnosco">
                     <button>Fale connosco</button>
                 </a>
-
             </div>
             
             <div class="social-icons">
@@ -247,7 +211,6 @@
                 <img src="/static/images/gov_acores_transparent.png" alt="Image 2">
             </div>
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
-
         </div>
     </footer>
 
@@ -270,8 +233,34 @@
                 fileInput.style.display = 'block';
             }
         });
-        
 
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        quill.on('text-change', function() {
+            document.getElementById('descricao').value = quill.root.innerHTML;
+            updateCounter();
+        });
+
+        function updateCounter() {
+            const maxLength = 1500;
+            const content = quill.getText().trim();
+            const currentLength = content.length;
+            const counterEle = document.getElementById('counter');
+            counterEle.innerHTML = `${currentLength}/${maxLength}`;
+        }
+
+        // Initialize counter on page load
+        updateCounter();
     </script>
 </body>
 </html>

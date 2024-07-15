@@ -58,4 +58,3 @@ def get_related_resources(resource_title, limit=4):
     
     return related_resources
 
-

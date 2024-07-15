@@ -34,3 +34,52 @@ def get_script_details():
         conn.close()
     
     return scripts_user, scripts_count
+
+def get_script_details_by_user(user_id):
+    """Get all tools from user and their count."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    scripts_user = []
+    scripts_count = 0
+    
+    try:
+        # Query to fetch all tools
+        cursor.execute("SELECT * FROM Scripts WHERE user_id=%s  ORDER BY id DESC",(user_id,))
+        scripts_user = cursor.fetchall()
+        
+        # Query to count the tools
+        cursor.execute("SELECT COUNT(*) AS count FROM Scripts ")
+        scripts_count = cursor.fetchone()['count']
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return scripts_user, scripts_count
+
+
+def get_script_details_pendent():
+    """Get all tools from user and their count."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    scripts_user = []
+    scripts_count = 0
+    
+    try:
+        # Query to fetch all tools
+        cursor.execute("SELECT * FROM Scripts WHERE approved='0' ORDER BY id DESC")
+        scripts_user = cursor.fetchall()
+        
+        # Query to count the tools
+        cursor.execute("SELECT COUNT(*) AS count FROM Scripts ")
+        scripts_count = cursor.fetchone()['count']
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return scripts_user, scripts_count

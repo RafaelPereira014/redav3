@@ -10,6 +10,33 @@ def connect_to_database():
     """Establishes a connection to the MySQL database."""
     return mysql.connector.connect(**DB_CONFIG)
 
+def get_title(resource_id):
+    """Get the user ID for the given username."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT title FROM Resources WHERE id=%s", (resource_id,))
+    title = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if title:
+        return title['title']
+    else:
+        return None
+    
+def get_title(resource_id):
+    """Get the user ID for the given username."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT title FROM Resources WHERE id=%s", (resource_id,))
+    title = cursor.fetchone()  # fetchone is used because we expect only one user with the given username
+    cursor.close()
+    conn.close()
+    
+    if title:
+        return title['title']
+    else:
+        return None
 
 def get_userid(username):
     """Get the user ID for the given username."""
@@ -433,6 +460,7 @@ def update_resource_details(cursor, resource_id, resource_details):
     return cursor.lastrowid
 
 def update_taxonomy_details(cursor, resource_id, taxonomy_details):
+    # Query to update existing terms
     taxonomy_update_query = """
         UPDATE Terms SET 
         title = %s,
@@ -440,13 +468,26 @@ def update_taxonomy_details(cursor, resource_id, taxonomy_details):
         WHERE id = %s
     """
     
+    # Query to link terms to a resource
     resource_term_update_query = """
         UPDATE resource_terms SET
         updated_at = NOW()
         WHERE resource_id = %s AND term_id = %s
     """
+    
+    # Query to insert new terms
+    taxonomy_insert_query = """
+        INSERT INTO Terms (title, taxonomy_id, created_at, updated_at)
+        VALUES (%s, %s, NOW(), NOW())
+    """
+    
+    # Query to link new terms to a resource
+    resource_term_insert_query = """
+        INSERT INTO resource_terms (resource_id, term_id, created_at, updated_at)
+        VALUES (%s, %s, NOW(), NOW())
+    """
 
-    # A helper function to get the term id by title and taxonomy
+    # Helper function to get the term id by title and taxonomy
     def get_term_id(title, taxonomy_title):
         taxonomy_id = get_taxonomy_id_for_title(taxonomy_title)
         cursor.execute("SELECT id FROM Terms WHERE title = %s AND taxonomy_id = %s", (title, taxonomy_id))
@@ -455,11 +496,20 @@ def update_taxonomy_details(cursor, resource_id, taxonomy_details):
 
     # Process each taxonomy detail
     for taxonomy_title, titles in taxonomy_details.items():
+        taxonomy_id = get_taxonomy_id_for_title(taxonomy_title)
         for title in titles:
             term_id = get_term_id(title, taxonomy_title)
             if term_id:
+                # Update existing term
                 cursor.execute(taxonomy_update_query, (title, term_id))
                 cursor.execute(resource_term_update_query, (resource_id, term_id))
+            else:
+                # Insert new term and link to resource
+                cursor.execute(taxonomy_insert_query, (title, taxonomy_id))
+                term_id = cursor.lastrowid
+                cursor.execute(resource_term_insert_query, (resource_id, term_id))
+
+    
 
 
 def get_recent_approved_resources_with_details(limit=8):

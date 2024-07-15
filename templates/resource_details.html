@@ -188,12 +188,14 @@
                         <div>
                             <span>Palavras-chave:</span>
                             <span>
-                                {% for hashtag in resource_details.hashtags %}
-                                    <a href="/search?hashtag={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
+                                {% for script_id, script in resource_details.scripts_by_id.items() %}
+                                    {% for hashtag in script.hashtags %}
+                                        <a href="/search?hashtag={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
                                 {% endfor %}
                             </span>
-                            
                         </div>
+                        
                     </div>
                     <div class="files">
                         
@@ -238,6 +240,7 @@
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
                         {% for script_id, script in resource_details.scripts_by_id.items() %}
+                        
                             {% if script.approved or admin %}
                                 <div class="button-container">
                                     <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>

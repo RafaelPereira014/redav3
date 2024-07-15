@@ -276,7 +276,7 @@ def resource_edit(resource_id):
         requisitos_tecnicos_title = request.form.getlist('requirements')
         slug = generate_slug(title)
         file = request.files.get('ficheiro')
-        
+
         resource_details.update({
             'title': title,
             'slug': slug,
@@ -288,7 +288,6 @@ def resource_edit(resource_id):
             'author': autor,
             'updated_at': datetime.now(),
             'user_id': user_id,
-            'type_id': 2,
             'image_id': 1,
             'hidden': 0
         })
@@ -301,11 +300,11 @@ def resource_edit(resource_id):
         
         # Update taxonomy details
         taxonomy_details = {
-            'idiomas_title': idiomas_title,
-            'formato_title': formato_title,
-            'modo_utilizacao_title': modo_utilizacao_title,
-            'requisitos_tecnicos_title': requisitos_tecnicos_title,
-            # Add 'Anos de escolaridade' if it's a part of your form data
+            'Idiomas': idiomas_title,
+            'Formato': formato_title,
+            'Modos de utilização': modo_utilizacao_title,
+            'Requisitos Técnicos': requisitos_tecnicos_title,
+            'Anos de escolaridade': []  # Add appropriate values if needed
         }
         
         update_taxonomy_details(cursor, resource_id, taxonomy_details)
@@ -339,15 +338,40 @@ def resource_edit(resource_id):
         idiomas_title=idiomas_title,
         admin=admin
     )
-
-@app.route('/resources/edit2/<int:resource_id>')
+    
+@app.route('/resources/edit2/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit2(resource_id):
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     resource_details = get_combined_details(resource_id)
     
-    return render_template('edit_resource2.html')
-    
+    if request.method == 'POST':
+        data = request.form
+        selected_anos = list(set(data.getlist('anos')))  # Use set to remove duplicates
+        selected_disciplinas = list(set(data.getlist('disciplinas')))  # Use set to remove duplicates
+        selected_dominios = list(set(data.getlist('dominios')))  # Use set to remove duplicates
+        selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
+        selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
+        descricao = data.get('descricao', '')
+        
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+
+        update_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
+        
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'message': 'Proposta atualizada com sucesso!'})
+
+    anos = get_unique_terms(level=1)
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=resource_details['ano'])
+    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=resource_details['disciplina'])
+    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=resource_details['dominio'])
+    conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=resource_details['subdominio'])
+
+    return render_template('edit_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, conceitos=conceitos, resource_details=resource_details, admin=admin)
+
 
 
 @app.route('/apps', methods=['GET'])
@@ -469,14 +493,20 @@ def my_account():
     tools_user, tools_count = get_tools_from_user(user_id)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
-    scripts_user,scripts_count = get_script_details()
+    scripts_user,scripts_count = get_script_details_by_user(user_id)
     
     # Pagination
     page = request.args.get('page', 1, type=int)
     per_page = 10
+    #resources
     total_resources = len(my_resources)
     total_pages = math.ceil(total_resources / per_page)
     paginated_resources = my_resources[(page - 1) * per_page:page * per_page]
+    
+    #proposals
+    total_proposals = scripts_count
+    total_pages_proposals = math.ceil(total_proposals / per_page)
+    paginated_proposals = scripts_user[(page - 1) * per_page:page * per_page]
     
     return render_template(
         'my_account.html',
@@ -491,7 +521,9 @@ def my_account():
         scripts_count=scripts_count,
         page=page,
         total_pages=total_pages,
-        admin=admin
+        admin=admin,
+        total_pages_proposals=total_pages_proposals,
+        paginated_proposals=paginated_proposals
     )
 
 
@@ -570,6 +602,8 @@ def novo_recurso():
 
         insert_taxonomy_details(cursor,resource_id,taxonomy_details)
         conn.commit()
+        
+        
 
     conn.close()
     cursor.close()
@@ -677,8 +711,18 @@ def update_approved_linguistic(resource_id):
 
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():
-    scripts, scripts_count = get_script_details()
-    return render_template('admin/recursos/po_pendentes.html')
+    scripts, scripts_count = get_script_details_pendent()
+    
+    for script in scripts:
+        resource_id = script['resource_id']
+        script['title'] = get_title(resource_id)  # Add 'title' key to each script dictionary
+        script['author'] = get_username(script['user_id'])
+        script['operation'] = get_propostasOp(resource_id)
+        
+
+    return render_template('admin/recursos/po_pendentes.html', scripts=scripts, scripts_count=scripts_count)
+
+
 
 @app.route('/dashboard/recursos/ocultos')
 def hidden():
@@ -719,7 +763,8 @@ def admin_comments():
 
 @app.route('/dashboard/comentarios/palavras-proibidas')
 def admin_comments_prohi():
-    return render_template('admin/comentarios/palavras-proibidas.html')
+    bad_words = badwords()
+    return render_template('admin/comentarios/palavras-proibidas.html',bad_words=bad_words)
 
 #######----- taxonomias-----------####
 @app.route('/dashboard/taxonomias')

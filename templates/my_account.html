@@ -179,11 +179,24 @@
                         <h3> Proposta de operacionalização </h3>
                         <p>{{script.created_at}}</p>
                         <p>{{script.operation}}</p>
-                        <button>Ver </button>
-                        <button>Adicionar proposta</button>
-                        <button>Gerir propostas</button>
+                        <a href="/resources/details/{{ script.resource_id }}"><button>Ver</button></a>
+                        <a href="/resources/edit2/{{ script.resource_id }}"><button>Editar proposta</button></a>
                     </div>
                 {%endfor%}
+
+                <div class="pagination">
+                    {% if page > 1 %}
+                        <a href="?page=1">&laquo; Inicio</a>
+                        <a href="?page={{ page - 1 }}">Anterior</a>
+                    {% endif %}
+                    
+                    <span class="current">Page {{ page }} of {{ total_pages_proposals }}</span>
+                    
+                    {% if page < total_pages_proposals %}
+                        <a href="?page={{ page + 1 }}">Próximo</a>
+                        <a href="?page={{ total_pages_proposals }}">Fim &raquo;</a>
+                    {% endif %}
+                </div>
 
                 
 
