@@ -245,13 +245,12 @@ def nova_proposta(slug):
     conn.close()
     cursor.close()
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug)
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug,resource_id=resource_id)
 
 
 
 
 
-# Edit resources
 @app.route('/resources/edit/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit(resource_id):
     user_id = session.get('user_id')  # Retrieve user ID from session
@@ -266,14 +265,14 @@ def resource_edit(resource_id):
         return render_template('error.html', message='Resource not found'), 404
 
     if request.method == 'POST':
-        title = request.form.get('titulo')
-        autor = request.form.get('autor')
-        org = request.form.get('organizacao')
-        descricao = request.form.get('descricao')
-        idiomas_title = request.form.getlist('idiomas')
-        formato_title = request.form.getlist('formato')
-        modo_utilizacao_title = request.form.getlist('use_mode')
-        requisitos_tecnicos_title = request.form.getlist('requirements')
+        title = request.form.get('titulo') or resource_details.get('title')
+        autor = request.form.get('autor') or resource_details.get('operation_author')
+        org = request.form.get('organizacao') or resource_details.get('organization')
+        descricao = request.form.get('descricao') or resource_details.get('description')
+        idiomas_title = request.form.getlist('idiomas') or resource_details.get('idiomas_title')
+        formato_title = request.form.getlist('formato') or resource_details.get('formato_title')
+        modo_utilizacao_title = request.form.getlist('use_mode') or resource_details.get('modo_utilizacao_title')
+        requisitos_tecnicos_title = request.form.getlist('requirements') or resource_details.get('requisitos_tecnicos_title')
         slug = generate_slug(title)
         file = request.files.get('ficheiro')
 
@@ -284,36 +283,36 @@ def resource_edit(resource_id):
             'operation': 'update',
             'operation_author': autor,
             'organization': org,
-            'link': request.form.get('link'),  # Add any other fields as needed
+            'link': request.form.get('link') or resource_details.get('link'),  # Add any other fields as needed
             'author': autor,
             'updated_at': datetime.now(),
             'user_id': user_id,
+            'type_id': 2,
             'image_id': 1,
             'hidden': 0
         })
 
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
-        
+
         # Update resource details
         update_resource_details(cursor, resource_id, resource_details)
-        
+
         # Update taxonomy details
         taxonomy_details = {
             'Idiomas': idiomas_title,
             'Formato': formato_title,
             'Modos de utilização': modo_utilizacao_title,
-            'Requisitos Técnicos': requisitos_tecnicos_title,
-            'Anos de escolaridade': []  # Add appropriate values if needed
+            'Requisitos técnicos': requisitos_tecnicos_title,
+            # Add 'Anos de escolaridade' if it's a part of your form data
         }
         
+
         update_taxonomy_details(cursor, resource_id, taxonomy_details)
-        
         conn.commit()
         cursor.close()
         conn.close()
 
-        flash('Resource updated successfully', 'success')
         return redirect(url_for('resource_details', resource_id=resource_id))
 
     # Extract titles from resource_details
@@ -321,9 +320,9 @@ def resource_edit(resource_id):
     modo_utilizacao_title = resource_details.get('modo_utilizacao_title')
     req_tecnicos_title = resource_details.get('requisitos_tecnicos_title')
     idiomas_title = resource_details.get('idiomas_title')
-    
+
     related_resources = get_related_resources(resource_details['title'])
-    
+
     return render_template(
         'edit_resource.html',
         resource_details=resource_details,
@@ -338,6 +337,7 @@ def resource_edit(resource_id):
         idiomas_title=idiomas_title,
         admin=admin
     )
+
     
 @app.route('/resources/edit2/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit2(resource_id):
@@ -529,8 +529,6 @@ def my_account():
 
 @app.route('/novorecurso', methods=['GET', 'POST'])
 def novo_recurso():
-    conn = connect_to_database()
-    cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')
     admin = is_admin(user_id)
     formatos = get_formatos()
@@ -547,7 +545,6 @@ def novo_recurso():
 
         # Retrieving lists of selected items
         idiomas_title = request.form.getlist('idiomas')
-        print(idiomas_title)
         formato_title = request.form.getlist('formato')
         modo_utilizacao_title = request.form.getlist('use_mode')
         requisitos_tecnicos_title = request.form.getlist('requirements')
@@ -557,56 +554,65 @@ def novo_recurso():
         # Handle file upload if needed
         file = request.files.get('ficheiro')
 
-        resource_details = {
-            'title': title,
-            'slug': slug,
-            'description': descricao,
-            'operation': 'create',  # Fill with actual data if available
-            'operation_author': autor,
-            'techResources': None,  # Fill with actual data if available
-            'email': None,  # Fill with actual data if available
-            'organization': org,
-            'duration': None,  # Fill with actual data if available
-            'highlight': 0,  # Adjust as needed
-            'exclusive': 0,  # Adjust as needed
-            'embed': None,  # Fill with actual data if available
-            'link': None,  # Fill with actual data if available
-            'author': autor,
-            'approved': 0,  # Adjust as needed
-            'approvedScientific': 0,  # Adjust as needed
-            'approvedLinguistic': 0,  # Adjust as needed
-            'status': 1,  # Adjust as needed
-            'accepted_terms': 0,  # Adjust as needed
-            'created_at': datetime.now(),  # Replace with actual timestamp
-            'updated_at': datetime.now(),  # Replace with actual timestamp
-            'deleted_at': None,  # Adjust as needed
-            'user_id': user_id,  # Replace with actual user ID
-            'type_id': 1,  # Replace with actual type ID
-            'image_id': 1,  # Replace with actual image ID
-            'hidden': 0  # Adjust as needed
-        }
+        try:
+            conn = connect_to_database()
+            cursor = conn.cursor(dictionary=True)
 
-        resource_id = insert_resource_details(cursor, resource_details)
+            resource_details = {
+                'title': title,
+                'slug': slug,
+                'description': descricao,
+                'operation': 'create',
+                'operation_author': autor,
+                'techResources': None,
+                'email': None,
+                'organization': org,
+                'duration': None,
+                'highlight': 0,
+                'exclusive': 0,
+                'embed': None,
+                'link': None,
+                'author': autor,
+                'approved': 0,
+                'approvedScientific': 0,
+                'approvedLinguistic': 0,
+                'status': 1,
+                'accepted_terms': 0,
+                'created_at': datetime.now(),
+                'updated_at': datetime.now(),
+                'deleted_at': None,
+                'user_id': user_id,
+                'type_id': 1,
+                'image_id': 1,
+                'hidden': 0
+            }
 
-        # Print resource_id for debugging
-        print(resource_id)
+            resource_id = insert_resource_details(cursor, resource_details)
 
-        taxonomy_details = {
-            'idiomas_title': idiomas_title[0] if idiomas_title else None,
-            'formato_title': formato_title[0] if formato_title else None,
-            'modo_utilizacao_title': modo_utilizacao_title[0] if modo_utilizacao_title else None,
-            'requisitos_tecnicos_title': requisitos_tecnicos_title[0] if requisitos_tecnicos_title else None,
-            'anos_escolaridade_title': anos_escolaridade_title[0] if anos_escolaridade_title else None,
-            'created_at': datetime.now()
-        }
+            taxonomy_details = {
+                'idiomas_title': idiomas_title[0] if idiomas_title else None,
+                'formato_title': formato_title[0] if formato_title else None,
+                'modo_utilizacao_title': modo_utilizacao_title[0] if modo_utilizacao_title else None,
+                'requisitos_tecnicos_title': requisitos_tecnicos_title[0] if requisitos_tecnicos_title else None,
+                'anos_escolaridade_title': anos_escolaridade_title[0] if anos_escolaridade_title else None,
+                'created_at': datetime.now()
+            }
 
-        insert_taxonomy_details(cursor,resource_id,taxonomy_details)
-        conn.commit()
-        
-        
+            insert_taxonomy_details(cursor, resource_id, taxonomy_details)
 
-    conn.close()
-    cursor.close()
+            conn.commit()
+            # Store resource_id in session
+            session['resource_id'] = resource_id
+            return redirect(url_for('novo_recurso2'))  # Replace with your target route
+
+        except Exception as e:
+            print(f"Error in transaction: {str(e)}")
+            conn.rollback()
+            raise  # Rethrow the exception for debugging purposes
+
+        finally:
+            cursor.close()
+            conn.close()
 
     return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
 
@@ -615,11 +621,47 @@ def novo_recurso():
 
 
 
-@app.route('/novorecurso2', methods=['GET'])
+@app.route('/novorecurso2', methods=['GET', 'POST'])
 def novo_recurso2():
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
+    resource_id = session.get('resource_id')
+    
+    ano = request.args.get('ano')
+    dominios = []
+    subdominios = []
+    conceitos = []
+    
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
+    for disciplina in disciplinas:
+        dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
+        for dominio in dominios:
+            subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
+            for subdominio in subdominios:
+                conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio) if ano else []
+
+    if request.method == 'POST':
+        data = request.form
+        selected_anos = list(set(data.getlist('anos')))  # Use set to remove duplicates
+        selected_disciplinas = list(set(data.getlist('disciplinas')))  # Use set to remove duplicates
+        selected_dominios = list(set(data.getlist('dominios')))  # Use set to remove duplicates
+        selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
+        selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
+        outros_conceitos = data.get('outros_conceitos', '')
+        descricao = data.get('descricao', '')
+        
+        insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
+        conn.commit()
+    
+        return redirect(url_for('resource_details', resource_id=resource_id))  # Updated line
+
+    conn.close()
+    cursor.close()
+    
+    
     return render_template('new_resource2.html', anos=anos,admin=admin)
 
 @app.route('/fetch_disciplinas')

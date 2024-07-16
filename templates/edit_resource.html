@@ -6,19 +6,53 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_resource.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-9Lf9+4Mjcjy5uDZ4AdK6GhpOj76lwhVbl2+uYvs1zLoXgRUeGNCZXz0aTl+1S9NpBUrKb9ICbpZMWZ3BhHrT7w==" crossorigin="anonymous" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-
     <title>Novo/Editar recurso - REDA</title>
     <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
-
+    <style>
+        /* Existing styles */
+    
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    
     <style>
         .container2 {
             background-image: url('/static/images/new-form-bg.jpg');
@@ -32,7 +66,6 @@
         .required {
             position: relative;
         }
-        
         .required::after {
             content: '*';
             position: absolute;
@@ -47,6 +80,38 @@
         }
         #counter {
             margin-top: 5px;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -89,24 +154,19 @@
     <main>
         <div class="container">
             <h1>Detalhes</h1>
-
             <form method="POST" enctype="multipart/form-data" action="/resources/edit/{{ resource_details.resource_id }}">
-
                 <div class="input-group required">
                     <h2>Título:</h2>
                     <input type="text" id="titulo" name="titulo" value="{{ resource_details.title }}">
                 </div>
-                
                 <div class="input-group required">
                     <h2>Autor/fonte:</h2>
                     <input type="text" id="autor" name="autor" placeholder="Nome do autor/fonte do recurso" value="{{ resource_details.author }}" required>
                 </div>
-                
                 <div class="input-group-org required">
                     <h2>Organização:</h2>
                     <input type="text" id="organizacao" name="organizacao" placeholder="Escola/organização/nome do sítio do autor do recurso" value="{{ resource_details.organization }}" required>
                 </div>
-    
                 <div class="input-group-format required">
                     <h2>Formato (MAX. 2):</h2>
                     {% for formato in formatos %}
@@ -115,7 +175,6 @@
                         <label for="formato{{ loop.index }}">{{ formato }}</label>
                     {% endfor %}
                 </div>
-    
                 <div class="input-group-local required">
                     <h2>Localização do recurso:</h2>
                     <input type="radio" id="localizacao1" name="localizacao" value="Opção 1" 
@@ -124,16 +183,13 @@
                     <input type="radio" id="localizacao2" name="localizacao" value="Opção 2" 
                         {% if resource_details.localizacao == 'Opção 2' %}checked{% endif %}>
                     <label for="localizacao2">Ficheiro</label>
-                
                     <div id="enderecoInput" style="display: {% if resource_details.localizacao == 'Opção 1' %}block{% else %}none{% endif %};">
                         <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço" value="{{ resource_details.endereco }}">
                     </div>
-                
                     <div id="fileInput" style="display: {% if resource_details.localizacao == 'Opção 2' %}block{% else %}none{% endif %};">
                         <input type="file" id="file" name="file">
                     </div>
                 </div>
-    
                 <div class="input-group-use required">
                     <h2>Modos de Utilização:</h2>
                     {% for modo in use_mode %}
@@ -142,7 +198,6 @@
                         <label for="modo{{ loop.index }}">{{ modo }}</label>
                     {% endfor %}
                 </div>
-    
                 <div class="input-group-req">
                     <h2>Requisitos Técnicos:</h2>
                     {% for requirement in requirements %}
@@ -151,7 +206,6 @@
                         <label for="requirement{{ loop.index }}">{{ requirement }}</label>
                     {% endfor %}
                 </div>
-                
                 <div class="input-group required">
                     <h2>Descrição:</h2>
                     <div id="editor-container">{{ resource_details.description }}</div>
@@ -159,7 +213,6 @@
                     <div id="counter"></div>
                     <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
                 </div>
-    
                 <div class="input-group-lang required">
                     <h2>Idiomas:</h2>
                     {% for idioma in idiomas %}
@@ -168,24 +221,19 @@
                         <label for="idioma{{ loop.index }}">{{ idioma }}</label>
                     {% endfor %}
                 </div>
-                
                 <div class="input-group-fich">
                     <h2>Ficheiro:</h2>
                     <input type="file" id="ficheiro" name="ficheiro">
                 </div>
-    
                 <small class="small-text">
                     <span class="text-danger">*</span>
                     Campo obrigatório
                 </small>
-                
-                <button type="submit" onclick="showPopupAndRedirect()">Editar recurso</button>
+                <button type="submit">Editar recurso</button>
                 <button type="button" onclick="window.location.href='/'">Cancelar</button>
-    
             </form>
         </div>
     </main>
-
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-nav">
@@ -197,7 +245,6 @@
                     <button>Fale connosco</button>
                 </a>
             </div>
-            
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -205,7 +252,6 @@
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-pinterest"></i></a>
             </div>
-            
             <div class="additional-images">
                 <img src="/static/images/dre_transparent.png" alt="Image 1">
                 <img src="/static/images/gov_acores_transparent.png" alt="Image 2">
@@ -213,7 +259,13 @@
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
         </div>
     </footer>
-
+    <!-- Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Recurso atualizado com sucesso!</p>
+        </div>
+    </div>
     <script>
         const localizacao1 = document.getElementById('localizacao1');
         const localizacao2 = document.getElementById('localizacao2');
@@ -261,6 +313,56 @@
 
         // Initialize counter on page load
         updateCounter();
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const formData = new FormData(this);
+            const resourceId = "{{ resource_details.resource_id }}";
+
+            fetch(`/resources/edit/${resourceId}`, {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // Show the modal
+                    const modal = document.getElementById("successModal");
+                    const span = document.getElementsByClassName("close")[0];
+
+                    modal.style.display = "block";
+
+                    // Redirect to the resource details page after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = `/resources/details/${resourceId}`;
+                    }, 2000);
+
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function() {
+                        modal.style.display = "none";
+                    }
+
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function(event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                } else {
+                    alert('Failed to update resource. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update resource. Please try again.');
+            });
+        });
     </script>
 </body>
 </html>
