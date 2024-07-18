@@ -167,7 +167,7 @@
         <hr></hr>
 
         <form method="GET" action="/dashboard/taxonomias/relacoes">
-            <table>
+            <table id="relations_table">
                 <!-- Table header -->
                 <tr>
                     <th>Ano</th>
@@ -240,42 +240,142 @@
                 {% endfor %}
             </table>
         </form>
-
-        <!-- Pagination links -->
-        <div class="pagination">
-            {% if pagination.total_pages > 1 %}
-                <ul>
-                    {% if pagination.has_prev %}
-                        <li><a href="?page=1">&laquo; First</a></li>
-                        <li><a href="?page={{ pagination.prev_num }}">&lsaquo; Prev</a></li>
-                    {% endif %}
-                    {% for num in pagination.iter_pages %}
-                        {% if num %}
-                            <li {% if num == pagination.page %}class="active"{% endif %}><a href="?page={{ num }}">{{ num }}</a></li>
-                        {% else %}
-                            <li><span>&hellip;</span></li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if pagination.has_next %}
-                        <li><a href="?page={{ pagination.next_num }}">Next &rsaquo;</a></li>
-                        <li><a href="?page={{ pagination.total_pages }}">Last &raquo;</a></li>
-                    {% endif %}
-                </ul>
-            {% endif %}
-        </div>
+        <div class="pagination" id="pagination"></div>
+        
     </div>
 
     <script>
-        function showDropdownMenu(element) {
-            var cell = element.parentElement;
-            var dropdownMenu = document.createElement('div');
-            dropdownMenu.classList.add('dropdown-menu');
-            dropdownMenu.innerHTML = `
-                <a href="#">Edit</a>
-                <a href="#">Delete</a>
-            `;
-            cell.appendChild(dropdownMenu);
-        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const table = document.getElementById("relations_table");
+            const pagination = document.getElementById("pagination");
+            const rowsPerPage = 15;
+            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+            let currentPage = 1;
+        
+            function displayRows(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+        
+                for (let i = 0; i < rows.length; i++) {
+                    rows[i].style.display = i >= start && i < end ? "" : "none";
+                }
+            }
+        
+            function createPageButton(page) {
+                const button = document.createElement("button");
+                button.innerText = page;
+                button.classList.add("page-btn");
+                if (page === currentPage) button.classList.add("active");
+        
+                button.addEventListener("click", function() {
+                    currentPage = page;
+                    displayRows(currentPage);
+        
+                    const currentBtn = document.querySelector(".page-btn.active");
+                    if (currentBtn) {
+                        currentBtn.classList.remove("active");
+                    }
+                    button.classList.add("active");
+        
+                    setupPagination();
+                });
+        
+                return button;
+            }
+        
+            function setupPagination() {
+                pagination.innerHTML = "";
+                const maxDisplayedPages = 3; // Number of pages to display before and after the current page
+                const range = maxDisplayedPages * 2 + 1;
+        
+                // Add the first page button
+                pagination.appendChild(createPageButton(1));
+        
+                if (currentPage > maxDisplayedPages + 2) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add page buttons around the current page
+                const start = Math.max(2, currentPage - maxDisplayedPages);
+                const end = Math.min(totalPages - 1, currentPage + maxDisplayedPages);
+        
+                for (let i = start; i <= end; i++) {
+                    pagination.appendChild(createPageButton(i));
+                }
+        
+                if (currentPage < totalPages - maxDisplayedPages - 1) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add the last page button if there are more than one page
+                if (totalPages > 1) {
+                    pagination.appendChild(createPageButton(totalPages));
+                }
+            }
+        
+            displayRows(currentPage);
+            setupPagination();
+
+            function toggleApprovalStatus(cell, type, id) {
+                const currentValue = parseInt(cell.getAttribute("data-value"));
+                const newValue = currentValue === 1 ? 0 : 1;
+                cell.setAttribute("data-value", newValue);
+
+                if (newValue === 1) {
+                    cell.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    cell.innerHTML = '<i class="fas fa-times"></i>';
+                }
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", `/update_approved_${type}/${id}`, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send();
+
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status !== 200) {
+                            alert(`Error updating approval status: ${xhr.responseText}`);
+                        }
+                    }
+                };
+            }
+
+            function confirmToggle(cell) {
+                const confirmation = confirm("Are you sure you want to toggle approval status?");
+                if (confirmation) {
+                    const id = cell.getAttribute("data-id");
+                    const type = cell.getAttribute("data-type");
+                    toggleApprovalStatus(cell, type, id);
+                }
+            }
+
+            table.addEventListener("click", function(event) {
+                const targetCell = event.target.closest(".approval-icon");
+                if (targetCell) {
+                    confirmToggle(targetCell);
+                }
+            });
+
+            const sidebarItems = document.querySelectorAll('.sidebar ul li');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const submenu = item.querySelector('.submenu');
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.querySelector('.submenu').style.display = 'none';
+                        }
+                    });
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        });
     </script>
 </body>
 </html>

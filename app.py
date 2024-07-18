@@ -265,53 +265,60 @@ def resource_edit(resource_id):
         return render_template('error.html', message='Resource not found'), 404
 
     if request.method == 'POST':
-        title = request.form.get('titulo') or resource_details.get('title')
-        autor = request.form.get('autor') or resource_details.get('operation_author')
-        org = request.form.get('organizacao') or resource_details.get('organization')
-        descricao = request.form.get('descricao') or resource_details.get('description')
-        idiomas_title = request.form.getlist('idiomas') or resource_details.get('idiomas_title')
-        formato_title = request.form.getlist('formato') or resource_details.get('formato_title')
-        modo_utilizacao_title = request.form.getlist('use_mode') or resource_details.get('modo_utilizacao_title')
-        requisitos_tecnicos_title = request.form.getlist('requirements') or resource_details.get('requisitos_tecnicos_title')
-        slug = generate_slug(title)
-        file = request.files.get('ficheiro')
+        # Extract form data
+        title = request.form.get('titulo')
+        author = request.form.get('autor')
+        organization = request.form.get('organizacao')
+        description = request.form.get('descricao')
+        # Extract other necessary fields
+        # Process taxonomies
+        formatos_titles = request.form.getlist('formato')
+        use_mode_titles = request.form.getlist('use_mode')
+        requirements_titles = request.form.getlist('requirements')
+        idiomas_titles = request.form.getlist('idiomas')
 
-        resource_details.update({
+        # Perform validation if necessary
+        if not title or not author or not organization or not description:
+            return render_template('edit_resource.html', 
+                                   resource_details=resource_details,
+                                   formatos=formatos,
+                                   use_mode=use_mode,
+                                   requirements=requirements,
+                                   idiomas=idiomas,
+                                   error="All required fields must be filled."), 400
+
+        # Prepare resource details dictionary for update
+        resource_details_update = {
             'title': title,
-            'slug': slug,
-            'description': descricao,
-            'operation': 'update',
-            'operation_author': autor,
-            'organization': org,
-            'link': request.form.get('link') or resource_details.get('link'),  # Add any other fields as needed
-            'author': autor,
-            'updated_at': datetime.now(),
+            'slug': title,  # Assuming you have a slugify function
+            'description': description,
+            'operation': request.form.get('operation'),  # Example for additional fields
+            'operation_author': request.form.get('operation_author'),
+            'organization': organization,
+            'link': request.form.get('link'),
+            'author': author,
+            'updated_at': datetime.now(),  # Ensure you import datetime
             'user_id': user_id,
-            'type_id': 2,
-            'image_id': 1,
-            'hidden': 0
-        })
-
-        conn = connect_to_database()
-        cursor = conn.cursor(dictionary=True)
-
-        # Update resource details
-        update_resource_details(cursor, resource_id, resource_details)
-
-        # Update taxonomy details
-        taxonomy_details = {
-            'Idiomas': idiomas_title,
-            'Formato': formato_title,
-            'Modos de utilização': modo_utilizacao_title,
-            'Requisitos técnicos': requisitos_tecnicos_title,
-            # Add 'Anos de escolaridade' if it's a part of your form data
+            'type_id': request.form.get('type_id'),
+            'image_id': request.form.get('image_id'),
+            'hidden': '1',
         }
-        
 
-        update_taxonomy_details(cursor, resource_id, taxonomy_details)
+        taxonomy_details_update = {
+            'formatos': formatos_titles,
+            'use_mode': use_mode_titles,
+            'requirements': requirements_titles,
+            'idiomas': idiomas_titles,
+        }
+
+        # Update resource and taxonomy details in the database
+        conn = connect_to_database()
+        cursor = conn.cursor()
+        update_resource_details(cursor, resource_id, resource_details_update)
+        update_taxonomy_details(cursor, resource_id, taxonomy_details_update)
         conn.commit()
-        cursor.close()
         conn.close()
+        cursor.close()
 
         return redirect(url_for('resource_details', resource_id=resource_id))
 
@@ -320,9 +327,9 @@ def resource_edit(resource_id):
     modo_utilizacao_title = resource_details.get('modo_utilizacao_title')
     req_tecnicos_title = resource_details.get('requisitos_tecnicos_title')
     idiomas_title = resource_details.get('idiomas_title')
-
+    
     related_resources = get_related_resources(resource_details['title'])
-
+    
     return render_template(
         'edit_resource.html',
         resource_details=resource_details,
@@ -338,13 +345,41 @@ def resource_edit(resource_id):
         admin=admin
     )
 
+
+
     
 @app.route('/resources/edit2/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit2(resource_id):
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     resource_details = get_combined_details(resource_id)
-    
+
+    # Debug print to see what resource_details contains
+    print("Resource Details:", resource_details)
+
+    # Extract 'ano' from scripts_by_id if available
+    anos = []
+    disciplinas = []
+    dominios = []
+    subdominios = []
+    conceitos = []
+
+    if resource_details:
+        # Flattening the list of anos, disciplinas, dominios, subdominios, and conceitos from scripts_by_id
+        for script in resource_details['scripts_by_id'].values():
+            anos.extend(script.get('anos_resources', []))
+            disciplinas.extend(script.get('areas_resources', []))
+            dominios.extend(script.get('dominios_resources', []))
+            subdominios.extend(script.get('subdominios', []))
+            conceitos.extend(script.get('hashtags', []))
+
+        # Remove duplicates
+        anos = list(set(anos))
+        disciplinas = list(set(disciplinas))
+        dominios = list(set(dominios))
+        subdominios = list(set(subdominios))
+        conceitos = list(set(conceitos))
+
     if request.method == 'POST':
         data = request.form
         selected_anos = list(set(data.getlist('anos')))  # Use set to remove duplicates
@@ -353,7 +388,7 @@ def resource_edit2(resource_id):
         selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
         descricao = data.get('descricao', '')
-        
+
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
 
@@ -362,13 +397,7 @@ def resource_edit2(resource_id):
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({'message': 'Proposta atualizada com sucesso!'})
-
-    anos = get_unique_terms(level=1)
-    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=resource_details['ano'])
-    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=resource_details['disciplina'])
-    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=resource_details['dominio'])
-    conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=resource_details['subdominio'])
+        return redirect(url_for('resource_details', resource_id=resource_id))
 
     return render_template('edit_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, conceitos=conceitos, resource_details=resource_details, admin=admin)
 
@@ -819,6 +848,7 @@ def admin_taxonomies():
 def admin_edit_taxonomies(slug):
     taxonomy_title = get_taxonomy_title(slug)
     taxonomies = edit_taxonomie(slug)  # Call your function with the provided slug
+    
     return render_template('admin/taxonomias/edit_taxonomia.html', taxonomies=taxonomies,taxonomy_title=taxonomy_title)
 
 @app.route('/dashboard/taxonomias/relacoes')
@@ -850,15 +880,6 @@ def admin_taxonomies_rel():
 def admin_users():
     all_users = get_all_users()
     return render_template('admin/utilizadores/utilizadores.html',all_users=all_users)
-
-
-
-
-
-
-
-
-
 
 
 

@@ -486,9 +486,9 @@ def update_taxonomy_details(cursor, resource_id, taxonomy_details):
             term_id = get_term_id(title, taxonomy_title)
             if term_id:
                 cursor.execute(taxonomy_update_query, (title, term_id))
+                cursor.fetchall()  # To ensure we process the results and avoid "unread result found"
                 cursor.execute(resource_term_update_query, (resource_id, term_id))
-
-
+                cursor.fetchall()  # To ensure we process the results and avoid "unread result found"
 
 
 def get_recent_approved_resources_with_details(limit=8):

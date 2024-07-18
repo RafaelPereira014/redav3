@@ -19,12 +19,13 @@
             align-items: flex-start; /* Align items at the start */
         }
 
-        .form-container {
+        .form-container, .edit-container {
             flex: 1;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .table-container {
@@ -33,7 +34,6 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 55px;
         }
 
         .taxonomy-title-container {
@@ -108,6 +108,19 @@
         .actions i:hover {
             color: #007BFF;
         }
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        #search-input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 200px;
+        }
+        
     </style>  
 </head>
 <body>
@@ -172,10 +185,23 @@
                     <button type="clear">Limpar</button>
                 </form>
             </div>
+            <div class="edit-container" id="edit-term-container" style="display: none;">
+                <h3>Editar termo</h3>
+                <form id="edit-term-form" action="/edit_term" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" id="edit-term-id" name="term_id">
+                    <label for="edit-title">Título</label>
+                    <input type="text" id="edit-title" name="title" placeholder="Nome do termo" required>
+                    <button type="submit">Guardar</button>
+                    <button type="submit">Eliminar</button>
+                </form>
+            </div>
         </div>
         
         <div class="table-container">
             <h3>Lista de termos:</h3> 
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Procurar termos...">
+            </div>
             <hr>
             <table id="terms_table">
                 <thead>
@@ -190,11 +216,10 @@
                     <tr>
                         <td>
                             <span class="term-title">{{ term.title }}</span>
-                            <input type="text" class="edit-term-title" value="{{ term.title }}" style="display: none;">
                         </td>
                         <td>{{ term.created_at }}</td>
                         <td class="actions">
-                            <a href="#" class="edit-term" onclick="editTerm('{{ term.title }}')">
+                            <a href="#" class="edit-term" data-term-id="{{ term.id }}" data-term-title="{{ term.title }}" onclick="editTerm('{{ term.id }}', '{{ term.title }}')">
                                 <i class="fas fa-pencil-alt"></i> Editar
                             </a>
                         </td>
@@ -203,64 +228,166 @@
                 </tbody>
             </table>
             <div class="pagination" id="pagination"></div>
-
         </div>
+        
     </div>
 
     <script>
-        function editTerm(title) {
-            document.getElementById('title').value = title; // Set the title in the input field
+
+        function editTerm(termId, termTitle) {
+            // Set the title in the edit input field
+            document.getElementById('edit-title').value = termTitle;
+            // Set the term ID in the hidden input field
+            document.getElementById('edit-term-id').value = termId;
+            // Show the edit container
+            document.getElementById('edit-term-container').style.display = 'block';
         }
         document.addEventListener("DOMContentLoaded", function() {
+
+            const searchInput = document.getElementById("search-input");
+            searchInput.addEventListener("input", function() {
+                const filter = searchInput.value.toLowerCase();
+                const rows = document.querySelectorAll("#terms_table tbody tr");
+
+                rows.forEach(row => {
+                    const title = row.querySelector(".term-title").textContent.toLowerCase();
+                    if (title.includes(filter)) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            });
             const table = document.getElementById("terms_table");
             const pagination = document.getElementById("pagination");
             const rowsPerPage = 15;
             const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
             const totalPages = Math.ceil(rows.length / rowsPerPage);
             let currentPage = 1;
-
+        
             function displayRows(page) {
                 const start = (page - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
-
+        
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? "" : "none";
                 }
             }
-
+        
+            function createPageButton(page) {
+                const button = document.createElement("button");
+                button.innerText = page;
+                button.classList.add("page-btn");
+                if (page === currentPage) button.classList.add("active");
+        
+                button.addEventListener("click", function() {
+                    currentPage = page;
+                    displayRows(currentPage);
+        
+                    const currentBtn = document.querySelector(".page-btn.active");
+                    if (currentBtn) {
+                        currentBtn.classList.remove("active");
+                    }
+                    button.classList.add("active");
+        
+                    setupPagination();
+                });
+        
+                return button;
+            }
+        
             function setupPagination() {
                 pagination.innerHTML = "";
+                const maxDisplayedPages = 3; // Number of pages to display before and after the current page
+                const range = maxDisplayedPages * 2 + 1;
+        
+                // Add the first page button
+                pagination.appendChild(createPageButton(1));
+        
+                if (currentPage > maxDisplayedPages + 2) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add page buttons around the current page
+                const start = Math.max(2, currentPage - maxDisplayedPages);
+                const end = Math.min(totalPages - 1, currentPage + maxDisplayedPages);
+        
+                for (let i = start; i <= end; i++) {
+                    pagination.appendChild(createPageButton(i));
+                }
+        
+                if (currentPage < totalPages - maxDisplayedPages - 1) {
+                    const ellipsis = document.createElement("span");
+                    ellipsis.innerText = "...";
+                    pagination.appendChild(ellipsis);
+                }
+        
+                // Add the last page button if there are more than one page
+                if (totalPages > 1) {
+                    pagination.appendChild(createPageButton(totalPages));
+                }
+            }
+        
+            displayRows(currentPage);
+            setupPagination();
 
-                for (let i = 1; i <= totalPages; i++) {
-                    const button = document.createElement("button");
-                    button.innerText = i;
-                    button.classList.add("page-btn");
-                    if (i === currentPage) button.classList.add("active");
+            function toggleApprovalStatus(cell, type, id) {
+                const currentValue = parseInt(cell.getAttribute("data-value"));
+                const newValue = currentValue === 1 ? 0 : 1;
+                cell.setAttribute("data-value", newValue);
 
-                    button.addEventListener("click", function() {
-                        currentPage = i;
-                        displayRows(currentPage);
+                if (newValue === 1) {
+                    cell.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    cell.innerHTML = '<i class="fas fa-times"></i>';
+                }
 
-                        const currentBtn = document.querySelector(".page-btn.active");
-                        currentBtn.classList.remove("active");
-                        button.classList.add("active");
-                    });
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", `/update_approved_${type}/${id}`, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send();
 
-                    pagination.appendChild(button);
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status !== 200) {
+                            alert(`Error updating approval status: ${xhr.responseText}`);
+                        }
+                    }
+                };
+            }
+
+            function confirmToggle(cell) {
+                const confirmation = confirm("Are you sure you want to toggle approval status?");
+                if (confirmation) {
+                    const id = cell.getAttribute("data-id");
+                    const type = cell.getAttribute("data-type");
+                    toggleApprovalStatus(cell, type, id);
                 }
             }
 
-            displayRows(currentPage);
-            setupPagination();
+            table.addEventListener("click", function(event) {
+                const targetCell = event.target.closest(".approval-icon");
+                if (targetCell) {
+                    confirmToggle(targetCell);
+                }
+            });
+
+            const sidebarItems = document.querySelectorAll('.sidebar ul li');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const submenu = item.querySelector('.submenu');
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.querySelector('.submenu').style.display = 'none';
+                        }
+                    });
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                });
+            });
         });
-        function toggleSubmenu(submenuId) {
-            var submenu = document.getElementById(submenuId);
-            if (submenu.style.display === "block") {
-                submenu.style.display = "none";
-            } else {
-                submenu.style.display = "block";
-            }
-        }
     </script>
 </body>
 </html>

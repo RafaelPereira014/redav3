@@ -145,7 +145,7 @@
 
         // Function to update the character counter
         function updateCounter(editor) {
-            const maxLength = editor.getElement().maxLength || 1500;
+            const maxLength = editor.getElement().maxLength || 2000;
             const content = editor.getContent({ format: 'text' }).trim();
             const currentLength = content.length;
             const counterEle = document.getElementById('counter');
@@ -325,7 +325,7 @@
                         <div id="editor-container" style="height: 300px;"></div>
                         <textarea id="descricao" name="descricao" style="display: none;"></textarea>
                         <div id="counter"></div>
-                        <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
+                        <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 2000</small>
                 </div>
                 <div class="input-group-helpfile">
                     <h2>Documento de apoio:</h2>
@@ -438,7 +438,7 @@
     
         // Function to update the character counter
         function updateCounter() {
-            const maxLength = 1500;
+            const maxLength = 2000;
             const content = quill.getText().trim();
             const currentLength = content.length;
             const counterEle = document.getElementById('counter');

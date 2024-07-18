@@ -106,6 +106,36 @@ def edit_taxonomie(taxonomy_slug):
         cursor.close()
         if conn.is_connected():
             conn.close()
+            
+def update_term(term_id, new_title, new_slug):
+    conn = connect_to_database()
+    if conn is None:
+        return False
+
+    cursor = conn.cursor()
+
+    update_query = """
+        UPDATE Terms 
+        SET 
+            title = %s,
+            slug = %s,
+            updated_at = NOW()
+        WHERE 
+            id = %s
+    """
+
+    try:
+        cursor.execute(update_query, (new_title, new_slug, term_id))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        if conn.is_connected():
+            conn.close()
+
 
 def get_taxonomy_title(slug):
     conn = connect_to_database()
