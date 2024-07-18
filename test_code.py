@@ -31,20 +31,7 @@ try:
         
         # Example usage of insert_combined_details function
 
-        scripts_by_id = {
-            5000: {
-                'operation': 'Operation details',
-                'approved': 0,
-                'user_id': 5,
-                'anos_resources': ['1st Grade'],
-                'areas_resources': ['Math'],
-                'dominios_resources': ['Science'],
-                'subdominios': ['Physics'],
-                'hashtags': ['#Learning']
-            }
-        }
-        
-        insert_script_details(cursor,4027,scripts_by_id)
+        insert_term('subdominios','teste termo','teste-termo')
         # After calling the function, commit the transaction and handle any errors appropriately.
         connection.commit()
         

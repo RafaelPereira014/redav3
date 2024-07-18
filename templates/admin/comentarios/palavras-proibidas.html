@@ -107,20 +107,10 @@
     </div>
 
     <script>
-        function toggleSubmenu(submenuId) {
-            var submenu = document.getElementById(submenuId);
-            if (submenu.style.display === "block") {
-                submenu.style.display = "none";
-            } else {
-                submenu.style.display = "block";
-            }
-        }
-    </script>
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
             const table = document.getElementById("badwords");
             const pagination = document.getElementById("pagination");
-            const rowsPerPage = 10;
+            const rowsPerPage = 15;
             const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
             const totalPages = Math.ceil(rows.length / rowsPerPage);
             let currentPage = 1;

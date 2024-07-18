@@ -135,6 +135,41 @@ def update_term(term_id, new_title, new_slug):
         cursor.close()
         if conn.is_connected():
             conn.close()
+            
+def insert_term(taxonomy_slug, term_title, term_slug, term_parent_id=None):
+    conn = connect_to_database()
+    if conn is None:
+        return False
+
+    cursor = conn.cursor()
+
+    # First, retrieve the taxonomy_id based on the taxonomy_slug
+    taxonomy_query = "SELECT id FROM Taxonomies WHERE slug = %s AND (deleted_at > NOW() OR deleted_at IS NULL)"
+    
+    try:
+        cursor.execute(taxonomy_query, (taxonomy_slug,))
+        result = cursor.fetchone()
+        if result is None:
+            print(f"Taxonomy with slug '{taxonomy_slug}' not found or is deleted.")
+            return False
+        taxonomy_id = result[0]
+
+        # Insert the new term into the Terms table
+        insert_query = """
+            INSERT INTO Terms (title, slug, created_at, updated_at, taxonomy_id, parent_id)
+            VALUES (%s, %s, NOW(), NOW(), %s, %s)
+        """
+        cursor.execute(insert_query, (term_title, term_slug, taxonomy_id, term_parent_id))
+        conn.commit()
+        return True
+    except Error as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        if conn.is_connected():
+            conn.close()
+
 
 
 def get_taxonomy_title(slug):
@@ -304,7 +339,7 @@ def badwords():
     try:
         # SQL query to fetch users with acceptance = 1
         query = ("""
-            SELECT id, title, status, created_at, updated_at, deleted_at FROM Badwords AS Badword WHERE ((Badword.deleted_at > '2024-07-01 15:45:24' OR Badword.deleted_at IS NULL) AND Badword.status = true) ORDER BY Badword.title ASC ;
+            SELECT title FROM Badwords AS Badword WHERE ((Badword.deleted_at > '2024-07-01 15:45:24' OR Badword.deleted_at IS NULL) AND Badword.status = true) ORDER BY Badword.title ASC ;
         """)
         
         # Execute the query

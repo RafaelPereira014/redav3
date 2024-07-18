@@ -835,6 +835,7 @@ def admin_comments():
 @app.route('/dashboard/comentarios/palavras-proibidas')
 def admin_comments_prohi():
     bad_words = badwords()
+    
     return render_template('admin/comentarios/palavras-proibidas.html',bad_words=bad_words)
 
 #######----- taxonomias-----------####
@@ -844,12 +845,46 @@ def admin_taxonomies():
     all_taxonomies = taxonomies()
     return render_template('admin/taxonomias/taxonomias.html',all_taxonomies=all_taxonomies)
 
-@app.route('/dashboard/taxonomias/<slug>')
+@app.route('/dashboard/taxonomias/<slug>', methods=['GET', 'POST'])
 def admin_edit_taxonomies(slug):
-    taxonomy_title = get_taxonomy_title(slug)
-    taxonomies = edit_taxonomie(slug)  # Call your function with the provided slug
+    conn = connect_to_database()
+    if conn is None:
+        return "Database connection error", 500
     
-    return render_template('admin/taxonomias/edit_taxonomia.html', taxonomies=taxonomies,taxonomy_title=taxonomy_title)
+    if request.method == 'GET':
+        taxonomy_title = get_taxonomy_title(slug)
+        taxonomies = edit_taxonomie(slug)
+        print(slug)
+        return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
+    
+    elif request.method == 'POST':
+        action = request.form.get('action')  # Retrieve action value
+        print(slug)
+        if action == 'add':
+            term_title = request.form.get('title')
+            term_slug = term_title.lower().replace(" ", "-")
+            
+            success = insert_term(slug, term_title, term_slug)
+            if success:
+                return jsonify({'success': True, 'message': 'Termo criado com sucesso!'})
+            else:
+                return jsonify({'success': False, 'message': 'Falha ao adicionar o termo.'}), 500
+        
+        elif action == 'update':
+            term_id = request.form.get('term_id')
+            term_title = request.form.get('title')
+            term_slug = term_title.lower().replace(" ", "-")
+            
+            success = update_term(term_id, term_title, term_slug)
+            if success:
+                return jsonify({'success': True, 'message': 'Termo atualizado com sucesso!'})
+            else:
+                return jsonify({'success': False, 'message': 'Falha ao atualizar o termo.'}), 500
+    
+    return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
+
+
+
 
 @app.route('/dashboard/taxonomias/relacoes')
 def admin_taxonomies_rel():
