@@ -253,8 +253,10 @@ def nova_proposta(slug):
 
 @app.route('/resources/edit/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit(resource_id):
-    user_id = session.get('user_id')  # Retrieve user ID from session
+    user_id = session.get('user_id')
     admin = is_admin(user_id)
+    user = get_username(user_id)
+    
     resource_details = get_combined_details(resource_id)
     formatos = get_formatos()
     use_mode = get_modos_utilizacao()
@@ -265,64 +267,49 @@ def resource_edit(resource_id):
         return render_template('error.html', message='Resource not found'), 404
 
     if request.method == 'POST':
-        # Extract form data
         title = request.form.get('titulo')
         author = request.form.get('autor')
         organization = request.form.get('organizacao')
         description = request.form.get('descricao')
-        # Extract other necessary fields
-        # Process taxonomies
-        formatos_titles = request.form.getlist('formato')
-        use_mode_titles = request.form.getlist('use_mode')
-        requirements_titles = request.form.getlist('requirements')
-        idiomas_titles = request.form.getlist('idiomas')
 
-        # Perform validation if necessary
         if not title or not author or not organization or not description:
             return render_template('edit_resource.html', 
-                                   resource_details=resource_details,
-                                   formatos=formatos,
-                                   use_mode=use_mode,
-                                   requirements=requirements,
-                                   idiomas=idiomas,
-                                   error="All required fields must be filled."), 400
+                                resource_details=resource_details,
+                                formatos=formatos,
+                                use_mode=use_mode,
+                                requirements=requirements,
+                                idiomas=idiomas,
+                                error="All required fields must be filled."), 400
 
-        # Prepare resource details dictionary for update
         resource_details_update = {
             'title': title,
             'slug': title,  # Assuming you have a slugify function
             'description': description,
-            'operation': request.form.get('operation'),  # Example for additional fields
-            'operation_author': request.form.get('operation_author'),
             'organization': organization,
-            'link': request.form.get('link'),
             'author': author,
-            'updated_at': datetime.now(),  # Ensure you import datetime
+            'operation': 'update',
+            'operation_author': user,
+            'link': 'www.google.com',
+            'updated_at': datetime.now(),
+            'type_id': '2',
+            'image_id': '1',
+            'hidden': '0',
             'user_id': user_id,
-            'type_id': request.form.get('type_id'),
-            'image_id': request.form.get('image_id'),
-            'hidden': '1',
         }
 
-        taxonomy_details_update = {
-            'formatos': formatos_titles,
-            'use_mode': use_mode_titles,
-            'requirements': requirements_titles,
-            'idiomas': idiomas_titles,
-        }
-
-        # Update resource and taxonomy details in the database
         conn = connect_to_database()
         cursor = conn.cursor()
-        update_resource_details(cursor, resource_id, resource_details_update)
-        update_taxonomy_details(cursor, resource_id, taxonomy_details_update)
-        conn.commit()
-        conn.close()
-        cursor.close()
+        try:
+            update_resource_details(cursor, resource_id, resource_details_update)
+            conn.commit()
+            return jsonify(success=True)
+        except Exception as e:
+            conn.rollback()
+            return jsonify(success=False, error=str(e)), 500
+        finally:
+            cursor.close()
+            conn.close()
 
-        return redirect(url_for('resource_details', resource_id=resource_id))
-
-    # Extract titles from resource_details
     formato_title = resource_details.get('formato_title')
     modo_utilizacao_title = resource_details.get('modo_utilizacao_title')
     req_tecnicos_title = resource_details.get('requisitos_tecnicos_title')
@@ -344,6 +331,7 @@ def resource_edit(resource_id):
         idiomas_title=idiomas_title,
         admin=admin
     )
+
 
 
 

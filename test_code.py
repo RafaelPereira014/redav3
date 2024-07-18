@@ -30,8 +30,14 @@ try:
         # Call the function to get combined details
         
         # Example usage of insert_combined_details function
+        taxonomy_details = {
+            'Idiomas':'blablabla',
+            'formato':'Vídeo',
+            'Modos de utilização':'Teste 123'
+            
+        }
 
-        insert_term('subdominios','teste termo','teste-termo')
+        update_taxonomy_details(cursor,4078,taxonomy_details)
         # After calling the function, commit the transaction and handle any errors appropriately.
         connection.commit()
         

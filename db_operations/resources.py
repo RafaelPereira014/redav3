@@ -460,6 +460,8 @@ def update_resource_details(cursor, resource_id, resource_details):
     return cursor.lastrowid
 
 def update_taxonomy_details(cursor, resource_id, taxonomy_details):
+    connection = connect_to_database()
+    cursor = connection.cursor()
     taxonomy_update_query = """
         UPDATE Terms SET 
         title = %s,
@@ -478,7 +480,7 @@ def update_taxonomy_details(cursor, resource_id, taxonomy_details):
         taxonomy_id = get_taxonomy_id_for_title(taxonomy_title)
         cursor.execute("SELECT id FROM Terms WHERE title = %s AND taxonomy_id = %s", (title, taxonomy_id))
         term = cursor.fetchone()
-        return term['id'] if term else None
+        return term[0] if term else None
 
     # Process each taxonomy detail
     for taxonomy_title, titles in taxonomy_details.items():
@@ -486,10 +488,12 @@ def update_taxonomy_details(cursor, resource_id, taxonomy_details):
             term_id = get_term_id(title, taxonomy_title)
             if term_id:
                 cursor.execute(taxonomy_update_query, (title, term_id))
-                cursor.fetchall()  # To ensure we process the results and avoid "unread result found"
                 cursor.execute(resource_term_update_query, (resource_id, term_id))
-                cursor.fetchall()  # To ensure we process the results and avoid "unread result found"
-
+    
+    
+    connection.commit()
+    connection.close()
+    cursor.close()
 
 def get_recent_approved_resources_with_details(limit=8):
     """Get the most recent approved resources with combined details."""
@@ -541,31 +545,17 @@ def get_resource_files(resource_slug):
     return files  # Return a list of file URLs
 
 
-def get_taxonomy_id_for_title(title):
+def get_taxonomy_id_for_title(taxonomy_title):
+    # Example function to get taxonomy ID from title
     conn = connect_to_database()
     cursor = conn.cursor()
+    cursor.execute("SELECT id FROM Taxonomies WHERE title = %s", (taxonomy_title,))
+    result = cursor.fetchone()
+    
+    conn.close()
+    cursor.close()
+    return result[0] if result else None
 
-    try:
-        query = "SELECT id FROM Taxonomies WHERE title = %s"
-        cursor.execute(query, (title,))
-        result = cursor.fetchone()
-
-        if result:
-            taxonomy_id = result[0]
-            return taxonomy_id
-        else:
-            print(f"Taxonomy with title '{title}' not found.")
-            return None
-
-    except mysql.connector.Error as e:
-        print(f"Error retrieving taxonomy id for title '{title}': {e}")
-        return None
-
-    finally:
-        if cursor:
-            cursor.close()
-        if conn and conn.is_connected():
-            conn.close()
 
 def get_taxonomy_id_for_slug(slug):
     conn = connect_to_database()

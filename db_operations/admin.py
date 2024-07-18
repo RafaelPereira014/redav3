@@ -136,7 +136,7 @@ def update_term(term_id, new_title, new_slug):
         if conn.is_connected():
             conn.close()
             
-def insert_term(taxonomy_slug, term_title, term_slug, term_parent_id=None):
+def insert_term(taxon, term_title, term_slug, term_parent_id=None):
     conn = connect_to_database()
     if conn is None:
         return False
