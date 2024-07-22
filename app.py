@@ -251,6 +251,7 @@ def nova_proposta(slug):
 
 
 
+
 @app.route('/resources/edit/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit(resource_id):
     user_id = session.get('user_id')
@@ -271,7 +272,10 @@ def resource_edit(resource_id):
         author = request.form.get('autor')
         organization = request.form.get('organizacao')
         description = request.form.get('descricao')
-
+        idiomas_selected = request.form.getlist('idiomas')
+        formatos_selected = request.form.getlist('formato')
+        use_mode_selected = request.form.getlist('use_mode')
+        requirements_selected = request.form.getlist('requirements')
         if not title or not author or not organization or not description:
             return render_template('edit_resource.html', 
                                 resource_details=resource_details,
@@ -296,16 +300,33 @@ def resource_edit(resource_id):
             'hidden': '0',
             'user_id': user_id,
         }
+        
+        print(idiomas_selected)
+        
+        taxonomy_details_update = {
+            'Idiomas': idiomas_selected,
+            'Formato': formatos_selected,
+            'Modos de utilização': use_mode_selected,
+            'Requisitos técnicos': requirements_selected
+        }
 
         conn = connect_to_database()
         cursor = conn.cursor()
         try:
             update_resource_details(cursor, resource_id, resource_details_update)
+            update_taxonomy_details(cursor,resource_id,taxonomy_details_update)
             conn.commit()
-            return jsonify(success=True)
+            # Redirect to the details page upon success
+            return redirect(url_for('resource_details', resource_id=resource_id))
         except Exception as e:
             conn.rollback()
-            return jsonify(success=False, error=str(e)), 500
+            return render_template('edit_resource.html', 
+                                resource_details=resource_details,
+                                formatos=formatos,
+                                use_mode=use_mode,
+                                requirements=requirements,
+                                idiomas=idiomas,
+                                error=str(e)), 500
         finally:
             cursor.close()
             conn.close()
@@ -331,7 +352,6 @@ def resource_edit(resource_id):
         idiomas_title=idiomas_title,
         admin=admin
     )
-
 
 
 

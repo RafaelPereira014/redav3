@@ -31,13 +31,11 @@ try:
         
         # Example usage of insert_combined_details function
         taxonomy_details = {
-            'Idiomas':'blablabla',
-            'formato':'Vídeo',
-            'Modos de utilização':'Teste 123'
-            
+            'Idiomas': ['Inglês'],
+            'Formato': ['PDF'],
+            'Modos de utilização': ['Online']
         }
-
-        update_taxonomy_details(cursor,4078,taxonomy_details)
+        update_taxonomy_details(cursor,4010,taxonomy_details)
         # After calling the function, commit the transaction and handle any errors appropriately.
         connection.commit()
         

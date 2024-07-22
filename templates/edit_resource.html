@@ -168,7 +168,7 @@
                     <div id="editor-container">{{ resource_details.description }}</div>
                     <textarea id="descricao" name="descricao" rows="5" style="display:none;" ></textarea>
                     <div id="counter"></div>
-                    <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 1500</small>
+                    <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 2000</small>
                 </div>
                 <div class="input-group-lang ">
                     <h2>Idiomas:</h2>
@@ -226,7 +226,7 @@
             });
             function updateCounter() {
                 var textLength = editor.getText().trim().length;
-                var maxLength = 10000;
+                var maxLength = 2000;
                 var counterElement = document.getElementById('counter');
                 counterElement.innerText = textLength + '/' + maxLength;
                 if (textLength > maxLength) {
