@@ -778,4 +778,3 @@ def strip_html_tags(text):
         return text
     clean = re.compile(r'<.*?>')
     return re.sub(clean, '', text)
-

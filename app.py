@@ -581,8 +581,6 @@ def novo_recurso():
         modo_utilizacao_title = request.form.getlist('use_mode')
         requisitos_tecnicos_title = request.form.getlist('requirements')
         anos_escolaridade_title = request.form.getlist('anos')
-        endereco = request.form.get('endereco')
-        embebed = request.form.get('embebed')
         slug = generate_slug(title)
 
         # Handle file upload if needed
@@ -604,8 +602,8 @@ def novo_recurso():
                 'duration': None,
                 'highlight': 0,
                 'exclusive': 0,
-                'embed': embebed,
-                'link': endereco,
+                'embed': None,
+                'link': None,
                 'author': autor,
                 'approved': 0,
                 'approvedScientific': 0,

@@ -51,35 +51,6 @@
             font-size: 1.4rem;
             line-height: 0.3;
         }
-        /* Container for hidden inputs with consistent styling */
-        .hidden-input-container {
-            margin: 20px 0;
-        }
-
-        /* Style for input fields */
-        .hidden-input-container input[type="text"],
-        .hidden-input-container input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-            font-size: 16px;
-            box-sizing: border-box;
-            display: block; /* Ensures the input takes full width within its container */
-        }
-
-        /* Placeholder styling */
-        .hidden-input-container input::placeholder {
-            color: #888;
-            font-style: italic;
-        }
-
-        /* Visible state styles for better user experience */
-        .hidden-input-container.visible {
-            display: block;
-        }
-
     </style>
 
     
@@ -157,9 +128,6 @@
 
                     <div id="enderecoInput" style="display: none;">
                         <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço">
-                    </div>
-                    <div id="embebdInput" style="display: none;">
-                        <input type="text" id="embebed" name="embebed" placeholder="Digite o codigo de incorporação">
                     </div>
 
                     <div id="fileInput" style="display: none;">
@@ -244,29 +212,6 @@
 
         </div>
     </footer>
-    <script>
-        const localizacao1 = document.getElementById('localizacao1');
-        const localizacao2 = document.getElementById('localizacao2');
-        const enderecoInput = document.getElementById('enderecoInput');
-        const fileInput = document.getElementById('fileInput');
-
-        localizacao1.addEventListener('change', function() {
-            if (this.checked) {
-                enderecoInput.style.display = 'block';
-                embebdInput.style.display = 'block';
-                fileInput.style.display = 'none';
-            }
-        });
-
-        localizacao2.addEventListener('change', function() {
-            if (this.checked) {
-                enderecoInput.style.display = 'none';
-                fileInput.style.display = 'block';
-            }
-        });
-        
-
-    </script>
 
     
     <script>
