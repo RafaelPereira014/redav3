@@ -1,4 +1,5 @@
-from datetime import datetime
+from aifc import Error
+from datetime import datetime, time
 import logging
 import os
 import re
@@ -459,56 +460,66 @@ def update_resource_details(cursor, resource_id, resource_details):
     cursor.execute(resource_update_query, resource_data)
     return cursor.lastrowid
 
-def update_taxonomy_details(cursor, resource_id, taxonomy_details):
-    connection = connect_to_database()
-    cursor = connection.cursor()
-    # Step 1: Get term_ids from resource_terms where resource_id = %s
-    cursor.execute("SELECT term_id FROM resource_terms WHERE resource_id = %s", (resource_id,))
-    term_ids = [row[0] for row in cursor.fetchall()]
-
-    if not term_ids:
-        print("No terms found for the given resource_id.")
-        return
-
-    # Step 2: Select taxonomy_id and title from Terms where id IN term_ids
-    format_strings = ','.join(['%s'] * len(term_ids))
-    cursor.execute(f"SELECT id, taxonomy_id FROM Terms WHERE id IN ({format_strings})", tuple(term_ids))
-    terms = cursor.fetchall()
-
-    # Create a dictionary with key as term_id and value as taxonomy_id
-    term_dict = {term[0]: term[1] for term in terms}
-
-    # Step 3: Update the title for each taxonomy_id as provided in taxonomy_details
-    taxonomy_update_query = """
-        UPDATE Terms SET 
-        title = %s,
-        updated_at = NOW()
-        WHERE id = %s
-    """
-    
-    for taxonomy_title, titles in taxonomy_details.items():
-        taxonomy_id = get_taxonomy_id_for_title(taxonomy_title)
-        if not taxonomy_id:
-            print(f"Taxonomy ID not found for title: {taxonomy_title}")
-            continue
-        
-        # Find term_ids for the current taxonomy_id
-        term_ids_to_update = [term_id for term_id, tax_id in term_dict.items() if tax_id == taxonomy_id]
-        
-        if not term_ids_to_update:
-            print(f"No terms found for taxonomy_id: {taxonomy_id}")
-            continue
-        
-        for term_id in term_ids_to_update:
-            if term_id in term_dict:
-                cursor.execute(taxonomy_update_query, (titles[0], term_id))  # Assuming titles has only one title for simplicity
-    
-    connection.commit()
-    print("Update complete.")
-    connection.close()
+def get_term_id_for_title(term_title, taxonomy_id):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id FROM Terms
+        WHERE title = %s AND taxonomy_id = %s
+    """, (term_title, taxonomy_id))
+    result = cursor.fetchone()
     cursor.close()
+    conn.close()
+    return result[0] if result else None
 
+
+
+
+def update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_selected, use_mode_selected, requirements_selected):
+    try:
+        print(f"Updating taxonomy details for resource ID: {resource_id}")
+
+        # Step 1: Delete existing term associations for the resource
+        cursor.execute("DELETE FROM resource_terms WHERE resource_id = %s", (resource_id,))
+        print(f"Deleted existing terms for resource ID: {resource_id}")
+
+        # Define taxonomy IDs
+        taxonomy_ids = {
+            'Idiomas': 12,
+            'Formato': 11,
+            'Modos de utilização': 10,
+            'Requisitos técnicos': 13
+        }
+
+        # Step 2: Insert new term associations
+        term_insert_query = "INSERT INTO resource_terms (resource_id, term_id, created_at, updated_at) VALUES (%s, %s, NOW(), NOW())"
         
+        taxonomy_details = {
+            'Idiomas': idiomas_selected,
+            'Formato': formatos_selected,
+            'Modos de utilização': use_mode_selected,
+            'Requisitos técnicos': requirements_selected
+        }
+
+        for taxonomy_title, term_titles in taxonomy_details.items():
+            taxonomy_id = taxonomy_ids.get(taxonomy_title)
+            if not taxonomy_id:
+                print(f"No taxonomy ID found for taxonomy title: {taxonomy_title}")
+                continue
+            
+            for term_title in term_titles:
+                term_id = get_term_id_for_title(term_title, taxonomy_id)
+                if term_id:
+                    cursor.execute(term_insert_query, (resource_id, term_id))
+                    print(f"Inserted term ID {term_id} for resource ID {resource_id}")
+                else:
+                    print(f"Term ID not found for title: {term_title} with taxonomy ID: {taxonomy_id}")
+
+    except Exception as e:
+        print(f"Error updating taxonomy details: {e}")
+        raise
+
+
 def get_recent_approved_resources_with_details(limit=8):
     """Get the most recent approved resources with combined details."""
     recent_resources = get_recent_approved_resources(limit=limit)

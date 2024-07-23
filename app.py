@@ -276,6 +276,7 @@ def resource_edit(resource_id):
         formatos_selected = request.form.getlist('formato')
         use_mode_selected = request.form.getlist('use_mode')
         requirements_selected = request.form.getlist('requirements')
+
         if not title or not author or not organization or not description:
             return render_template('edit_resource.html', 
                                 resource_details=resource_details,
@@ -300,26 +301,22 @@ def resource_edit(resource_id):
             'hidden': '0',
             'user_id': user_id,
         }
-        
-        print(idiomas_selected)
-        
-        taxonomy_details_update = {
-            'Idiomas': idiomas_selected,
-            'Formato': formatos_selected,
-            'Modos de utilização': use_mode_selected,
-            'Requisitos técnicos': requirements_selected
-        }
+
+        print("Updating resource details with:", resource_details_update)
+        print("Updating taxonomy details with:", idiomas_selected, formatos_selected, use_mode_selected, requirements_selected)
 
         conn = connect_to_database()
         cursor = conn.cursor()
         try:
             update_resource_details(cursor, resource_id, resource_details_update)
-            update_taxonomy_details(cursor,resource_id,taxonomy_details_update)
+            update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_selected, use_mode_selected, requirements_selected)
             conn.commit()
+            print("Resource updated successfully")
             # Redirect to the details page upon success
             return redirect(url_for('resource_details', resource_id=resource_id))
         except Exception as e:
             conn.rollback()
+            print(f"Error updating resource: {e}")
             return render_template('edit_resource.html', 
                                 resource_details=resource_details,
                                 formatos=formatos,
@@ -352,8 +349,6 @@ def resource_edit(resource_id):
         idiomas_title=idiomas_title,
         admin=admin
     )
-
-
 
     
 @app.route('/resources/edit2/<int:resource_id>', methods=['GET', 'POST'])
