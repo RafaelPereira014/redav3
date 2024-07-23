@@ -468,9 +468,11 @@ def get_term_id_for_title(term_title, taxonomy_id):
         WHERE title = %s AND taxonomy_id = %s
     """, (term_title, taxonomy_id))
     result = cursor.fetchone()
+    cursor.fetchall()  # Fetch any remaining results
     cursor.close()
     conn.close()
     return result[0] if result else None
+
 
 
 
