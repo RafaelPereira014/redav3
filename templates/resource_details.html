@@ -240,7 +240,6 @@
                     <div class="proposta-op">
                         <h3>Proposta de operacionalização</h3>
                         {% for script_id, script in resource_details.scripts_by_id.items() %}
-                        
                             {% if script.approved or admin %}
                                 <div class="button-container">
                                     <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
@@ -248,52 +247,44 @@
                                         <button onclick="aprovarProposta({{ script_id }})">Aprovar proposta de operacionalização</button>
                                     {% endif %}
                                 </div>
-                                <div id="proposta{{ loop.index }}" style="display: none;">
+                                <div id="proposta{{ loop.index }}" class="proposta-content">
                                     <div class="separator">
-                                        <span>Autor:</span>
-                                        <span>{{ resource_details.user_details[script.user_id].name if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                        <span class="label">Autor:</span>
+                                        <span class="value">{{ resource_details.user_details[script.user_id].name if script.user_id in resource_details.user_details else 'N/A' }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Organização:</span>
-                                        <span>{{ resource_details.user_details[script.user_id].organization if script.user_id in resource_details.user_details else 'N/A' }}</span>
+                                        <span class="label">Organização:</span>
+                                        <span class="value">{{ resource_details.user_details[script.user_id].organization if script.user_id in resource_details.user_details else 'N/A' }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Proposta de operacionalização:</span>
-                                        <span>{{ script.operation | safe }}</span>
+                                        <span class="label">Proposta de operacionalização:</span>
+                                        <span class="value">{{ script.operation | safe }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Anos de escolaridade:</span>
-                                        <span>{{ script.anos_resources | join(', ') }}</span>
+                                        <span class="label">Anos de escolaridade:</span>
+                                        <span class="value">{{ script.anos_resources | join(', ') }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Disciplinas:</span>
-                                        <span>{{ script.areas_resources | join(', ') }}</span>
+                                        <span class="label">Disciplinas:</span>
+                                        <span class="value">{{ script.areas_resources | join(', ') }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Domínios/Temas:</span>
-                                        <span>{{ script.dominios_resources | join(', ') }}</span>
+                                        <span class="label">Domínios/Temas:</span>
+                                        <span class="value">{{ script.dominios_resources | join(', ') }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Subdomínios:</span>
-                                        <span>{{ script.subdominios | join(', ') }}</span>
+                                        <span class="label">Subdomínios:</span>
+                                        <span class="value">{{ script.subdominios | join(', ') }}</span>
                                     </div>
                                     <div class="separator">
-                                        <span>Conceitos:</span>
-                                        <span>{{ script.hashtags | join(', ') }}</span>
+                                        <span class="label">Conceitos:</span>
+                                        <span class="value">{{ script.hashtags | join(', ') }}</span>
                                     </div>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                    
-                    
-                    
-                    
-                    
-                  
-                    
-                    
-                    
+                
                 </div>
                 
                 <div class="comments">

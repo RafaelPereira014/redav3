@@ -318,8 +318,9 @@ nav ul li a:hover {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 30px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    border: 1px solid #e1e1e1;
 }
 
 .proposta-op h3 {
@@ -339,15 +340,24 @@ nav ul li a:hover {
     background-color: #83ae03;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     font-size: 14px;
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s;
+    margin: 0 5px;
 }
 
 .proposta-op button:hover {
     background-color: #6b8e03;
+}
+
+.proposta-op .proposta-content {
+    display: none; /* Hide all proposals by default */
+}
+
+.proposta-op .proposta-content.active {
+    display: block; /* Show active proposal */
 }
 
 .proposta-op .separator {
@@ -355,20 +365,29 @@ nav ul li a:hover {
     justify-content: space-between;
     padding: 10px 0;
     border-bottom: 1px solid #f1f1f1;
+    font-size: 16px;
+}
+
+.proposta-op .separator span {
+    color: #333;
+}
+
+.proposta-op .separator span.label {
+    font-weight: 600;
+    color: #555;
+    min-width: 180px; /* Ensure labels are aligned */
+}
+
+.proposta-op .separator span.value {
+    flex-grow: 1;
 }
 
 .proposta-op .separator:last-child {
     border-bottom: none;
 }
 
-.proposta-op strong {
-    color: #555;
-    font-weight: 600;
-}
-
-.proposta-op span {
-    font-size: 16px;
-    color: #333;
+.proposta-op .button-container button {
+    margin: 0 5px;
 }
 
 
