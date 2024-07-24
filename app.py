@@ -23,7 +23,7 @@ app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Needed for session management
 UPLOAD_FOLDER = 'static/files/resources/'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif','doc','pdf','docx'}
 
 # Ensure the upload folder exists
 if not os.path.exists(UPLOAD_FOLDER):
@@ -478,8 +478,84 @@ def search():
 
 @app.route('/novaapp')
 def novaapp():
+    
+    conn = connect_to_database()
+    cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
+    # if request.method == 'POST':
+    #     title = request.form.get('titulo')
+    #     descricao = request.form.get('descricao')
+    #     imagem = request.files.get('file')
+
+    #     # Retrieving lists of selected items
+        
+    #     endereco = request.form.get('endereco')
+    #     embebed = request.form.get('embebed')
+    #     slug = generate_slug(title)
+
+    #     # If there's an image and it's allowed, save it
+    #     if imagem and allowed_file(imagem.filename):
+    #         image_filename = imagem.filename
+    #         image_extension = image_filename.rsplit('.', 1)[1].lower()
+
+    #         # Generate new file name
+    #         random_int = random.randint(1000, 9999)
+    #         new_image_filename = f"{slug}_{random_int}.{image_extension}"
+            
+    #         # Create the directory /static/files/resources/slug/
+    #         slug_dir = os.path.join('static', 'files', 'resources', slug)
+    #         if not os.path.exists(slug_dir):
+    #             os.makedirs(slug_dir)
+            
+    #         image_path = os.path.join(slug_dir, new_image_filename)
+
+    #         # Save the image
+    #         imagem.save(image_path)
+    #         print(f"Image saved to {image_path}")
+
+    #         # Insert new record into the Files table
+    #         cursor.execute(
+    #             "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+    #             (new_image_filename, image_extension, 1, datetime.now(), datetime.now())
+    #         )
+    #         image_id = cursor.lastrowid
+        
+    #         resource_details = {
+    #             title=title,
+    #             slug=generate_slug(title),
+    #             description=descricao,
+    #             highlight='0',
+    #             exclusive='0',
+    #             approved='0',
+    #             approvedScientific='0',
+    #             approvedLinguistic='0',
+    #             status='0',
+    #             accepted_terms='0',
+    #             hidden='0',
+    #             created_at=datetime.now(),
+    #             updated_at=datetime.now(),
+    #             user_id=user_id,
+    #             type_id='1',
+    #             image_id=image_id
+    #         }
+
+    #         resource_id = insert_app_details(cursor, resource_details)
+
+
+    #         conn.commit()
+            
+    #         return redirect(url_for(''))  # Replace with your target route
+
+    #     except Exception as e:
+    #         print(f"Error in transaction: {str(e)}")
+    #         conn.rollback()
+    #         raise  # Rethrow the exception for debugging purposes
+
+    #     finally:
+    #         cursor.close()
+    #         conn.close()
+            
     return render_template('novaapp.html',admin=admin)
 
 # Tools
@@ -609,43 +685,71 @@ def novo_recurso():
         slug = generate_slug(title)
 
         # Handle file upload if needed
-        file = request.files.get('ficheiro')
-        print(file)
+        file = request.files.get('file')
+        imagem = request.files.get('ficheiro')
 
         try:
             conn = connect_to_database()
             cursor = conn.cursor(dictionary=True)
 
-            # Initialize image_id
+            # Initialize image_id and file_id
             image_id = None
-
+            file_id = None
+            
             # If there's a file and it's allowed, save it
             if file and allowed_file(file.filename):
-                filename = file.filename
-                extension = filename.rsplit('.', 1)[1].lower()
+                file_filename = file.filename
+                file_extension = file_filename.rsplit('.', 1)[1].lower()
 
                 # Generate new file name
                 random_int = random.randint(1000, 9999)
-                new_filename = f"{slug}_{random_int}.{extension}"
+                new_file_filename = f"{slug}_{random_int}.{file_extension}"
                 
                 # Create the directory /static/files/resources/slug/
                 slug_dir = os.path.join('static', 'files', 'resources', slug)
                 if not os.path.exists(slug_dir):
                     os.makedirs(slug_dir)
                 
-                file_path = os.path.join(slug_dir, new_filename)
+                file_path = os.path.join(slug_dir, new_file_filename)
 
                 # Save the file
                 file.save(file_path)
                 print(f"File saved to {file_path}")
 
-                # Insert new record into the images-like table
+                # Insert new record into the Files table
                 cursor.execute(
                     "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
-                    (new_filename, extension, 1, datetime.now(), datetime.now())
+                    (new_file_filename, file_extension, 1, datetime.now(), datetime.now())
+                )
+                file_id = cursor.lastrowid
+
+            # If there's an image and it's allowed, save it
+            if imagem and allowed_file(imagem.filename):
+                image_filename = imagem.filename
+                image_extension = image_filename.rsplit('.', 1)[1].lower()
+
+                # Generate new file name
+                random_int = random.randint(1000, 9999)
+                new_image_filename = f"{slug}_{random_int}.{image_extension}"
+                
+                # Create the directory /static/files/resources/slug/
+                slug_dir = os.path.join('static', 'files', 'resources', slug)
+                if not os.path.exists(slug_dir):
+                    os.makedirs(slug_dir)
+                
+                image_path = os.path.join(slug_dir, new_image_filename)
+
+                # Save the image
+                imagem.save(image_path)
+                print(f"Image saved to {image_path}")
+
+                # Insert new record into the Files table
+                cursor.execute(
+                    "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (new_image_filename, image_extension, 1, datetime.now(), datetime.now())
                 )
                 image_id = cursor.lastrowid
-
+            
             resource_details = {
                 'title': title,
                 'slug': slug,
@@ -703,7 +807,6 @@ def novo_recurso():
             conn.close()
 
     return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
-
 
 
 

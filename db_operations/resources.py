@@ -152,7 +152,7 @@ def get_recent_approved_resources(limit=8):
     """Get the most recent approved resources from the DB."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC LIMIT %s", (limit,))
+    cursor.execute("SELECT * FROM Resources WHERE approvedScientific = 1 AND approvedLinguistic = 1 AND type_id='2' ORDER BY id DESC LIMIT %s", (limit,))
     resources = cursor.fetchall()
     cursor.close()
     conn.close()
@@ -165,7 +165,7 @@ def get_resources_from_user(userid):
     cursor = conn.cursor(dictionary=True)
     
     try:
-        cursor.execute("SELECT * FROM Resources WHERE user_id=%s ORDER BY id DESC", (userid,))
+        cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id='2' ORDER BY id DESC", (userid,))
         resources_user = cursor.fetchall()
     except Exception as e:
         print(f"Error: {e}")
@@ -409,27 +409,10 @@ def insert_script_details(cursor, resource_id, scripts_by_id):
 
 
 def update_resource_details(cursor, resource_id, resource_details):
-    resource_update_query = """
-        UPDATE Resources SET
-        title = %s,
-        slug = %s,
-        description = %s,
-        operation = %s,
-        operation_author = %s,
-        organization = %s,
-        link = %s,
-        author = %s,
-        updated_at = %s,
-        user_id = %s,
-        type_id = %s,
-        image_id = %s,
-        hidden = %s
-        WHERE id = %s
-    """
-    
-    resource_data = (
+    cursor.callproc('UpdateResourceDetails', (
+        resource_id,
         resource_details['title'],
-        resource_details['slug'],  # Make sure resource_details includes 'slug' key
+        resource_details['slug'],
         resource_details['description'],
         resource_details['operation'],
         resource_details['operation_author'],
@@ -440,11 +423,9 @@ def update_resource_details(cursor, resource_id, resource_details):
         resource_details['user_id'],
         resource_details['type_id'],
         resource_details['image_id'],
-        resource_details['hidden'],
-        resource_id  # Include the resource ID
-    )
-    
-    cursor.execute(resource_update_query, resource_data)
+        resource_details['hidden']
+    ))
+
     return cursor.lastrowid
 
 def get_term_id_for_title(term_title, taxonomy_id):
@@ -486,7 +467,7 @@ def update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_sele
         taxonomy_details = {
             'Idiomas': idiomas_selected,
             'Formato': formatos_selected,
-            'Modos de utilização': use_mode_selected,
+            'Modos de utilização': use_mode_selected,   
             'Requisitos técnicos': requirements_selected
         }
 
@@ -545,7 +526,7 @@ def get_resource_image_url(resource_slug):
     return None  # Return None if no image is found
 
 def get_resource_files(resource_slug):
-    file_extensions = ['pdf', 'docx', 'xlsx']  # Add other file extensions as needed
+    file_extensions = ['pdf', 'docx', 'xlsx','doc']  # Add other file extensions as needed
     directory_path = os.path.join(current_app.root_path, 'static', 'files', 'resources', resource_slug)
     files = []
 
