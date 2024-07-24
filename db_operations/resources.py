@@ -364,31 +364,18 @@ def insert_resource_details(cursor, resource_details):
     cursor.execute(resource_insert_query, resource_data)
     return cursor.lastrowid
 
-def insert_taxonomy_details(cursor,resource_id, taxonomy_details):
-    taxonomy_insert_query = """
-        INSERT INTO Terms (title, taxonomy_id, created_at, updated_at)
-        VALUES (%s, %s, NOW(), NOW())
-    """
-    
-    taxonomy_data = [
-        (taxonomy_details['idiomas_title'], get_taxonomy_id_for_title('Idiomas')),
-        (taxonomy_details['formato_title'], get_taxonomy_id_for_title('Formato')),
-        (taxonomy_details['modo_utilizacao_title'], get_taxonomy_id_for_title('Modos de utilização')),
-        (taxonomy_details['requisitos_tecnicos_title'], get_taxonomy_id_for_title('Requisitos Técnicos')),
-        (taxonomy_details['anos_escolaridade_title'], get_taxonomy_id_for_title('Anos de escolaridade'))
-    ]
+def insert_taxonomy_details(cursor, resource_id, taxonomy_details):
+    # Call the stored procedure
+    cursor.callproc('InsertTaxonomyDetails', [
+        resource_id,
+        taxonomy_details['idiomas_title'],
+        taxonomy_details['formato_title'],
+        taxonomy_details['modo_utilizacao_title'],
+        taxonomy_details['requisitos_tecnicos_title'],
+        taxonomy_details['anos_escolaridade_title']
+    ])
 
-    for data in taxonomy_data:
-        cursor.execute(taxonomy_insert_query, data)
-        term_id = cursor.lastrowid
 
-        # Insert into resource_terms
-        resource_term_insert_query = """
-            INSERT INTO resource_terms (resource_id, term_id,created_at,updated_at)
-            VALUES (%s, %s,NOW(),NOW())
-        """
-        resource_term_data = (resource_id, term_id)
-        cursor.execute(resource_term_insert_query, resource_term_data)
 
 def insert_script_details(cursor, resource_id, scripts_by_id):
     for script_data in scripts_by_id.values():
