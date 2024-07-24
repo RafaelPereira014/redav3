@@ -242,7 +242,7 @@
                         {% for script_id, script in resource_details.scripts_by_id.items() %}
                             {% if script.approved or admin %}
                                 <div class="button-container">
-                                    <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }}</button>
+                                    <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }} {{script_id}}</button>
                                     {% if admin and not script.approved %}
                                         <button onclick="aprovarProposta({{ script_id }})">Aprovar proposta de operacionalização</button>
                                     {% endif %}
@@ -559,23 +559,17 @@
             fetch(`/delete_resource/${resourceId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/json'
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.includes("Resource deleted successfully")) {
-                    alert("Recurso eliminado com sucesso!");
-                    // Redirect to the resources page after deletion
-                    window.location.href = '/resources';
+                if (response.ok) {
+                    alert(data.message);
+                    // Redirect to the main page after deletion
+                    window.location.href = '/';
                 } else {
-                    alert("Erro ao eliminar o recurso: " + data);
-                    window.location.href = '/resources';
+                    alert("Erro ao eliminar o recurso: " + data.message);
                 }
                 deleteModal.style.display = "none"; // Close the modal
             })
@@ -585,6 +579,7 @@
                 deleteModal.style.display = "none"; // Close the modal in case of error
             });
         }
+        
         
 
         // Event listener for the 'Ocultar' button

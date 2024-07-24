@@ -145,3 +145,23 @@ def update_script(resource_id, user_id, selected_anos, selected_disciplinas, sel
             conn.close()
 
 
+def delete_resource_and_scripts(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor()
+
+        # Call the stored procedure
+        cursor.callproc('DeleteResourceAndScripts', (resource_id,))
+        
+        # Commit the transaction
+        conn.commit()
+
+        print(f"Resource and associated scripts with ID {resource_id} have been deleted.")
+        
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        conn.rollback()  # Rollback the transaction on error
+
+    finally:
+        cursor.close()
+        conn.close()

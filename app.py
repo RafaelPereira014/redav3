@@ -1,5 +1,6 @@
 from itertools import islice
 import math
+import random
 import bcrypt
 import re
 from flask import Flask, flash, jsonify, redirect, render_template, request
@@ -199,15 +200,25 @@ def resource_details(resource_id):
                            related_resources=related_resources, 
                            admin=admin,slug=slug)
 
+
+
+
 @app.route('/hide_resource/<int:resource_id>', methods=['POST'])
 def hide_resource_route(resource_id):
     result = hide_resource(resource_id)
     return result
 
 @app.route('/delete_resource/<int:resource_id>', methods=['POST'])
-def delete_resource_route(resource_id):
-    result = delete_resource(resource_id)
-    return result
+def delete_resource(resource_id):
+    try:
+        delete_resource_and_scripts(resource_id)
+        response = jsonify(message='Resource deleted successfully')
+        response.status_code = 200
+    except Exception as e:
+        response = jsonify(message=f'Error occurred: {str(e)}')
+        response.status_code = 500
+    
+    return response
 
 @app.route('/gerirpropostas/<slug>')
 def gerir_propostas(slug):
@@ -612,13 +623,17 @@ def novo_recurso():
             if file and allowed_file(file.filename):
                 filename = file.filename
                 extension = filename.rsplit('.', 1)[1].lower()
+
+                # Generate new file name
+                random_int = random.randint(1000, 9999)
+                new_filename = f"{slug}_{random_int}.{extension}"
                 
                 # Create the directory /static/files/resources/slug/
                 slug_dir = os.path.join('static', 'files', 'resources', slug)
                 if not os.path.exists(slug_dir):
                     os.makedirs(slug_dir)
                 
-                file_path = os.path.join(slug_dir, filename)
+                file_path = os.path.join(slug_dir, new_filename)
 
                 # Save the file
                 file.save(file_path)
@@ -627,7 +642,7 @@ def novo_recurso():
                 # Insert new record into the images-like table
                 cursor.execute(
                     "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
-                    (filename, extension, 1, datetime.now(), datetime.now())
+                    (new_filename, extension, 1, datetime.now(), datetime.now())
                 )
                 image_id = cursor.lastrowid
 
@@ -692,7 +707,6 @@ def novo_recurso():
 
 
 
-
 @app.route('/novorecurso2', methods=['GET', 'POST'])
 def novo_recurso2():
     conn = connect_to_database()
@@ -723,7 +737,7 @@ def novo_recurso2():
         selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
         outros_conceitos = data.get('outros_conceitos', '')
-        descricao = data.get('descricao', '')
+        descricao = data.get('descricao')
         
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
         conn.commit()

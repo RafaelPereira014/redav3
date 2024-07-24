@@ -540,7 +540,7 @@ def get_resource_image_url(resource_slug):
         for ext in image_extensions:
             for filename in os.listdir(directory_path):
                 if filename.startswith(resource_slug) and filename.endswith('.' + ext):
-                    return url_for('static', filename=f'files/resources/{resource_slug}/{filename}')
+                    return url_for('static', filename=f'/files/resources/{resource_slug}/{filename}')
 
     return None  # Return None if no image is found
 
@@ -553,7 +553,7 @@ def get_resource_files(resource_slug):
         for ext in file_extensions:
             for filename in os.listdir(directory_path):
                 if filename.startswith(resource_slug) and filename.endswith('.' + ext):
-                    file_url = url_for('static', filename=f'files/resources/{resource_slug}/{filename}')
+                    file_url = url_for('static', filename=f'/files/resources/{resource_slug}/{filename}')
                     files.append(file_url)
 
     return files  # Return a list of file URLs
