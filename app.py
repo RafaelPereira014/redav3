@@ -21,6 +21,17 @@ from db_operations.new_operations import *
 app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Needed for session management
+UPLOAD_FOLDER = 'static/files/resources/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# Ensure the upload folder exists
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
 
 
 config = {
@@ -276,6 +287,7 @@ def resource_edit(resource_id):
         formatos_selected = request.form.getlist('formato')
         use_mode_selected = request.form.getlist('use_mode')
         requirements_selected = request.form.getlist('requirements')
+        slug = generate_slug(title)
 
         if not title or not author or not organization or not description:
             return render_template('edit_resource.html', 
@@ -288,7 +300,7 @@ def resource_edit(resource_id):
 
         resource_details_update = {
             'title': title,
-            'slug': title,  # Assuming you have a slugify function
+            'slug': slug,  
             'description': description,
             'organization': organization,
             'author': author,
@@ -587,10 +599,37 @@ def novo_recurso():
 
         # Handle file upload if needed
         file = request.files.get('ficheiro')
+        print(file)
 
         try:
             conn = connect_to_database()
             cursor = conn.cursor(dictionary=True)
+
+            # Initialize image_id
+            image_id = None
+
+            # If there's a file and it's allowed, save it
+            if file and allowed_file(file.filename):
+                filename = file.filename
+                extension = filename.rsplit('.', 1)[1].lower()
+                
+                # Create the directory /static/files/resources/slug/
+                slug_dir = os.path.join('static', 'files', 'resources', slug)
+                if not os.path.exists(slug_dir):
+                    os.makedirs(slug_dir)
+                
+                file_path = os.path.join(slug_dir, filename)
+
+                # Save the file
+                file.save(file_path)
+                print(f"File saved to {file_path}")
+
+                # Insert new record into the images-like table
+                cursor.execute(
+                    "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (filename, extension, 1, datetime.now(), datetime.now())
+                )
+                image_id = cursor.lastrowid
 
             resource_details = {
                 'title': title,
@@ -617,7 +656,7 @@ def novo_recurso():
                 'deleted_at': None,
                 'user_id': user_id,
                 'type_id': 1,
-                'image_id': 1,
+                'image_id': image_id,  # Use the new image_id
                 'hidden': 0
             }
 
@@ -649,7 +688,6 @@ def novo_recurso():
             conn.close()
 
     return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
-
 
 
 
