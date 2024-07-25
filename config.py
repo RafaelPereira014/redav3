@@ -3,5 +3,5 @@ DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
     'password': 'passroot',
-    'database': 'redav4'
+    'database': 'redav5'
 }
