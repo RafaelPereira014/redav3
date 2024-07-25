@@ -240,41 +240,35 @@
                         {% endif %}
                     {% endif %}
 
-                    {% for script_id, script in resource.details.scripts_by_id.items() %}
-                        <div class="ciclo-container">
-                            {% set ciclos = [] %}
+                    {% set ciclos = [] %}
 
-                            {% if '1.º' in script.anos_resources or
-                                '2.º' in script.anos_resources or
-                                '3.º' in script.anos_resources or
-                                '4.º' in script.anos_resources %}
-                                {% set _ = ciclos.append('1º ciclo') %}
-                            {% endif %}
-                            
-                            {% if '5.º' in script.anos_resources or
-                                '6.º' in script.anos_resources %}
-                                {% set _ = ciclos.append('2º ciclo') %}
-                            {% endif %}
-                            
-                            {% if '7.º' in script.anos_resources or
-                                '8.º' in script.anos_resources or
-                                '9.º' in script.anos_resources %}
-                                {% set _ = ciclos.append('3º ciclo') %}
-                            {% endif %}
-                            
-                            {% if '10.º' in script.anos_resources or
-                                '11.º' in script.anos_resources or
-                                '12.º' in script.anos_resources %}
-                                {% set _ = ciclos.append('Secundário') %}
-                            {% endif %}
-                            
-                            {% if ciclos %}
-                                <p class="ciclo">{{ ciclos | join(', ') }}</p>
-                            {% else %}
-                                <p class="ciclo">No cycle information found</p>
-                            {% endif %}
-                        </div>
+                    {% for script_id, script in resource.details.scripts_by_id.items() %}
+                        {% if '1.º' in script.anos_resources or '2.º' in script.anos_resources or '3.º' in script.anos_resources or '4.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('1º ciclo') %}
+                        {% endif %}
+                        {% if '5.º' in script.anos_resources or '6.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('2º ciclo') %}
+                        {% endif %}
+                        {% if '7.º' in script.anos_resources or '8.º' in script.anos_resources or '9.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('3º ciclo') %}
+                        {% endif %}
+                        {% if '10.º' in script.anos_resources or '11.º' in script.anos_resources or '12.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('Secundário') %}
+                        {% endif %}
                     {% endfor %}
+
+                    {% set unique_ciclos = ciclos | unique %}
+
+                    <div class="ciclo-container">
+                        {% if unique_ciclos %}
+                            <p class="ciclo">{{ unique_ciclos | join(', ') }}</p>
+                        {% else %}
+                            <p class="ciclo">No cycle information found</p>
+                        {% endif %}
+                    </div>
+
+
+
 
 
 

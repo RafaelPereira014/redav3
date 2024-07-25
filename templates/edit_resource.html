@@ -66,6 +66,7 @@
         
         #editor-container {
             height: 200px;
+            text-transform: none; /* Ensure text-transform is none */
         }
         #counter {
             margin-top: 5px;
@@ -132,25 +133,6 @@
                         <label for="formato{{ loop.index }}">{{ formato }}</label>
                     {% endfor %}
                 </div>
-                <!-- 
-                <div class="input-group-local ">
-                    <h2>Localização do recurso:</h2>
-                    <input type="radio" id="localizacao1" name="localizacao" value="Opção 1" 
-                        {% if resource_details.localizacao == 'Opção 1' %}checked{% endif %}>
-                    <label for="localizacao1">Endereço e/ou código de incorporação</label>
-                    <input type="radio" id="localizacao2" name="localizacao" value="Opção 2" 
-                        {% if resource_details.localizacao == 'Opção 2' %}checked{% endif %}>
-                    <label for="localizacao2">Ficheiro</label>
-                    <div id="enderecoInput" style="display: {% if resource_details.localizacao == 'Opção 1' %}block{% else %}none{% endif %};">
-                        <input type="text" id="endereco" name="endereco" placeholder="Digite o endereço" value="{{ resource_details.endereco }}">
-                    </div>
-                    <div id="fileInput" style="display: {% if resource_details.localizacao == 'Opção 2' %}block{% else %}none{% endif %};">
-                        <input type="file" id="file" name="file">
-                    </div>
-                </div>
-                
-                
-                -->
                 <div class="input-group-use">
                     <h2>Modos de Utilização:</h2>
                     {% for modo in use_mode %}
@@ -169,8 +151,8 @@
                 </div>
                 <div class="input-group ">
                     <h2>Descrição:</h2>
-                    <div id="editor-container">{{ resource_details.description }}</div>
-                    <textarea id="descricao" name="descricao" rows="5" style="display:none;" ></textarea>
+                    <div id="editor-container"></div>
+                    <textarea id="descricao" name="descricao" rows="5" style="display:none;">{{ resource_details.description }}</textarea>
                     <div id="counter"></div>
                     <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 2000</small>
                 </div>
@@ -222,12 +204,17 @@
             var editor = new Quill('#editor-container', {
                 theme: 'snow'
             });
-            var input = document.querySelector('#descricao');
-            editor.root.innerHTML = input.value;
+
+            // Set initial value from textarea to Quill editor
+            var descricaoInput = document.getElementById('descricao');
+            editor.clipboard.dangerouslyPasteHTML(descricaoInput.value);
+
+            // Sync Quill editor content to textarea
             editor.on('text-change', function() {
-                input.value = editor.root.innerHTML;
+                descricaoInput.value = editor.root.innerHTML;
                 updateCounter();
             });
+
             function updateCounter() {
                 var textLength = editor.getText().trim().length;
                 var maxLength = 2000;
