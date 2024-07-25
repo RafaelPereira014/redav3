@@ -580,7 +580,7 @@ def tools():
     total_tools = cursor.fetchone()['total']
 
     # Fetch tools for the current page
-    cursor.execute("SELECT * FROM Resources WHERE type_id=%s ORDER BY id DESC LIMIT %s OFFSET %s", (1, per_page, offset))
+    cursor.execute("SELECT * FROM Resources WHERE type_id=%s AND approvedScientific = 1 AND approvedLinguistic = 1 ORDER BY id DESC LIMIT %s OFFSET %s", (1, per_page, offset))
     all_tools = cursor.fetchall()
     
     for tool in all_tools:
@@ -612,11 +612,68 @@ def tools():
 
 
 
-@app.route('/novaferramenta')
+@app.route('/novaferramenta', methods=['GET', 'POST'])
 def newtool():
+    conn = connect_to_database()
+    cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
-    return render_template('novaferramenta.html',admin=admin)
+
+    if request.method == 'POST':
+        try:
+            title = request.form.get('titulo')
+            print(title)
+            descricao = request.form.get('descricao')
+            print(descricao)
+            
+            # Retrieving lists of selected items
+            endereco = request.form.get('endereco')
+            print(endereco)
+            embebed = request.form.get('categoria')
+            print(embebed)
+            slug = generate_slug(title)
+
+            # If there's an image and it's allowed, save it
+            
+
+            resource_details = {
+                'title': title,
+                'slug': slug,
+                'description': descricao,
+                'highlight': '0',
+                'exclusive': '0',
+                'embed': embebed,
+                'link': endereco,
+                'approved': '0',
+                'approvedScientific': '0',
+                'approvedLinguistic': '0',
+                'status': '0',
+                'accepted_terms': '0',
+                'hidden': '0',
+                'created_at': datetime.now(),
+                'updated_at': datetime.now(),
+                'user_id': user_id,
+                'type_id': '1',
+                'image_id': '1'
+            }
+
+            resource_id = insert_tools_details(cursor, resource_details)
+            print(resource_id)
+
+            conn.commit()
+
+            return redirect(url_for('tools'))  # Replace with your target route
+
+        except Exception as e:
+            print(f"Error in transaction: {str(e)}")
+            conn.rollback()
+            raise  # Rethrow the exception for debugging purposes
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    return render_template('novaferramenta.html', admin=admin)
 
 # My Account
 @app.route('/myaccount')

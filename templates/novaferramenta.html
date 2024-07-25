@@ -85,54 +85,50 @@
     </div>
     <main>
         <div class="container">
-            <div class="input-group required">
-                <h2>Título:</h2>
-                <textarea id="titulo" name="titulo" rows="3" placeholder="Nome da ligação" required></textarea>
-            </div>
+            <form  method="POST" enctype="multipart/form-data">
+                <div class="input-group required">
+                    <h2>Título:</h2>
+                    <textarea id="titulo" name="titulo" rows="1" placeholder="Nome da aplicação" required></textarea>
+                </div>
+                
+                <div class="input-group required">
+                    <h2>Descrição:</h2>
+                    <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+                    <div id="counter"></div>
+    
+                    <small class="small-text">
+                        Deve ter no mínimo 20 caracteres e no máximo 1500
+                    </small>
+                </div>
+                <div class="input-group required">
+                    <h2>Endereço</h2>
+                    <input type="text" name="endereco" id="endereco-input" placeholder="Endereço de ligação">
+                </div>
+                
+                
+                <div class="input-group-categ required">
+                    <h2>Categorias:</h2>
+                    <input type="checkbox" id="categoria1" name="categoria" value="Opção 1">
+                    <label for="categoria1">Curiosidades</label>
+                    <input type="checkbox" id="categoria2" name="categoria" value="Opção 2">
+                    <label for="categoria2">Interessantes</label>
+                    <input type="checkbox" id="categoria3" name="categoria" value="Opção 3">
+                    <label for="categoria3">Jogos</label>
+                </div>
             
-            <div class="input-group required">
-                <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao" placeholder="Descreva esta ligação sucintamente" maxlength="1500"  required></textarea>
-                <div id="counter"></div>
+                
+                
+                
                 <small class="small-text">
-                    Deve ter no mínimo 20 caracteres e no máximo 1500
+                    <span class="text-danger">*</span>
+                    Campo obrigatório
                 </small>
-            </div>
-            <div class="input-group required">
-                <h2>Endereço</h2>
-                <input type="text" id="endereco-input" placeholder="Endereço de ligação">
-            </div>
-
-            <div class="input-group">
-                <h2>Palavras-chave</h2>
-                <input type="text" id="tags-input" placeholder="Outros conceitos">
-                <small class="small-text">
-                    Deve escrever entre 1 e 10 palavras ou expressões
-                </small>
-                <div class="tags-container" id="tags-container"></div>
-            </div>
+                
+                <button type="submit">Criar aplicação</button>
+                <button onclick="window.location.href='/'">Cancelar</button>
+    
+            </form>
             
-            
-            <div class="input-group-categ required">
-                <h2>Categorias:</h2>
-                <input type="checkbox" id="categoria1" name="categoria" value="Opção 1">
-                <label for="categoria1">Curiosidades</label>
-                <input type="checkbox" id="categoria2" name="categoria" value="Opção 2">
-                <label for="categoria2">Interessantes</label>
-                <input type="checkbox" id="categoria3" name="categoria" value="Opção 3">
-                <label for="categoria3">Jogos</label>
-            </div>
-        
-            
-            
-            <small class="small-text">
-                <span class="text-danger">*</span>
-                Campo obrigatório
-            </small>
-            
-            <button type="submit">Criar ferramenta</button>
-            <button type="submit">Cancelar</button>
-
         </div>
     </main>
     

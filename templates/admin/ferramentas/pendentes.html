@@ -29,7 +29,19 @@
             background-color: #333;
             color: white;
         }
-    </style> 
+        .approval-icon {
+            cursor: pointer;
+        }
+        .approval-icon i {
+            margin: 0 5px;
+        }
+        .approval-icon .fa-check {
+            color: green;
+        }
+        .approval-icon .fa-times {
+            color: red;
+        }
+    </style>
 
 
     
@@ -104,8 +116,8 @@
                 <tr>
                     <th>Título</th>
                     <th>Data de criação</th>
-                    <th>Submetido por</th>
-                    <th>Ações</th>
+                    <th>Aprovado linguisticamente</th>
+                    <th>Aprovado cientificamente</th>
                 </tr>
             </thead>
             <tbody>
@@ -113,10 +125,19 @@
                 <tr>
                     <td>{{ tool.title }}</td>
                     <td>{{ tool.created_at}}</td>
-                    <td>{{ tool.author }}</td>
-                    <td>
-                        <i class="fa fa-pencil"></i>
-                        <i class="fas fa-trash"></i>
+                    <td class="approval-icon" data-id="{{ tool.id }}" data-type="linguistic" data-value="{{ tool.approvedLinguistic }}">
+                        {% if tool.approvedLinguistic == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
+                    </td>
+                    <td class="approval-icon" data-id="{{ tool.id }}" data-type="scientific" data-value="{{ tool.approvedScientific }}">
+                        {% if tool.approvedScientific == 1 %}
+                            <i class="fas fa-check"></i>
+                        {% else %}
+                            <i class="fas fa-times"></i>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -169,16 +190,65 @@
 
             displayRows(currentPage);
             setupPagination();
-        });
 
-        function toggleSubmenu(submenuId) {
-            var submenu = document.getElementById(submenuId);
-            if (submenu.style.display === "block") {
-                submenu.style.display = "none";
-            } else {
-                submenu.style.display = "block";
+
+            function toggleApprovalStatus(cell, type, id) {
+                const currentValue = parseInt(cell.getAttribute("data-value"));
+                const newValue = currentValue === 1 ? 0 : 1;
+                cell.setAttribute("data-value", newValue);
+            
+                if (newValue === 1) {
+                    cell.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    cell.innerHTML = '<i class="fas fa-times"></i>';
+                }
+            
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", `/update_approved_${type}/${id}`, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status !== 200) {
+                            alert(`Error updating approval status: ${xhr.responseText}`);
+                        }
+                    }
+                };
+            
+                xhr.send(`newValue=${newValue}`);
             }
-        }
+            
+            function confirmToggle(cell) {
+                const confirmation = confirm("Are you sure you want to toggle approval status?");
+                if (confirmation) {
+                    const id = cell.getAttribute("data-id");
+                    const type = cell.getAttribute("data-type");
+                    toggleApprovalStatus(cell, type, id);
+                }
+            }
+            
+            table.addEventListener("click", function(event) {
+                const targetCell = event.target.closest(".approval-icon");
+                if (targetCell) {
+                    confirmToggle(targetCell);
+                }
+            });
+            
+
+            const sidebarItems = document.querySelectorAll('.sidebar ul li');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const submenu = item.querySelector('.submenu');
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.querySelector('.submenu').style.display = 'none';
+                        }
+                    });
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        });
     </script>
 </body>
 </html>
