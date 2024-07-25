@@ -115,18 +115,20 @@ def get_pendent_resources():
 def update_approvedScientific(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("UPDATE Resources set approvedScientific='1' where id=%s",(resource_id,))
+    cursor.execute("UPDATE Resources set approvedScientific=%s where id=%s", (1, resource_id))
     conn.commit()
     cursor.close()
     conn.close()
-    
+    return {"status": "success", "message": "Scientific approval updated"}
+
 def update_approvedLinguistic(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("UPDATE Resources set approvedLinguistic='1' where id=%s",(resource_id,))
+    cursor.execute("UPDATE Resources set approvedLinguistic=%s where id=%s", (1, resource_id))
     conn.commit()
     cursor.close()
     conn.close()
+    return {"status": "success", "message": "Linguistic approval updated"}
 
 def get_hidden_resources():
     """Get all approved resources from the DB."""

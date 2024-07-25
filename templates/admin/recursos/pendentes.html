@@ -224,18 +224,17 @@
                 const currentValue = parseInt(cell.getAttribute("data-value"));
                 const newValue = currentValue === 1 ? 0 : 1;
                 cell.setAttribute("data-value", newValue);
-
+        
                 if (newValue === 1) {
                     cell.innerHTML = '<i class="fas fa-check"></i>';
                 } else {
                     cell.innerHTML = '<i class="fas fa-times"></i>';
                 }
-
+        
                 const xhr = new XMLHttpRequest();
                 xhr.open("POST", `/update_approved_${type}/${id}`, true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send();
-
+        
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status !== 200) {
@@ -243,6 +242,8 @@
                         }
                     }
                 };
+        
+                xhr.send(); // Ensure the request is sent after onreadystatechange is set
             }
 
             function confirmToggle(cell) {

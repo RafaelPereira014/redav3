@@ -774,7 +774,7 @@ def novo_recurso():
                 'updated_at': datetime.now(),
                 'deleted_at': None,
                 'user_id': user_id,
-                'type_id': 1,
+                'type_id': 2,
                 'image_id': image_id,  # Use the new image_id
                 'hidden': 0
             }
@@ -933,12 +933,12 @@ def rec_pendentes():
 @app.route('/update_approved_scientific/<int:resource_id>', methods=['POST'])
 def update_approved_scientific(resource_id):
     result = update_approvedScientific(resource_id)
-    return result
+    return jsonify(result)
 
 @app.route('/update_approved_linguistic/<int:resource_id>', methods=['POST'])
 def update_approved_linguistic(resource_id):
     result = update_approvedLinguistic(resource_id)
-    return result
+    return jsonify(result)
 
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():

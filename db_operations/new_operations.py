@@ -146,6 +146,7 @@ def update_script(resource_id, user_id, selected_anos, selected_disciplinas, sel
 
 
 def delete_resource_and_scripts(resource_id):
+    conn = None
     try:
         conn = connect_to_database()
         cursor = conn.cursor()
@@ -159,9 +160,13 @@ def delete_resource_and_scripts(resource_id):
         print(f"Resource and associated scripts with ID {resource_id} have been deleted.")
         
     except Exception as e:
+        if conn:
+            conn.rollback()  # Rollback the transaction on error
         print(f"Error occurred: {str(e)}")
-        conn.rollback()  # Rollback the transaction on error
+        raise e  # Re-raise the exception to be caught in the route function
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
