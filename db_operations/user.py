@@ -99,23 +99,24 @@ def get_current_month_users():
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
         
-        # Get the current year and month
-        #current_year = datetime.now().year
+        # Set current year and month
         current_year = 2024
-        #current_month = datetime.now().month
         current_month = 5
         
-        # SQL query to select resources created in the current month
+        # SQL query to count users created in the current month
         query = """
-            SELECT COUNT(*) FROM Users
+            SELECT COUNT(*) AS count FROM Users
             WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s
         """
         cursor.execute(query, (current_year, current_month))
-        users = cursor.fetchall()
+        result = cursor.fetchone()
         
-        logging.info(f"Retrieved {len(users)} users created in the current month.")
+        # Extract the count value from the result dictionary
+        users_count = result['count'] if result else 0
         
-        return users
+        logging.info(f"Retrieved {users_count} users created in the current month.")
+        
+        return users_count
     except Exception as e:
         logging.error(f"Error retrieving users for the current month: {e}")
         return None

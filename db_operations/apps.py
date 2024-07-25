@@ -154,25 +154,27 @@ def get_current_month_apps():
         cursor = conn.cursor(dictionary=True)
         
         # Get the current year and month
-        #current_year = datetime.now().year
         current_year = 2024
-        #current_month = datetime.now().month
         current_month = 5
         
-        # SQL query to select resources created in the current month
+        # SQL query to select count of apps created in the current month
         query = """
-            SELECT COUNT(*) FROM Resources 
+            SELECT COUNT(*) AS count FROM Resources 
             WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s AND type_id='3'
         """
         cursor.execute(query, (current_year, current_month))
-        apps = cursor.fetchall()
+        result = cursor.fetchone()
         
-        logging.info(f"Retrieved {len(apps)} apps created in the current month.")
+        # Extract the count value from the result dictionary
+        apps_count = result['count'] if result else 0
         
-        return apps
+        logging.info(f"Retrieved {apps_count} apps created in the current month.")
+        
+        return apps_count
     except Exception as e:
         logging.error(f"Error retrieving apps for the current month: {e}")
         return None
     finally:
         cursor.close()
         conn.close()
+

@@ -29,71 +29,76 @@
             background-color: #333;
             color: white;
         }
-      
-        
+
         .content {
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* Adjust the gap between sections */
+            padding: 20px;
+        }
+
+        .panels {
+            display: flex;
             flex-wrap: wrap;
-            gap: 10px; /* Adjust the gap between panels */
+            gap: 20px; /* Adjust the gap between panels */
             justify-content: center; /* Center the panels horizontally */
         }
-        
+
         .panel {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
             box-sizing: border-box;
             color: white; /* Ensure text is readable against colored backgrounds */
-            width: calc(25% - 30px); /* Four panels in a row */
-            max-width: 200px;
+            width: 100%;
+            max-width: 180px;
+            text-align: center;
         }
-        
+
         .panel h2 {
             margin-bottom: 15px;
         }
-        
+
         .panel p {
             margin: 0;
+            font-size: 1.5em;
+            font-weight: bold;
         }
-        
+
         .panel-resources {
             background: linear-gradient(to bottom, #34a853, #b8e994);
         }
-        
+
         .panel-apps {
             background: linear-gradient(to bottom, #4285f4, #a0c1f8);
         }
-        
+
         .panel-tools {
             background: linear-gradient(to bottom, #fbbc05, #fce4a6);
         }
-        
+
         .panel-users {
             background: linear-gradient(to bottom, #ea4335, #f9b3a0);
         }
-        
+
         /* Optional: Add hover effect for better user experience */
         .panel:hover {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
-        
-        
-    </style>
 
-    
+    </style>
 </head>
 <body>
-    
+
     <div class="sidebar">
         <div class="logo">
             <a href="/dashboard">
                 <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="Logo">
-            </a>        
+            </a>
         </div>
         <ul>
             <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-
             <li>
                 <a><i class="fas fa-database"></i> Recursos </a>
                 <ul class="submenu">
@@ -102,15 +107,12 @@
                     <li><a href="/dashboard/recursos/ocultos" >Ocultos</a></li>
                 </ul>
             </li>
-            
-            
             <li>
                 <a href="/dashboard/aplicacoes"><i class="fas fa-layer-group"></i> Aplicações</a>
                 <ul class="submenu">
                     <li><a href="/dashboard/aplicacoes/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
                 </ul>
             </li>
-
             <li>
                 <a href="/dashboard/ferramentas"><i class="fas fa-tools"></i> Ferramentas</a>
                 <ul class="submenu">
@@ -135,47 +137,51 @@
             <li><a href="#"><i class="fas fa-file-alt"></i> Artigos</a></li>
         </ul>
     </div>
-    
-    <div class="content">
-        <h2>Resumo da REDA - {{date}}</h2>
-        <div class="panel panel-resources">
-            <h2>novos recursos</h2>
-            <p>{{monthly_resources}}</p>
-        </div>
-        <div class="panel panel-apps">
-            <h2>novas aplicações</h2>
-            <p>{{monthly_apps}}</p>
-        </div>
-        <div class="panel panel-tools">
-            <h2>novas ferramentas</h2>
-            <p>{{monthly_tools}}</p>
-        </div>
-        <div class="panel panel-users">
-            <h2>novos utilizadores</h2>
-            <p>{{monthly_users}}</p>
-        </div>
-        
 
-        <h2>Utilizadores mais ativos -  {{date}}</h2>
-    
+    <div class="content">
+        <h2>Resumo da REDA - {{current_month}}</h2>
+        <div class="panels">
+            <div class="panel panel-resources">
+                <h2>novos recursos</h2>
+                <p>{{monthly_resources}}</p>
+            </div>
+            <div class="panel panel-apps">
+                <h2>novas aplicações</h2>
+                <p>{{monthly_apps}}</p>
+            </div>
+            <div class="panel panel-tools">
+                <h2>novas ferramentas</h2>
+                <p>{{monthly_tools}}</p>
+            </div>
+            <div class="panel panel-users">
+                <h2>novos utilizadores</h2>
+                <p>{{monthly_users}}</p>
+            </div>
+        </div>
+
+        <h2>Utilizadores mais ativos - {{current_month}}</h2>
 
         <table id="main_table">
-            <tr>
-                <th>Nº recursos</th>
-                <th>Nome</th>
-                <th>E-mail</th>
-            </tr>
-            {% for user in active_users %}
-            <tr>
-                <td>{{ user.resource_count }}</td>
-                <td>{{ user.author }}</td>
-                <td>{{ user.email }}</td>
-            </tr>
-            {% endfor %}
+            <thead>
+                <tr>
+                    <th>Nº recursos</th>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in active_users %}
+                <tr>
+                    <td>{{ user.resource_count }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
         <div class="pagination" id="pagination"></div>
     </div>
-    
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const table = document.getElementById("main_table");
@@ -228,6 +234,4 @@
                 submenu.style.display = "block";
             }
         }
-    </script>
-    </body>
-    </html>
+   

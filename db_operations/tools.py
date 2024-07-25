@@ -77,22 +77,25 @@ def get_current_month_tools():
         cursor = conn.cursor(dictionary=True)
         
         # Get the current year and month
-        #current_year = datetime.now().year
         current_year = 2024
-        #current_month = datetime.now().month
         current_month = 5
         
-        # SQL query to select resources created in the current month
+        # SQL query to select the count of resources created in the current month
         query = """
-            SELECT COUNT(*) FROM Resources 
+            SELECT COUNT(*) AS count FROM Resources 
             WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s AND type_id='1'
         """
         cursor.execute(query, (current_year, current_month))
-        tools = cursor.fetchall()
         
-        logging.info(f"Retrieved {len(tools)} tools created in the current month.")
+        # Fetch the result (only one row with one column)
+        result = cursor.fetchone()
         
-        return tools
+        # Extract the count value from the result dictionary
+        tools_count = result['count'] if result else 0
+        
+        logging.info(f"Retrieved {tools_count} tools created in the current month.")
+        
+        return tools_count
     except Exception as e:
         logging.error(f"Error retrieving tools for the current month: {e}")
         return None

@@ -1,3 +1,4 @@
+from datetime import date
 from itertools import islice
 import math
 import random
@@ -979,13 +980,28 @@ def speakwus():
 # Admin Page
 @app.route('/dashboard')
 def admin():
-    date = datetime.now()  # Get current date and time
-    active_users = get_active_month_users()
+    month_names = {
+    1: "Janeiro",
+    2: "Fevereiro",
+    3: "Março",
+    4: "Abril",
+    5: "Maio",
+    6: "Junho",
+    7: "Julho",
+    8: "Agosto",
+    9: "Setembro",
+    10: "Outubro",
+    11: "Novembro",
+    12: "Dezembro"
+    }
+    current_date = datetime.now()
+    current_month = month_names[current_date.month]
+    active_users = get_active_users_with_usernames()
     monthly_tools = get_current_month_tools()
     monthly_apps = get_current_month_apps()
     monthly_resources = get_current_month_resources()
     monthly_users = get_current_month_users()
-    return render_template('admin/admin.html', date=date,active_users=active_users,monthly_apps=monthly_apps,monthly_tools=monthly_tools,monthly_resources=monthly_resources,monthly_users=monthly_users)  # Pass date to template
+    return render_template('admin/admin.html', current_month=current_month,active_users=active_users,monthly_apps=monthly_apps,monthly_tools=monthly_tools,monthly_resources=monthly_resources,monthly_users=monthly_users)  # Pass date to template
 
 @app.route('/dashboard/recursos/pendentes')
 def rec_pendentes():

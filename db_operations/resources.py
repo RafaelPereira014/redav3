@@ -754,23 +754,27 @@ def get_current_month_resources():
         current_year = datetime.now().year
         current_month = datetime.now().month
         
-        # SQL query to select resources created in the current month
+        # SQL query to select count of resources created in the current month
         query = """
-            SELECT COUNT(*) FROM Resources 
+            SELECT COUNT(*) AS count FROM Resources 
             WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s
         """
         cursor.execute(query, (current_year, current_month))
-        resources = cursor.fetchall()
+        result = cursor.fetchone()
         
-        logging.info(f"Retrieved {len(resources)} resources created in the current month.")
+        # Extract the count value from the result dictionary
+        resources_count = result['count'] if result else 0
         
-        return resources
+        logging.info(f"Retrieved {resources_count} resources created in the current month.")
+        
+        return resources_count
     except Exception as e:
         logging.error(f"Error retrieving resources for the current month: {e}")
         return None
     finally:
         cursor.close()
         conn.close()
+
         
 
 def get_active_month_users():
@@ -778,18 +782,13 @@ def get_active_month_users():
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
         
-         # Get the current year and month
-        #current_year = datetime.now().year
         current_year = 2024
-        #current_month = datetime.now().month
         current_month = 5
         
-        
-        # SQL query to select count of resources by author created in the current month
         query = """
-            SELECT author, COUNT(*) AS resource_count FROM Resources 
+            SELECT user_id, COUNT(*) AS resource_count FROM Resources 
             WHERE YEAR(created_at) = %s AND MONTH(created_at) = %s
-            GROUP BY author
+            GROUP BY user_id
         """
         cursor.execute(query, (current_year, current_month))
         active_users = cursor.fetchall()
@@ -803,7 +802,60 @@ def get_active_month_users():
     finally:
         cursor.close()
         conn.close()
-    
+
+
+def get_usernames(user_ids):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Prepare the SQL query to retrieve usernames and emails
+        query = """
+            SELECT id, name, email FROM Users
+            WHERE id IN (%s)
+        """ % ','.join(['%s'] * len(user_ids))  # Construct the query with the correct number of placeholders
+        
+        cursor.execute(query, user_ids)
+        usernames_and_emails = cursor.fetchall()
+        
+        logging.info(f"Retrieved {len(usernames_and_emails)} usernames and emails.")
+        
+        return usernames_and_emails
+    except Exception as e:
+        logging.error(f"Error retrieving usernames and emails: {e}")
+        return []
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def get_active_users_with_usernames():
+    active_users = get_active_month_users()
+    if active_users:
+        user_ids = [user['user_id'] for user in active_users]
+        
+        # Retrieve usernames and emails for the user IDs
+        usernames_and_emails = get_usernames(user_ids)
+        
+        # Map user_id to a tuple of (username, email) using the field names from `usernames_and_emails`
+        user_id_to_info = {user['id']: (user['name'], user['email']) for user in usernames_and_emails}
+        
+        # Combine active users with their usernames and emails
+        active_users_with_usernames = [
+            {
+                'id': user['user_id'],  # Ensure consistency with `active_users` key names
+                'name': user_id_to_info.get(user['user_id'], ('Unknown', 'Unknown'))[0],
+                'email': user_id_to_info.get(user['user_id'], ('Unknown', 'Unknown'))[1],
+                'resource_count': user['resource_count']
+            }
+            for user in active_users
+        ]
+        
+        return active_users_with_usernames
+    else:
+        return []
+
+
 
 
 def strip_html_tags(text):
