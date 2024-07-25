@@ -29,6 +29,18 @@
             background-color: #333;
             color: white;
         }
+        .approval-icon {
+            cursor: pointer;
+        }
+        .approval-icon i {
+            margin: 0 5px;
+        }
+        .approval-icon .fa-check {
+            color: green;
+        }
+        .approval-icon .fa-times {
+            color: red;
+        }
     </style>
 
     
@@ -109,20 +121,21 @@
                 <tr>
                     <td>{{ app.title }}</td>
                     <td>{{ app.created_at}}</td>
-                    <td class="approval-icon" data-value="{{ app.approvedLinguistic }}">
+                    <td class="approval-icon" data-id="{{ app.id }}" data-type="linguistic" data-value="{{ app.approvedLinguistic }}">
                         {% if app.approvedLinguistic == 1 %}
                             <i class="fas fa-check"></i>
                         {% else %}
                             <i class="fas fa-times"></i>
                         {% endif %}
                     </td>
-                    <td class="approval-icon" data-value="{{ app.approvedScientific }}">
+                    <td class="approval-icon" data-id="{{ app.id }}" data-type="scientific" data-value="{{ app.approvedScientific }}">
                         {% if app.approvedScientific == 1 %}
                             <i class="fas fa-check"></i>
                         {% else %}
                             <i class="fas fa-times"></i>
                         {% endif %}
                     </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -174,43 +187,65 @@
 
             displayRows(currentPage);
             setupPagination();
+
+
+            function toggleApprovalStatus(cell, type, id) {
+                const currentValue = parseInt(cell.getAttribute("data-value"));
+                const newValue = currentValue === 1 ? 0 : 1;
+                cell.setAttribute("data-value", newValue);
+            
+                if (newValue === 1) {
+                    cell.innerHTML = '<i class="fas fa-check"></i>';
+                } else {
+                    cell.innerHTML = '<i class="fas fa-times"></i>';
+                }
+            
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", `/update_approved_${type}/${id}`, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status !== 200) {
+                            alert(`Error updating approval status: ${xhr.responseText}`);
+                        }
+                    }
+                };
+            
+                xhr.send(`newValue=${newValue}`);
+            }
+            
+            function confirmToggle(cell) {
+                const confirmation = confirm("Are you sure you want to toggle approval status?");
+                if (confirmation) {
+                    const id = cell.getAttribute("data-id");
+                    const type = cell.getAttribute("data-type");
+                    toggleApprovalStatus(cell, type, id);
+                }
+            }
+            
+            table.addEventListener("click", function(event) {
+                const targetCell = event.target.closest(".approval-icon");
+                if (targetCell) {
+                    confirmToggle(targetCell);
+                }
+            });
+            
+
+            const sidebarItems = document.querySelectorAll('.sidebar ul li');
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const submenu = item.querySelector('.submenu');
+                    sidebarItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.querySelector('.submenu').style.display = 'none';
+                        }
+                    });
+                    submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+                });
+            });
         });
-
-        function toggleApprovalStatus(cell) {
-            const currentValue = parseInt(cell.getAttribute("data-value"));
-            const newValue = currentValue === 1 ? 0 : 1;
-            cell.setAttribute("data-value", newValue);
-
-            if (newValue === 1) {
-                cell.innerHTML = '<i class="fas fa-check"></i>';
-            } else {
-                cell.innerHTML = '<i class="fas fa-times"></i>';
-            }
-        }
-
-        function confirmToggle(cell) {
-            const confirmation = confirm("Are you sure you want to toggle approval status?");
-            if (confirmation) {
-                toggleApprovalStatus(cell);
-                // Here you can add logic to update the approval status in your backend via AJAX or form submission.
-            }
-        }
-
-        table.addEventListener("click", function(event) {
-            const targetCell = event.target.closest(".approval-icon");
-            if (targetCell) {
-                confirmToggle(targetCell);
-            }
-        });
-
-        function toggleSubmenu(submenuId) {
-            var submenu = document.getElementById(submenuId);
-            if (submenu.style.display === "block") {
-                submenu.style.display = "none";
-            } else {
-                submenu.style.display = "block";
-            }
-        }
     </script>
 </body>
 </html>

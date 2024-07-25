@@ -491,6 +491,37 @@ def update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_sele
         print(f"Error updating taxonomy details: {e}")
         raise
 
+def insert_app_details(cursor, resource_details):
+    resource_insert_query = """
+        INSERT INTO Resources 
+        (title, slug, description, highlight, exclusive, embed, link, approved, approvedScientific, approvedLinguistic, 
+        status, accepted_terms, hidden, created_at, updated_at, user_id, type_id, image_id)
+        VALUES 
+        (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    resource_data = (
+        resource_details['title'],
+        resource_details['slug'],
+        resource_details['description'],
+        resource_details['highlight'],
+        resource_details['exclusive'],
+        resource_details.get('embed'),  # If 'embed' is not in resource_details, it defaults to None
+        resource_details.get('link'),  # If 'link' is not in resource_details, it defaults to None
+        resource_details['approved'],
+        resource_details['approvedScientific'],
+        resource_details['approvedLinguistic'],
+        resource_details['status'],
+        resource_details['accepted_terms'],
+        resource_details['hidden'],
+        resource_details['created_at'],
+        resource_details['updated_at'],
+        resource_details['user_id'],
+        resource_details['type_id'],
+        resource_details['image_id']
+    )
+    cursor.execute(resource_insert_query, resource_data)
+    return cursor.lastrowid
+
 
 def get_recent_approved_resources_with_details(limit=8):
     """Get the most recent approved resources with combined details."""

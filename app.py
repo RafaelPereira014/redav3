@@ -476,88 +476,93 @@ def search():
 
 
 
-@app.route('/novaapp')
+@app.route('/novaapp', methods=['GET', 'POST'])
 def novaapp():
-    
     conn = connect_to_database()
     cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
-    # if request.method == 'POST':
-    #     title = request.form.get('titulo')
-    #     descricao = request.form.get('descricao')
-    #     imagem = request.files.get('file')
 
-    #     # Retrieving lists of selected items
-        
-    #     endereco = request.form.get('endereco')
-    #     embebed = request.form.get('embebed')
-    #     slug = generate_slug(title)
+    if request.method == 'POST':
+        try:
+            title = request.form.get('titulo')
+            print(title)
+            descricao = request.form.get('descricao')
+            print(descricao)
+            imagem = request.files.get('ficheiro')
+            print(imagem)
+            # Retrieving lists of selected items
+            endereco = request.form.get('endereco')
+            print(endereco)
+            embebed = request.form.get('sistema')
+            print(embebed)
+            slug = generate_slug(title)
 
-    #     # If there's an image and it's allowed, save it
-    #     if imagem and allowed_file(imagem.filename):
-    #         image_filename = imagem.filename
-    #         image_extension = image_filename.rsplit('.', 1)[1].lower()
+            # If there's an image and it's allowed, save it
+            if imagem and allowed_file(imagem.filename):
+                image_filename = imagem.filename
+                image_extension = image_filename.rsplit('.', 1)[1].lower()
 
-    #         # Generate new file name
-    #         random_int = random.randint(1000, 9999)
-    #         new_image_filename = f"{slug}_{random_int}.{image_extension}"
-            
-    #         # Create the directory /static/files/resources/slug/
-    #         slug_dir = os.path.join('static', 'files', 'resources', slug)
-    #         if not os.path.exists(slug_dir):
-    #             os.makedirs(slug_dir)
-            
-    #         image_path = os.path.join(slug_dir, new_image_filename)
+                # Generate new file name
+                random_int = random.randint(1000, 9999)
+                new_image_filename = f"{slug}_{random_int}.{image_extension}"
 
-    #         # Save the image
-    #         imagem.save(image_path)
-    #         print(f"Image saved to {image_path}")
+                # Create the directory /static/files/resources/slug/
+                slug_dir = os.path.join('static', 'files', 'apps', slug)
+                if not os.path.exists(slug_dir):
+                    os.makedirs(slug_dir)
 
-    #         # Insert new record into the Files table
-    #         cursor.execute(
-    #             "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
-    #             (new_image_filename, image_extension, 1, datetime.now(), datetime.now())
-    #         )
-    #         image_id = cursor.lastrowid
-        
-    #         resource_details = {
-    #             title=title,
-    #             slug=generate_slug(title),
-    #             description=descricao,
-    #             highlight='0',
-    #             exclusive='0',
-    #             approved='0',
-    #             approvedScientific='0',
-    #             approvedLinguistic='0',
-    #             status='0',
-    #             accepted_terms='0',
-    #             hidden='0',
-    #             created_at=datetime.now(),
-    #             updated_at=datetime.now(),
-    #             user_id=user_id,
-    #             type_id='1',
-    #             image_id=image_id
-    #         }
+                image_path = os.path.join(slug_dir, new_image_filename)
 
-    #         resource_id = insert_app_details(cursor, resource_details)
+                # Save the image
+                imagem.save(image_path)
+                print(f"Image saved to {image_path}")
 
+                # Insert new record into the Files table
+                cursor.execute(
+                    "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (new_image_filename, image_extension, 1, datetime.now(), datetime.now())
+                )
+                image_id = cursor.lastrowid
 
-    #         conn.commit()
-            
-    #         return redirect(url_for(''))  # Replace with your target route
+                resource_details = {
+                    'title': title,
+                    'slug': slug,
+                    'description': descricao,
+                    'highlight': '0',
+                    'exclusive': '0',
+                    'embed': embebed,
+                    'link': endereco,
+                    'approved': '0',
+                    'approvedScientific': '0',
+                    'approvedLinguistic': '0',
+                    'status': '0',
+                    'accepted_terms': '0',
+                    'hidden': '0',
+                    'created_at': datetime.now(),
+                    'updated_at': datetime.now(),
+                    'user_id': user_id,
+                    'type_id': '3',
+                    'image_id': image_id
+                }
 
-    #     except Exception as e:
-    #         print(f"Error in transaction: {str(e)}")
-    #         conn.rollback()
-    #         raise  # Rethrow the exception for debugging purposes
+                resource_id = insert_app_details(cursor, resource_details)
+                print(resource_id)
 
-    #     finally:
-    #         cursor.close()
-    #         conn.close()
-            
-    return render_template('novaapp.html',admin=admin)
+                conn.commit()
 
+                return redirect(url_for('apps'))  # Replace with your target route
+
+        except Exception as e:
+            print(f"Error in transaction: {str(e)}")
+            conn.rollback()
+            raise  # Rethrow the exception for debugging purposes
+
+        finally:
+            cursor.close()
+            conn.close()
+
+    return render_template('novaapp.html', admin=admin)
 # Tools
 @app.route('/tools')
 def tools():

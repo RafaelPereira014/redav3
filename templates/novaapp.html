@@ -86,54 +86,57 @@
     </div>
     <main>
         <div class="container">
-            <div class="input-group required">
-                <h2>Título:</h2>
-                <textarea id="titulo" name="titulo" rows="1" placeholder="Nome da aplicação" required></textarea>
-            </div>
-            
-            <div class="input-group required">
-                <h2>Descrição:</h2>
-                <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
-                <div id="counter"></div>
-
+            <form  method="POST" enctype="multipart/form-data">
+                <div class="input-group required">
+                    <h2>Título:</h2>
+                    <textarea id="titulo" name="titulo" rows="1" placeholder="Nome da aplicação" required></textarea>
+                </div>
+                
+                <div class="input-group required">
+                    <h2>Descrição:</h2>
+                    <textarea id="descricao" name="descricao" placeholder="Descreva esta aplicação sucintamente" maxlength="1500" required></textarea>
+                    <div id="counter"></div>
+    
+                    <small class="small-text">
+                        Deve ter no mínimo 20 caracteres e no máximo 1500
+                    </small>
+                </div>
+                <div class="input-group required">
+                    <h2>Endereço</h2>
+                    <input type="text" name="endereco" id="endereco-input" placeholder="Endereço de ligação">
+                </div>
+                
+                
+                <div class="input-group-system required">
+                    <h2>Sistemas:</h2>
+                    <input type="checkbox" id="sistema1" name="sistema" value="Opção 1">
+                    <label for="sistema1">Android</label>
+                    <input type="checkbox" id="sistema2" name="sistema" value="Opção 2">
+                    <label for="sistema2">iOS</label>
+                    <input type="checkbox" id="sistema3" name="sistema" value="Opção 3">
+                    <label for="sistema3">Windows</label>
+                </div>
+                
+                
+                <div class="input-group-fich">
+                    <h2>Imagem de destaque:</h2>
+                    <input type="file" id="ficheiro" name="ficheiro" >
+                    <small class="small-text">
+                        Tamanho máximo do ficheiro é de 716KB.
+                    </small>
+                   
+                    <!-- Add more radio options as needed -->
+                </div>
                 <small class="small-text">
-                    Deve ter no mínimo 20 caracteres e no máximo 1500
+                    <span class="text-danger">*</span>
+                    Campo obrigatório
                 </small>
-            </div>
-            <div class="input-group required">
-                <h2>Endereço</h2>
-                <input type="text" id="endereco-input" placeholder="Endereço de ligação">
-            </div>
+                
+                <button type="submit">Criar aplicação</button>
+                <button onclick="window.location.href='/'">Cancelar</button>
+    
+            </form>
             
-            
-            <div class="input-group-system required">
-                <h2>Sistemas:</h2>
-                <input type="checkbox" id="sistema1" name="sistema" value="Opção 1">
-                <label for="sistema1">Android</label>
-                <input type="checkbox" id="sistema2" name="sistema" value="Opção 2">
-                <label for="sistema2">iOS</label>
-                <input type="checkbox" id="sistema3" name="sistema" value="Opção 3">
-                <label for="sistema3">Windows</label>
-            </div>
-            
-            
-            <div class="input-group-fich">
-                <h2>Imagem de destaque:</h2>
-                <input type="file" id="ficheiro" name="ficheiro" >
-                <small class="small-text">
-                    Tamanho máximo do ficheiro é de 716KB.
-                </small>
-               
-                <!-- Add more radio options as needed -->
-            </div>
-            <small class="small-text">
-                <span class="text-danger">*</span>
-                Campo obrigatório
-            </small>
-            
-            <button type="submit">Criar aplicação</button>
-            <button onclick="window.location.href='/'">Cancelar</button>
-
         </div>
     </main>
      <!-- Footer -->
