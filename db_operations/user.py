@@ -99,9 +99,10 @@ def get_current_month_users():
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
         
-        # Set current year and month
-        current_year = 2024
-        current_month = 5
+        data = datetime.now()
+        # Get the current year and month
+        current_year = data.year
+        current_month = data.month
         
         # SQL query to count users created in the current month
         query = """

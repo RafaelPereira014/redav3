@@ -750,9 +750,10 @@ def get_current_month_resources():
         conn = connect_to_database()
         cursor = conn.cursor(dictionary=True)
         
+        data = datetime.now()
         # Get the current year and month
-        current_year = datetime.now().year
-        current_month = datetime.now().month
+        current_year = data.year
+        current_month = data.month
         
         # SQL query to select count of resources created in the current month
         query = """

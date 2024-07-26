@@ -1154,6 +1154,42 @@ def admin_users():
     all_users = get_all_users()
     return render_template('admin/utilizadores/utilizadores.html',all_users=all_users)
 
+@app.route('/search-users', methods=['POST'])
+def search_users():
+    data = request.json
+    search_name_email = data.get('searchNameEmail', '').lower()
+    user_type = data.get('userType')
+
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT id, email, name, organization, created_at, role_id FROM Users
+        WHERE (LOWER(name) LIKE %s OR LOWER(email) LIKE %s)
+    """
+    params = [f"%{search_name_email}%", f"%{search_name_email}%"]
+
+    if user_type:
+        query += " AND role_id = %s"
+        params.append(user_type)
+
+    cursor.execute(query, params)
+    users = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    for user in users:
+        if user['role_id'] == 1:
+            user['type'] = 'Administrador'
+        elif user['role_id'] == 2:
+            user['type'] = 'Utilizador Regular'
+        elif user['role_id'] == 3:
+            user['type'] = 'Convidado'
+        else:
+            user['type'] = 'Desconhecido'
+
+    return jsonify(users)
 
 
 if __name__ == "__main__":

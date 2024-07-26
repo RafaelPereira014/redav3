@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - REDA</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
@@ -49,36 +49,29 @@
             color: #6c757d;
             font-size: 14px;
         }
-        
     </style>    
 </head>
 <body>
-   
     <div class="sidebar">
         <div class="logo">
             <img src="/static/images/REDA_logo.png" alt="Logo">
         </div>
-    
         <ul>
             <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-
             <li>
                 <a><i class="fas fa-database"></i> Recursos </a>
                 <ul class="submenu">
                     <li><a href="/dashboard/recursos/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
                     <li><a href="/dashboard/recursos/po/pendentes"><i class="far fa-clock"></i> Operacionalizações pendentes</a></li>
-                    <li><a href="/dashboard/recursos/ocultos" >Ocultos</a></li>
+                    <li><a href="/dashboard/recursos/ocultos">Ocultos</a></li>
                 </ul>
             </li>
-            
-            
             <li>
                 <a href="/dashboard/aplicacoes"><i class="fas fa-layer-group"></i> Aplicações</a>
                 <ul class="submenu">
                     <li><a href="/dashboard/aplicacoes/pendentes"><i class="far fa-clock"></i> Pendentes</a></li>
                 </ul>
             </li>
-
             <li>
                 <a href="/dashboard/ferramentas"><i class="fas fa-tools"></i> Ferramentas</a>
                 <ul class="submenu">
@@ -110,14 +103,14 @@
             <input type="text" id="searchNameEmail" placeholder="Nome / E-mail">
             <select id="userType">
                 <option value="">Tipo de Utilizador</option>
-                <option value="admin">Administrador</option>
-                <option value="regular">Utilizador Regular</option>
-                <option value="guest">Convidado</option>
+                <option value="1">Administrador</option>
+                <option value="2">Utilizador Regular</option>
+                <option value="3">Convidado</option>
             </select>
-            <button onclick="searchUsers()">Pesquisar</button>
+            <button id="searchButton">Pesquisar</button>
         </div>
-
-        <hr></hr>
+        
+        <hr>
 
         <table id="users_table">
             <thead>
@@ -125,7 +118,7 @@
                     <th>Nome</th>
                     <th>E-mail</th>
                     <th>Organização</th>
-                    <th>Criado a </th>
+                    <th>Criado a</th>
                     <th>Tipo de utilizador</th>
                 </tr>
             </thead>
@@ -135,115 +128,154 @@
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.organization }}</td>
-                    <td>{{ user.created_at}}</td>
-                    <td>{{ user.type}}</td>
-                    
+                    <td>{{ user.created_at }}</td>
+                    <td>{{ user.type }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
         <div class="pagination" id="pagination"></div>
-       
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const table = document.getElementById("users_table");
-            const pagination = document.getElementById("pagination");
             const rowsPerPage = 15;
-            const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
-            const totalPages = Math.ceil(rows.length / rowsPerPage);
             let currentPage = 1;
-        
+
             function displayRows(page) {
+                const table = document.getElementById("users_table");
+                const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
                 const start = (page - 1) * rowsPerPage;
                 const end = start + rowsPerPage;
-        
+
                 for (let i = 0; i < rows.length; i++) {
                     rows[i].style.display = i >= start && i < end ? "" : "none";
                 }
             }
-        
+
             function createPageButton(page) {
                 const button = document.createElement("button");
                 button.innerText = page;
                 button.classList.add("page-btn");
                 if (page === currentPage) button.classList.add("active");
-        
+
                 button.addEventListener("click", function() {
                     currentPage = page;
                     displayRows(currentPage);
-        
+
                     const currentBtn = document.querySelector(".page-btn.active");
                     if (currentBtn) {
                         currentBtn.classList.remove("active");
                     }
                     button.classList.add("active");
-        
+
                     setupPagination();
                 });
-        
+
                 return button;
             }
-        
+
             function setupPagination() {
+                const table = document.getElementById("users_table");
+                const pagination = document.getElementById("pagination");
+                const rows = table.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+                const totalPages = Math.ceil(rows.length / rowsPerPage);
+
                 pagination.innerHTML = "";
-                const maxDisplayedPages = 3; // Number of pages to display before and after the current page
+
+                const maxDisplayedPages = 3;
                 const range = maxDisplayedPages * 2 + 1;
-        
-                // Add the first page button
+
                 pagination.appendChild(createPageButton(1));
-        
+
                 if (currentPage > maxDisplayedPages + 2) {
                     const ellipsis = document.createElement("span");
                     ellipsis.innerText = "...";
                     pagination.appendChild(ellipsis);
                 }
-        
-                // Add page buttons around the current page
+
                 const start = Math.max(2, currentPage - maxDisplayedPages);
                 const end = Math.min(totalPages - 1, currentPage + maxDisplayedPages);
-        
+
                 for (let i = start; i <= end; i++) {
                     pagination.appendChild(createPageButton(i));
                 }
-        
+
                 if (currentPage < totalPages - maxDisplayedPages - 1) {
                     const ellipsis = document.createElement("span");
                     ellipsis.innerText = "...";
                     pagination.appendChild(ellipsis);
                 }
-        
-                // Add the last page button if there are more than one page
+
                 if (totalPages > 1) {
                     pagination.appendChild(createPageButton(totalPages));
                 }
+
+                displayRows(currentPage);
             }
-        
-            displayRows(currentPage);
+
+            function searchUsers() {
+                const searchNameEmail = document.getElementById('searchNameEmail').value;
+                const userType = document.getElementById('userType').value;
+            
+                const data = {
+                    searchNameEmail: searchNameEmail,
+                    userType: userType
+                };
+            
+                fetch('/search-users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector("#users_table tbody");
+                    tableBody.innerHTML = ""; // Clear previous results
+            
+                    data.forEach(user => {
+                        const row = document.createElement("tr");
+            
+                        const nameCell = document.createElement("td");
+                        nameCell.textContent = user.name;
+                        row.appendChild(nameCell);
+            
+                        const emailCell = document.createElement("td");
+                        emailCell.textContent = user.email;
+                        row.appendChild(emailCell);
+            
+                        const organizationCell = document.createElement("td");
+                        organizationCell.textContent = user.organization;
+                        row.appendChild(organizationCell);
+            
+                        const createdAtCell = document.createElement("td");
+                        createdAtCell.textContent = user.created_at;
+                        row.appendChild(createdAtCell);
+            
+                        const typeCell = document.createElement("td");
+                        typeCell.textContent = user.type;
+                        row.appendChild(typeCell);
+            
+                        tableBody.appendChild(row);
+                    });
+
+                    // Reset the current page to 1 after searching
+                    currentPage = 1;
+                    setupPagination();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            // Initial setup for pagination
             setupPagination();
+
+            // Attach the search function to the button click
+            document.getElementById('searchButton').addEventListener('click', searchUsers);
         });
-        
-        function toggleSubmenu(submenuId) {
-            var submenu = document.getElementById(submenuId);
-            if (submenu.style.display === "block") {
-                submenu.style.display = "none";
-            } else {
-                submenu.style.display = "block";
-            }
-        }
-
-        function displayTodos() {
-            // Logic to display all data in the table
-        }
-
-        function displayCientifica() {
-            // Logic to display only cientifica data in the table
-        }
-
-        function displayLinguistica() {
-            // Logic to display only linguistica data in the table
-        }
     </script>
 </body>
 </html>
