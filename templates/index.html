@@ -61,6 +61,17 @@
             height: 100%;
         }
 
+        .areas-resources {
+            position: absolute;
+            top: 10px; /* Adjust this value to move text slightly above the image */
+            left: 10px; /* Adjust this value as needed for horizontal positioning */
+            background: rgba(0, 0, 0, 0.7); /* Darker background */
+            padding: 5px; /* Optional: add padding for better readability */
+            border-radius: 5px; /* Optional: rounded corners */
+            font-size: 0.8em; /* Adjust font size as needed */
+            color: #fff; /* White text color for contrast */
+        }
+
         
         
 
@@ -115,7 +126,7 @@
                                 {% else %}
                                     {{ resource.description |safe }}
                                 {% endif %}
-                            </p>
+                            </p>                            
                             <a href="/resources/details/{{ resource.id }}" class="button">Ler mais...</a>
                         </div>
                     </div>
@@ -155,7 +166,9 @@
         <div class="container">
             <h1>Últimos recursos</h1>
             <div class="rectangles">
+
                 {% for resource in recent_resources %}
+                
                 <div class="rectangle {% if not admin %} smaller-rectangle {% endif %}">
                     {% if resource.image_url %}
                     <img src="{{ resource.image_url }}" alt="Resource Image">
@@ -164,8 +177,20 @@
                         {{ resource.embed | safe }}
                     </div>
                     {% endif %}
-                   
+                    <div class="image-container">
+                        {% for script_id, script in resource.details.scripts_by_id.items() %}
+                            <div class="areas-resources">
+                                {% if script.areas_resources|length > 1 %}
+                                    Multidisciplinar
+                                {% else %}
+                                    {{ script.areas_resources[0] }}
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
                     <h2>
+
                         {% if resource.title|length > 25 %}
                         {{ resource.title[:25] | strip_html ~ '...' }}
                         {% else %}
@@ -224,6 +249,9 @@
                                 <p class="ciclo">No ciclo information found</p>
                             {% endif %}
                         </div>
+                        
+
+
                     {% endfor %}
 
 

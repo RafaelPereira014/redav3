@@ -27,21 +27,18 @@ try:
         # Create a cursor object to execute SQL queries
         cursor = connection.cursor(dictionary=True)
         
-        # Call the function to get combined details
         
-        # Example usage of insert_combined_details function
-        taxonomy_details = {
-            'Idiomas': ['Inglês'],
-            'Formato': ['PDF'],
-            'Modos de utilização': ['Online']
-        }
-        update_taxonomy_details(cursor,4010,taxonomy_details)
-        # After calling the function, commit the transaction and handle any errors appropriately.
-        connection.commit()
+        combined_details = get_combined_details(4017)
+        if combined_details:
+            resource_details = combined_details
+            for script_id, script_data in resource_details.get('scripts_by_id', {}).items():
+                print(f"Script ID: {script_id}, Areas Resources: {script_data.get('areas_resources')}")
+        else:
+            print("No details returned.")
+
         
         
 
-       
 
         # Print the formatted string
         

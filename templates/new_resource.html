@@ -192,15 +192,20 @@
             <div class="input-group-lang required">
                 <h2>Idiomas:</h2>
                 {% for idioma in idiomas %}
-                    <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}">
+                    <input type="radio" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}">
                     <label for="idioma{{ loop.index }}">{{ idioma }}</label>
                 {% endfor %}
             </div>
             <div class="input-group-fich">
-                <h2>Ficheiro:</h2>
-                <input type="file" id="ficheiro" name="ficheiro" >
-                <!-- Add more radio options as needed -->
+                <h2>Imagem de destaque:</h2>
+                <label class="file-label" for="ficheiro">
+                    <input type="file" id="ficheiro" name="ficheiro" class="file-input" onchange="updateFileName()">
+                    <span class="file-custom-text">Escolha um arquivo</span>
+                    <span class="file-name">Nenhum arquivo selecionado</span>
+                </label>
             </div>
+            
+            
             <small class="small-text">
                 <span class="text-danger">*</span>
                 Campo obrigatório
@@ -296,3 +301,20 @@
             const counterEle = document.getElementById('counter');
             counterEle.innerHTML = `${currentLength}/${maxLength}`;
         }
+    </script>
+    <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('ficheiro');
+            const fileNameSpan = document.querySelector('.file-name');
+            const file = fileInput.files[0]; // Get the first file
+        
+            if (file) {
+                fileNameSpan.textContent = file.name; // Display the file name
+            } else {
+                fileNameSpan.textContent = 'Nenhum arquivo selecionado'; // Default text if no file selected
+            }
+        }
+        </script>
+        
+</body>
+</html>
