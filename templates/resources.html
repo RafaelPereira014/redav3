@@ -216,11 +216,7 @@
                     <div class="image-container">
                         {% for script_id, script in resource.details.scripts_by_id.items() %}
                             <div class="areas-resources">
-                                {% if script.areas_resources|length > 1 %}
-                                    Multidisciplinar
-                                {% else %}
-                                    {{ script.areas_resources[0] }}
-                                {% endif %}
+                                {{ resource.areas_resources_display }}
                             </div>
                         {% endfor %}
                     </div>

@@ -134,7 +134,7 @@
             counterEle.innerHTML = `${currentLength}/${maxLength}`;
         }
 
-        let keywords = [];
+        let keywords = [];  // Initialize the keywords array
 
         function addKeyword(keyword) {
             if (typeof keyword === 'undefined') {
@@ -170,6 +170,12 @@
                 keywordsContainer.appendChild(keywordElement);
             });
         }
+
+        function updateHiddenKeywords() {
+            const hiddenKeywords = document.getElementById('hiddenKeywords');
+            hiddenKeywords.value = keywords.join(',');
+        }
+
 
         $(document).ready(function() {
             $('input[name="anos"]').change(function() {
@@ -400,6 +406,7 @@
         </div>
     </footer>
     <script>
+        
         var quill = new Quill('#editor-container', {
             theme: 'snow',
             modules: {

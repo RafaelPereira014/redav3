@@ -106,6 +106,23 @@ def homepage():
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
         resource['details'] = get_combined_details(resource['id'])  # Fetch resource details
+        
+        # Identify the oldest script ID and get the areas_resources[0]
+        scripts_by_id = resource['details'].get('scripts_by_id', {})
+        if scripts_by_id:
+            # Find the oldest script ID (minimum ID)
+            oldest_script_id = min(scripts_by_id.keys(), key=int)
+            oldest_script = scripts_by_id.get(oldest_script_id, {})
+            areas_resources = oldest_script.get('areas_resources', [])
+            # Determine if there are multiple areas_resources
+            if len(areas_resources) > 1:
+                resource['areas_resources_display'] = 'Multidisciplinar'
+            elif areas_resources:
+                resource['areas_resources_display'] = areas_resources[0]
+            else:
+                resource['areas_resources_display'] = 'No area resources available'
+        else:
+            resource['areas_resources_display'] = 'No area resources available'
 
 
     highlighted_resources = get_highlighted_resources()
@@ -139,12 +156,28 @@ def resources():
         total_resources = get_total_resource_count()
 
     total_pages = (total_resources + per_page - 1) // per_page
-    total_resources = get_total_resource_count()
 
     for resource in paginated_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
         resource['details'] = get_combined_details(resource['id'])  # Fetch resource details
+        
+        # Identify the oldest script ID and get the areas_resources[0]
+        scripts_by_id = resource['details'].get('scripts_by_id', {})
+        if scripts_by_id:
+            # Find the oldest script ID (minimum ID)
+            oldest_script_id = min(scripts_by_id.keys(), key=int)
+            oldest_script = scripts_by_id.get(oldest_script_id, {})
+            areas_resources = oldest_script.get('areas_resources', [])
+            # Determine if there are multiple areas_resources
+            if len(areas_resources) > 1:
+                resource['areas_resources_display'] = 'Multidisciplinar'
+            elif areas_resources:
+                resource['areas_resources_display'] = areas_resources[0]
+            else:
+                resource['areas_resources_display'] = 'No area resources available'
+        else:
+            resource['areas_resources_display'] = 'No area resources available'
 
     # Define the range of pages to show
     if total_pages <= 5:
@@ -157,7 +190,17 @@ def resources():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('resources.html', all_resources=paginated_resources, page=page, total_pages=total_pages, page_range=page_range, search_term=search_term, admin=admin,total_resources=total_resources)
+    return render_template(
+        'resources.html',
+        all_resources=paginated_resources,
+        page=page,
+        total_pages=total_pages,
+        page_range=page_range,
+        search_term=search_term,
+        admin=admin,
+        total_resources=total_resources
+    )
+
 
 
 
@@ -325,37 +368,72 @@ def resource_edit(resource_id):
         requirements_selected = request.form.getlist('requirements')
         slug = generate_slug(title)
 
-        if not title or not author or not organization or not description:
-            return render_template('edit_resource.html', 
-                                resource_details=resource_details,
-                                formatos=formatos,
-                                use_mode=use_mode,
-                                requirements=requirements,
-                                idiomas=idiomas,
-                                error="All required fields must be filled."), 400
-
-        resource_details_update = {
-            'title': title,
-            'slug': slug,  
-            'description': description,
-            'organization': organization,
-            'author': author,
-            'operation': 'update',
-            'operation_author': user,
-            'link': 'www.google.com',
-            'updated_at': datetime.now(),
-            'type_id': '2',
-            'image_id': '1',
-            'hidden': '0',
-            'user_id': user_id,
-        }
-
-        print("Updating resource details with:", resource_details_update)
-        print("Updating taxonomy details with:", idiomas_selected, formatos_selected, use_mode_selected, requirements_selected)
+        # Handle file upload if needed
+        imagem = request.files.get('ficheiro')
 
         conn = connect_to_database()
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
+        
         try:
+            if imagem and allowed_file(imagem.filename):
+                # Delete old image if it exists
+                old_image_id = resource_details.get('image_id')
+                if old_image_id:
+                    cursor.execute("SELECT name FROM Files WHERE id = %s", (old_image_id,))
+                    old_image = cursor.fetchone()
+                    if old_image:
+                        old_image_path = os.path.join('static', 'files', 'resources', slug, old_image['name'])
+                        if os.path.exists(old_image_path):
+                            os.remove(old_image_path)
+                            print(f"Old image {old_image_path} deleted")
+
+                # Save the new image
+                image_filename = imagem.filename
+                image_extension = image_filename.rsplit('.', 1)[1].lower()
+                random_int = random.randint(1000, 9999)
+                new_image_filename = f"{slug}_{random_int}.{image_extension}"
+                slug_dir = os.path.join('static', 'files', 'resources', slug)
+                if not os.path.exists(slug_dir):
+                    os.makedirs(slug_dir)
+                image_path = os.path.join(slug_dir, new_image_filename)
+                imagem.save(image_path)
+                print(f"Image saved to {image_path}")
+
+                # Insert new record into the Files table
+                cursor.execute(
+                    "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (new_image_filename, image_extension, 1, datetime.now(), datetime.now())
+                )
+                new_image_id = cursor.lastrowid
+            else:
+                new_image_id = resource_details.get('image_id')
+
+            if not title or not author or not organization or not description:
+                return render_template('edit_resource.html', 
+                                    resource_details=resource_details,
+                                    formatos=formatos,
+                                    use_mode=use_mode,
+                                    requirements=requirements,
+                                    idiomas=idiomas,
+                                    error="All required fields must be filled."), 400
+
+            resource_details_update = {
+                'title': title,
+                'slug': slug,  
+                'description': description,
+                'organization': organization,
+                'author': author,
+                'operation': 'update',
+                'operation_author': user,
+                'link': 'www.google.com',  # Update with actual link
+                'updated_at': datetime.now(),
+                'type_id': '2',
+                'image_id': new_image_id,
+                'hidden': '0',
+                'user_id': user_id,
+            }
+
+            
             update_resource_details(cursor, resource_id, resource_details_update)
             update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_selected, use_mode_selected, requirements_selected)
             conn.commit()
@@ -980,7 +1058,8 @@ def novo_recurso2():
         selected_dominios = list(set(data.getlist('dominios')))  # Use set to remove duplicates
         selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
-        outros_conceitos = data.get('outros_conceitos', '')
+        outros_conceitos = data.get('keywordInput')
+        print(outros_conceitos)
         descricao = data.get('descricao')
         
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
