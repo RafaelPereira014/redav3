@@ -145,8 +145,19 @@
                 <img src="{{ app.image_url or 'static/images/white.jpeg' }}" alt="App Image">
                 <div class="text">
                     <h2>{{ app.title }}</h2>
-                    <small class="small-text">{{ app.platform }}</small>
+                    <small class="small-text">
+                        {% if app.embed == 'Opção 1' %}
+                            Android
+                        {% elif app.embed == 'Opção 2' %}
+                            iOS
+                        {% elif app.embed == 'Opção 3' %}
+                            Windows
+                        {% else %}
+                            <!-- Show nothing if app.embed is None or doesn't match any options -->
+                        {% endif %}
+                    </small>
                 </div>
+                
                 <p class="short-description">{{ app.description[:100]|escape }}...</p>
                 <p class="full-description" style="display: none;">{{ app.description|escape }}</p>
                 <button class="readmore">Ler mais</button>

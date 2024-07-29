@@ -227,32 +227,32 @@
                         {% endif %}
                     {% endif %}
 
+                    {% set ciclos = [] %}
+
                     {% for script_id, script in resource.details.scripts_by_id.items() %}
-                        <div class="ciclo-container">
-                            {% if '1.º' in script.anos_resources or
-                                '2.º' in script.anos_resources or
-                                '3.º' in script.anos_resources or
-                                '4.º' in script.anos_resources %}
-                                <p class="ciclo">1º ciclo</p>
-                            {% elif '5.º' in script.anos_resources or
-                                    '6.º' in script.anos_resources %}
-                                <p class="ciclo">2º ciclo</p>
-                            {% elif '7.º' in script.anos_resources or
-                                    '8.º' in script.anos_resources or
-                                    '9.º' in script.anos_resources %}
-                                <p class="ciclo">3º ciclo</p>
-                            {% elif '10.º' in script.anos_resources or
-                                    '11.º' in script.anos_resources or
-                                    '12.º' in script.anos_resources %}
-                                <p class="ciclo">Secundário 3º ciclo</p>
-                            {% else %}
-                                <p class="ciclo">No ciclo information found</p>
-                            {% endif %}
-                        </div>
-                        
-
-
+                        {% if '1.º' in script.anos_resources or '2.º' in script.anos_resources or '3.º' in script.anos_resources or '4.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('1º ciclo') %}
+                        {% endif %}
+                        {% if '5.º' in script.anos_resources or '6.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('2º ciclo') %}
+                        {% endif %}
+                        {% if '7.º' in script.anos_resources or '8.º' in script.anos_resources or '9.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('3º ciclo') %}
+                        {% endif %}
+                        {% if '10.º' in script.anos_resources or '11.º' in script.anos_resources or '12.º' in script.anos_resources %}
+                            {% set _ = ciclos.append('Secundário') %}
+                        {% endif %}
                     {% endfor %}
+
+                    {% set unique_ciclos = ciclos | unique %}
+
+                    <div class="ciclo-container">
+                        {% if unique_ciclos %}
+                            <p class="ciclo">{{ unique_ciclos | join(', ') }}</p>
+                        {% else %}
+                            <p class="ciclo">No cycle information found</p>
+                        {% endif %}
+                    </div>
 
 
                     {% endif %}

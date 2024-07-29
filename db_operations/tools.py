@@ -103,3 +103,26 @@ def get_current_month_tools():
     finally:
         cursor.close()
         conn.close()
+        
+        
+def update_tool(resource_id, titulo, descricao, link, embebed):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    
+    query = """
+        UPDATE Resources
+        SET title = %s,
+            description = %s,
+            link = %s,
+            embed = %s
+        WHERE id = %s
+    """
+    cursor.execute(query, (titulo, descricao, link, embebed, resource_id))
+    conn.commit()
+    
+    cursor.close()
+    conn.close()
+
+    
+    
+    

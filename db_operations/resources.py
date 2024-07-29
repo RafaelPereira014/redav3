@@ -296,7 +296,9 @@ def get_combined_details(resource_id):
                 'organization': resource_details['organization'],
                 'description': resource_details['description'],
                 'author': resource_details['author'],
-                'user_id': resource_details['user_id']
+                'user_id': resource_details['user_id'],
+                'link': resource_details['link'],
+                'embed': resource_details['embed']
             })
 
         if taxonomy_details:

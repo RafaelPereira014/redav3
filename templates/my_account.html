@@ -208,7 +208,7 @@
                 <div class="tool-card">
                     <h3>{{app.title | safe }}</h3>
                     <p>{{app.description | safe}}</p>
-                    <button class="edit">Editar</button>
+                    <a href="/resources/edit_app/{{ app.id }}"><button>Editar</button></a>
                     <button class="eliminar">Eliminar</button>
                 </div>
                 {%endfor%}
@@ -223,7 +223,7 @@
                     <div class="tool-card">
                         <h3>{{tool.title | safe}}</h3>
                         <p>{{tool.description | safe}}</p>
-                        <button class="edit">Editar</button>
+                        <a href="/resources/edit_tool/{{ tool.id }}"><button>Editar</button></a>
                         <button class="eliminar">Eliminar</button>
                     </div>
                 {%endfor%}

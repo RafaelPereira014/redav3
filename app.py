@@ -564,6 +564,33 @@ def novaapp():
             conn.close()
 
     return render_template('novaapp.html', admin=admin)
+
+@app.route('/resources/edit_app/<int:resource_id>', methods=['GET', 'POST'])
+def edit_app(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+    title = get_title(resource_id)
+    slug = generate_slug(title)
+    
+    resource_details = get_combined_details(resource_id)
+    
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
+        descricao = request.form.get('descricao')
+        link = request.form.get('endereco')
+        embebed = request.form.get('embed')
+        
+        update_tool(resource_id, titulo, descricao, link, embebed)
+        
+        return redirect(url_for('apps', resource_id=resource_id))
+    
+    return render_template('edit_app.html', admin=admin, slug=slug, resource_details=resource_details)
+
+
+
+
 # Tools
 @app.route('/tools')
 def tools():
@@ -610,6 +637,8 @@ def tools():
     
 
     return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
+
+
 
 
 
@@ -675,6 +704,31 @@ def newtool():
             conn.close()
 
     return render_template('novaferramenta.html', admin=admin)
+
+
+@app.route('/resources/edit_tool/<int:resource_id>', methods=['GET', 'POST'])
+def edit_tool(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    user_id = session.get('user_id')  # Retrieve user ID from session
+    admin = is_admin(user_id)
+    title = get_title(resource_id)
+    slug = generate_slug(title)
+    
+    resource_details = get_combined_details(resource_id)
+    
+    if request.method == 'POST':
+        titulo = request.form.get('titulo')
+        descricao = request.form.get('descricao')
+        link = request.form.get('endereco')
+        embebed = request.form.get('embed')
+        
+        update_tool(resource_id, titulo, descricao, link, embebed)
+        
+        return redirect(url_for('tools', resource_id=resource_id))
+    
+    return render_template('edit_tool.html', admin=admin, slug=slug, resource_details=resource_details)
+
 
 # My Account
 @app.route('/myaccount')
