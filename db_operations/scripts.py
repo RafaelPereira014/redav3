@@ -83,3 +83,5 @@ def get_script_details_pendent():
         conn.close()
     
     return scripts_user, scripts_count
+
+

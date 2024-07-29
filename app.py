@@ -17,10 +17,15 @@ from db_operations.admin import *
 from db_operations.new_resource import *
 from db_operations.user import *
 from db_operations.new_operations import *
+from flask_wtf.csrf import CSRFProtect
+
+
+
 
 
 
 app = Flask(__name__)
+csrf = CSRFProtect(app)
 
 app.secret_key = 'your_secret_key'  # Needed for session management
 UPLOAD_FOLDER = 'static/files/resources/'
@@ -270,6 +275,27 @@ def nova_proposta(slug):
 
     return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug,resource_id=resource_id)
 
+
+@app.route('/approve_script/<int:script_id>', methods=['POST'])
+def approve_script(script_id):
+    conn = connect_to_database()
+    cursor = conn.cursor()
+    
+    try:
+        query = """
+            UPDATE Scripts SET approved = '1' WHERE id = %s
+        """
+        cursor.execute(query, (script_id,))
+        conn.commit()
+        success = True
+    except Exception as e:
+        print(f"Error: {e}")
+        success = False
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return jsonify(success=success)
 
 
 

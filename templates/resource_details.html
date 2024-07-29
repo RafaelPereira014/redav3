@@ -247,6 +247,7 @@
                                         <button onclick="aprovarProposta({{ script_id }})">Aprovar proposta de operacionalização</button>
                                     {% endif %}
                                 </div>
+                            
                                 <div id="proposta{{ loop.index }}" class="proposta-content">
                                     <div class="separator">
                                         <span class="label">Autor:</span>
@@ -436,6 +437,30 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        function aprovarProposta(script_id) {
+            fetch(`/approve_script/${script_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token() }}' // If you use CSRF protection
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Proposta de operacionalização atualizada.');
+                    location.reload(); // This will reload the page
+                } else {
+                    alert('Erro ao atualizar proposta.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+    
     <script>
         // Get all elements with class 'created_at'
         const createdAtElements = document.querySelectorAll('.created_at');
