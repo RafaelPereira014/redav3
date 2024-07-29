@@ -443,7 +443,6 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token() }}' // If you use CSRF protection
                 },
             })
             .then(response => response.json())

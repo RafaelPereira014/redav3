@@ -17,7 +17,6 @@ from db_operations.admin import *
 from db_operations.new_resource import *
 from db_operations.user import *
 from db_operations.new_operations import *
-from flask_wtf.csrf import CSRFProtect
 
 
 
@@ -25,7 +24,6 @@ from flask_wtf.csrf import CSRFProtect
 
 
 app = Flask(__name__)
-csrf = CSRFProtect(app)
 
 app.secret_key = 'your_secret_key'  # Needed for session management
 UPLOAD_FOLDER = 'static/files/resources/'
