@@ -26,41 +26,30 @@
             text-align: center;
         }
         .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin-top: 20px;
-            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center;
+            margin-bottom: 10px;
         }
         
         .pagination a {
-            margin: 0 5px;
-            padding: 10px 20px;
+            color: #333;
+            padding: 8px 16px;
             text-decoration: none;
-            color: #007bff;
-            background-color: #ffffff;
-            border: 1px solid #007bff;
+            transition: background-color 0.3s;
+            border: 1px solid #ccc;
+            margin: 0 5px;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        
-        .pagination a:hover {
-            background-color: #007bff;
-            color: #ffffff;
-            border-color: #007bff;
         }
         
         .pagination a.active {
-            background-color: #007bff;
-            color: #ffffff;
-            border-color: #007bff;
+            background-color: #aec03f;
+            color: white;
         }
         
-        .pagination a.disabled {
-            color: #cccccc;
-            background-color: #f1f1f1;
-            border-color: #cccccc;
-            cursor: not-allowed;
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
         }
 
         .video-container {

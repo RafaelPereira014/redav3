@@ -44,12 +44,13 @@ nav ul li a {
 }
 
 .pagination a.active {
-    background-color: #a0af3b;
+    background-color: #aec03f;
     color: white;
 }
 
-.pagination a:hover:not(.active) {background-color: #ddd;}
-
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
 
 button.resource {
     padding: 10px 20px; /* Adjust padding for the button */

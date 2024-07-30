@@ -87,19 +87,15 @@
         <div class="container">
             <!-- Profile Header -->
             <div class="header-profile">
-                
-                
                 <div class="profile-details">
-                    <h3> Bem vindo(a) {{user_details.name}}</h3>     
-
+                    <h3>Bem vindo(a) {{ user_details.name }}</h3>
                     <div class="profile-counts">
-                        
-                        <p>{{resources_count}} Recursos </p>
-                        <p>{{apps_count}} Aplicações </p>
-                        <p>{{tools_count}} Ferramentas</p>
+                        <p>{{ resources_count }} Recursos</p>
+                        <p>{{ apps_count }} Aplicações</p>
+                        <p>{{ tools_count }} Ferramentas</p>
                     </div>
                 </div>
-                 <!-- Options Menu -->
+                <!-- Options Menu -->
                 <div class="options-menu">
                     <a href="#my-resources">Meus recursos</a>
                     <a href="#my-proposals">Minhas propostas de op.</a>
@@ -107,60 +103,50 @@
                     <a href="#my-tools">Minhas ferramentas</a>
                 </div>
             </div>
-
-           
-
+    
             <!-- Content Sections -->
             <section id="my-resources" class="content-section">
-                <!-- Content for "Meus Recursos" section -->
-                <!-- Display user's resources here -->
                 <h1>Os meus recursos</h1>
                 <p>{{ resources_count }} resultados</p>
-                <a href="/novorecurso"><button> + Novo recurso </button></a>
+                <a href="/novorecurso"><button>+ Novo recurso</button></a>
                 <div class="search-container">
-                    <input type="text" placeholder="Palavras-chave...">
-                    <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
-                    <button class="clear-button"> Limpar Filtros </button>
+                    <input type="text" id="searchInput" placeholder="Palavras-chave..." value="{{ search_term }}">
+                    <button class="search-button" onclick="searchResources()">Filtrar palavras</button>
+                    <button class="clear-button" onclick="clearSearch()">Limpar Filtros</button>
                 </div>
+                
+                
                 {% for resource in my_resources %}
                     <div class="resource-card">
                         <h2>
-                            {% if resource.title %}
-                            {{ resource.title | strip_html}}
-                            
+                            {% if resource['title'] %}
+                                {{ resource['title'] | strip_html }}
                             {% endif %}
                         </h2>
-                        <p>Criado a {{ resource.created_at }}</p>
+                        <p>Criado a {{ resource['created_at'] }}</p>
                         <p>
-                            {% if resource.description %}
-                            {{ resource.description | strip_html  }}
-                            
+                            {% if resource['description'] %}
+                                {{ resource['description'] | strip_html }}
                             {% endif %}
                         </p>
-                        
                         <div class="icon-bar">
-                            <!-- Flag Icon -->
                             <i class="fas fa-flag"></i>
-                            <!-- Heart Icon -->
                             <i class="fas fa-heart"></i>
                         </div>
-                        <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
-                        <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
-                        <button class="Delete" onclick="openDeleteModal()">Eliminar</button>                   
-                     </div>
+                        <a href="/resources/details/{{ resource['id'] }}"><button>Ver recurso</button></a>
+                        <a href="/resources/edit/{{ resource['id'] }}"><button>Editar recurso</button></a>
+                        <button class="Delete" onclick="openDeleteModal()">Eliminar</button>
+                    </div>
                 {% endfor %}
-                
                 <div class="pagination">
                     {% if page > 1 %}
-                        <a href="?page=1">&laquo; Inicio</a>
-                        <a href="?page={{ page - 1 }}">Anterior</a>
+                        <a href="?page=1&search={{ search_term }}">&laquo; Inicio</a>
+                        <a href="?page={{ page - 1 }}&search={{ search_term }}">Anterior</a>
                     {% endif %}
-                    
                     <span class="current">Page {{ page }} of {{ total_pages }}</span>
-                    
                     {% if page < total_pages %}
-                        <a href="?page={{ page + 1 }}">Próximo</a>
-                        <a href="?page={{ total_pages }}">Fim &raquo;</a>
+                        <a href="?page={{ page + 1 }}&search={{ search_term }}">Próximo</a>
+                        <a href="?page={{ total_pages }}&search={{ search_term }}">Fim &raquo;</a>
                     {% endif %}
                 </div>
             </section>
@@ -300,6 +286,21 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        function searchResources() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const queryString = new URLSearchParams({ search: searchTerm }).toString();
+            window.location.href = `/myaccount?${queryString}`;
+        }
+        
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            window.location.href = '/myaccount'; // Redirect to the account page without search term
+        }
+        
+        
+       
+    </script>
     <script>
         // Get the login modal
         var loginModal = document.getElementById("loginModal");
