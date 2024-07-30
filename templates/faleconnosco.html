@@ -3,22 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Meu perfil - REDA</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}" >
+    <link rel="icon" href="{{ url_for('static', filename='images/REDA_logo.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/faleconnosco.css') }}">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-    
-
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -30,23 +23,16 @@
         .required {
             position: relative;
         }
-        
         .required::after {
             content: '*';
             position: absolute;
             top: 0;
-            right:absolute;
+            right: absolute;
             color: red;
             font-size: 1.4rem;
             line-height: 0.3;
         }
-
-        
-        
     </style>
-   
-    <!-- Add other necessary CSS links -->
-   
 </head>
 <body>
     <div class="header-governo">
@@ -54,14 +40,13 @@
         <span> Esta é uma presença oficial do <a href="https://portal.azores.gov.pt">Governo dos Açores</a> </span>
     </div>
 
-    <!-- Header -->
-    
     <header>
         <div class="container">
             <div class="profile-info">
                 <a href="/">
                     <img src="{{ url_for('static', filename='images/REDA_logo.png') }}" alt="logo-reda">
-                </a>            </div>
+                </a>
+            </div>
             <nav>
                 <ul>
                     <li><a href="/">Inicio</a></li>
@@ -71,27 +56,23 @@
                         <button class="resource-button" onclick="location.href='/resources'">
                             <i class="fa fa-search"></i> Recursos
                         </button>
-                    </li>                    
-                    {%if admin%}
+                    </li>
+                    {% if admin %}
                     <li>
                         <button class="resource-button" onclick="location.href='/novorecurso'">
                             <i class="fa fa-plus"></i> Introduzir recurso
                         </button>
-                    </li>  
-                    {%endif%}
+                    </li>
+                    {% endif %}
                 </ul>
             </nav>
-            <!-- Top Right Navigation -->
             <nav class="top-nav">
                 <ul>
                     {% if admin %}
-                        <!-- Render admin-specific links or buttons -->
                         <li><a href="/myaccount">Minha Conta</a></li>
-
                         <li><a href="/dashboard" target="_blank">Administração</a></li>
                         <li><a href="/logout">Sair</a></li>
                     {% else %}
-                        <!-- Render non-admin links or buttons -->
                         <li><a href="/login">Login</a></li>
                         <li><a href="/register">Registar</a></li>
                     {% endif %}
@@ -100,88 +81,65 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main>
         <div class="container">
-            <h1>Fale connosco</h1>
+            <form  method="POST" enctype="multipart/form-data">
+                <h1>Fale connosco</h1>
 
-            <div class="input-group-assunto required">
-                <h2>Assunto</h2>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="assunto1" name="assunto" value="Opção 1">
-                    <label for="assunto1">Recursos</label>
-                    <input type="checkbox" id="assunto2" name="assunto" value="Opção 2">
-                    <label for="assunto2">Comentários</label>
+                <div class="input-group-assunto required">
+                    <h2>Assunto</h2>
+                    <select id="assunto" name="assunto" required>
+                        <option value="">Selecione um assunto</option>
+                        <option value="Opção 1">Recursos</option>
+                        <option value="Opção 2">Comentários</option>
+                        <option value="Opção 3">Sugestões(endereços)</option>
+                        <option value="Opção 4">Problemas técnicos</option>
+                        <option value="Opção 5">Aplicações</option>
+                        <option value="Opção 6">Registo</option>
+                        <option value="Opção 7">Experimenta</option>
+                        <option value="Opção 8">Outros</option>
+                    </select>
                 </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="assunto3" name="assunto" value="Opção 3">
-                    <label for="assunto3">Sugestões(endereços)</label>
-                    <input type="checkbox" id="assunto4" name="assunto" value="Opção 4">
-                    <label for="assunto4">Problemas técnicos</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="assunto5" name="assunto" value="Opção 5">
-                    <label for="assunto5">Aplicações</label>
-                    <input type="checkbox" id="assunto6" name="assunto" value="Opção 6">
-                    <label for="assunto5">Registo</label>
-                </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="assunto7" name="assunto" value="Opção 7">
-                    <label for="assunto5">Experimenta</label>
-                    <input type="checkbox" id="assunto8" name="assunto" value="Opção 8">
-                    <label for="assunto5">Outros</label>
-                </div>
-            </div>
-            
 
-            <div class="input-group-mensagem required">
-                <h2>Mensagem:</h2>
+                <div class="input-group-mensagem required">
+                    <h2>Mensagem:</h2>
+                    <small class="small-text">
+                        Por favor incluir ligações externas (links) sempre que seja adequado
+                    </small>
+                    <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Mensagem que nos pretende transmitir" required></textarea>
+                </div>
+
+                <div class="input-group-nome required">
+                    <h2>Nome:</h2>
+                    <input type="text" id="autor" name="autor" placeholder="O seu nome" required>
+                </div>
+
+                <div class="input-group-email">
+                    <h2>Email:</h2>
+                    <small class="small-text">
+                        Deixe o seu endereço de correiro eletrónico se pretender que o contactemos
+                    </small>
+                    <input type="text" id="email" name="email" placeholder="O seu email" required>
+                </div>
+
+                <div class="input-group-data required">
+                    <input type="checkbox" id="dataConsent" name="dataConsent" value="accepted" required>
+                    <label for="dataConsent">Compreendo e aceito como os meus dados serão <a href="/politica-privacidade">recolhidos, armazenados e tratados</a>.</label>
+                </div>
+
+                <form action="submit.php" method="POST">
+                    <div class="g-recaptcha" data-sitekey="6LfdhN4pAAAAAKJYzhj7rcvP2CsoZQBe6XwGCk7O"></div>
+                    <button type="submit">Enviar</button>
+                </form>
+
                 <small class="small-text">
-                    Por favor incluir ligações externas (links) sempre que seja adequado
+                    <span class="text-danger">*</span>
+                    Campo obrigatório
                 </small>
-    
-                <textarea id="descricao" name="descricao" rows="5" class="tinymce" placeholder="Mensagem que nos pretende transmitir"  required></textarea>
-            </div>
-            <div class="input-group-nome required">
-                <h2>Nome:</h2>
-                <input type="text" id="autor" name="autor" placeholder="O seu nome" required>
-            </div>
-            
-            <div class="input-group-email ">
-                <h2>Email:</h2>
-                <small class="small-text">
-                    Deixe o seu endereço de correiro eletrónico se pretender que o contactemos
-                </small>
-                <input type="text" id="autor" name="autor" placeholder="O seu email" required>
-            </div>
-            
-
-            <div class="input-group-data required">
-                <input type="checkbox" id="assunto1" name="assunto" value="Opção 1">
-                <label for="assunto1">Compreendo e aceito como os meus dados serão <a href="/politica-privacidade">recolhidos, armazenados e tratados</a>.</label>
-               
-            </div>
-
-            <form action="submit.php" method="POST">
-                <!-- Your form fields go here -->
-        
-                <div class="g-recaptcha" data-sitekey="6LfdhN4pAAAAAKJYzhj7rcvP2CsoZQBe6XwGCk7O"></div>
-        
             </form>
-            <small class="small-text">
-                <span class="text-danger">*</span>
-                Campo obrigatório
-            </small>
-            
-            <button type="submit">Enviar</button>
         </div>
-
-        
-        
     </main>
 
-    <!-- Login Modal -->
-    <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
@@ -203,7 +161,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-nav">
@@ -212,14 +169,11 @@
                 <a href="#">Ficha Técnica</a>
                 <a href="/politica-privacidade">Política de Privacidade</a>
                 <button>Fale connosco </button>
-
             </div>
-
             <div class="additional-images">
                 <img src="static/images/dre_transparent.png" alt="Image 1">
                 <img src="static/images/gov_acores_transparent.png" alt="Image 2">
             </div>
-            
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -227,13 +181,8 @@
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-pinterest"></i></a>
             </div>
-            
-            
             <span> © Direção Regional da Educação - Secretaria Regional da Educação e dos Assuntos Culturais </span>
-
         </div>
     </footer>
-
-    
 </body>
 </html>

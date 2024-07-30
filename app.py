@@ -1134,8 +1134,19 @@ def help():
 
 # fale connosco
 
-@app.route('/faleconnosco')
+@app.route('/faleconnosco', methods=['GET', 'POST'])
 def speakwus():
+    
+    if request.method == 'POST':
+        data = request.form
+        assunto = data.get('assunto')
+        mensagem = data.get('mensagem')
+        nome = data.get('nome')
+        email = data.get('email')
+        
+        
+    
+    
     return render_template('faleconnosco.html')
 
 

@@ -600,20 +600,19 @@
     <!-- Contact User Modal -->
     <div id="contactUserModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeContactUserModal()">&times;</span>
-            <h2>Contactar Utilizador</h2>
-            <form id="contactForm">
-                <label for="name">Nome:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="assunto">Assunto:</label>
-                <input type="assunto" id="assunto" name="assunto" required>
-                <label for="message">Mensagem:</label>
-                <textarea id="message" name="message" rows="5" required></textarea>
-                <button type="submit">Enviar</button>
-            </form>
-            
+          <span class="close" onclick="closeContactUserModal()">&times;</span>
+          <h2>Contactar Utilizador</h2>
+          <form id="contactForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="assunto">Assunto:</label>
+            <input type="text" id="assunto" name="assunto" required>
+            <label for="message">Mensagem:</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+            <button type="submit">Enviar</button>
+          </form>
         </div>
     </div>
      <!-- Footer -->
@@ -651,21 +650,21 @@
     <script>
         // Embed resource details directly from the server-side template
         const resourceDetails = {
-            username: "{{ resource_details.username }}",
-            email: "{{ resource_details.email }}",
-            assunto: "{{resource_details.title}}"
+          username: "{{ resource_details.username }}",
+          email: "{{ resource_details.email }}",
+          assunto: "Recurso#{{resource_id}}:{{ resource_details.title }}"  // Make sure this matches the server-side data
         };
     
         // Function to populate the form fields
         function populateForm() {
-            document.getElementById('name').value = resourceDetails.username;
-            document.getElementById('email').value = resourceDetails.email;
-            document.getElementById('assunto').value = resourceDetails.title;
+          document.getElementById('name').value = resourceDetails.username;
+          document.getElementById('email').value = resourceDetails.email;
+          document.getElementById('assunto').value = resourceDetails.assunto;  // Use 'assunto' instead of 'title'
         }
     
         // Populate the form fields when the page loads
         window.onload = populateForm;
-    </script>
+      </script>
     
     <script>
         let currentScriptId = null;
