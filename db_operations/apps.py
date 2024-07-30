@@ -102,6 +102,41 @@ def get_total_app_count():
     conn.close()
     return result['count']
 
+def get_filtered_apps(search_query, page, apps_per_page):
+    offset = (page - 1) * apps_per_page
+    search_query = f"%{search_query}%"
+
+    query = """
+        SELECT * FROM Resources
+        WHERE type_id='3' AND (title LIKE %s OR description LIKE %s)
+        LIMIT %s OFFSET %s
+    """
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(query, (search_query, search_query, apps_per_page, offset))
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    
+    return result
+
+def get_filtered_app_count(search_query):
+    search_query = f"%{search_query}%"
+
+    query = """
+        SELECT COUNT(*) as count FROM Resources
+        WHERE type_id='3' AND (title LIKE %s OR description LIKE %s)
+    """
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(query, (search_query, search_query))
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    
+    return result['count']
+
+
 
 def get_app_metadata(resource_id):
     conn = connect_to_database()

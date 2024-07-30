@@ -144,32 +144,27 @@ def resources():
     page = request.args.get('page', 1, type=int)
     per_page = 12
     
-    user_id = session.get('user_id')  # Retrieve user ID from session
+    user_id = session.get('user_id')
     admin = is_admin(user_id)
 
     if search_term:
-        # If search term is provided, search for resources
         paginated_resources, total_resources = search_resources(search_term, page, per_page)
     else:
-        # Otherwise, fetch all resources
         paginated_resources = get_all_resources(page, per_page)
         total_resources = get_total_resource_count()
 
-    total_pages = (total_resources + per_page - 1) // per_page
+    total_pages = math.ceil(total_resources / per_page)
 
     for resource in paginated_resources:
         resource['image_url'] = get_resource_image_url(resource['slug'])
         resource['embed'] = get_resource_embed(resource['id'])
-        resource['details'] = get_combined_details(resource['id'])  # Fetch resource details
+        resource['details'] = get_combined_details(resource['id'])
         
-        # Identify the oldest script ID and get the areas_resources[0]
         scripts_by_id = resource['details'].get('scripts_by_id', {})
         if scripts_by_id:
-            # Find the oldest script ID (minimum ID)
             oldest_script_id = min(scripts_by_id.keys(), key=int)
             oldest_script = scripts_by_id.get(oldest_script_id, {})
             areas_resources = oldest_script.get('areas_resources', [])
-            # Determine if there are multiple areas_resources
             if len(areas_resources) > 1:
                 resource['areas_resources_display'] = 'Multidisciplinar'
             elif areas_resources:
@@ -179,7 +174,6 @@ def resources():
         else:
             resource['areas_resources_display'] = 'No area resources available'
 
-    # Define the range of pages to show
     if total_pages <= 5:
         page_range = range(1, total_pages + 1)
     else:
@@ -200,12 +194,7 @@ def resources():
         admin=admin,
         total_resources=total_resources
     )
-
-
-
-
-
-
+    
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
     combined_details = get_combined_details(resource_id)
@@ -538,24 +527,27 @@ def apps():
     admin = is_admin(user_id)
     page = request.args.get('page', default=1, type=int)
     apps_per_page = 12
+    search_query = request.args.get('search', '')
 
-    # Fetch apps for the current page
-    paginated_apps = get_all_apps(page, apps_per_page)
-    
-    # Fetch total app count for pagination
-    total_apps = get_total_app_count()
+    if search_query:
+        # Fetch filtered apps based on search query for the current page
+        paginated_apps = get_filtered_apps(search_query, page, apps_per_page)
+        total_apps = get_filtered_app_count(search_query)
+    else:
+        # Fetch all apps for the current page
+        paginated_apps = get_all_apps(page, apps_per_page)
+        total_apps = get_total_app_count()
+
     total_pages = (total_apps + apps_per_page - 1) // apps_per_page
 
     # Update each app with its slug and image URL
     for app in paginated_apps:
         app['slug'] = get_app_slug(app['id'])
-        app['metadados']=get_app_metadata(app['id'])
+        app['metadados'] = get_app_metadata(app['id'])
         if app['slug']:
             app['image_url'] = get_apps_image_url(app['slug'])
         else:
             app['image_url'] = None
-    
-   
 
     # Define the range of pages to show
     if total_pages <= 5:
@@ -568,7 +560,16 @@ def apps():
         else:
             page_range = range(page - 2, page + 3)
 
-    return render_template('apps.html', all_apps=paginated_apps, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
+    return render_template(
+        'apps.html',
+        all_apps=paginated_apps,
+        page=page,
+        total_pages=total_pages,
+        page_range=page_range,
+        admin=admin,
+        search_query=search_query
+    )
+
 
 @app.route('/search', methods=['POST'])
 def search():

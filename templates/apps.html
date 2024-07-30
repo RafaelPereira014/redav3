@@ -49,7 +49,6 @@
             z-index: 10000; 
         }
 
-
         .compreendi {
             background-color: #83ae03;
             color: #fff;
@@ -134,9 +133,11 @@
             </div>
             <div class="filter-bar">
                 <h2>Filtrar por...</h2>
-                <input type="text" placeholder="Palavras-chave...">
-                <button class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
-                <button class="clear-button"> Limpar Filtros </button>
+                <form method="GET" action="{{ url_for('apps') }}">
+                    <input type="text" name="search" placeholder="Palavras-chave..." value="{{ request.args.get('search', '') }}">
+                    <button type="submit" class="search-button"><i class="fas fa-search"></i> Filtrar palavras</button>
+                    <button type="button" class="clear-button" onclick="location.href='{{ url_for('apps') }}'"> Limpar Filtros </button>
+                </form>
             </div>
             <hr>
             <!-- Loop through applications -->
@@ -182,15 +183,15 @@
             <!-- Pagination -->
             <div class="pagination">
                 {% if page > 1 %}
-                    <a href="{{ url_for('apps', page=1) }}">Início</a>
-                    <a href="{{ url_for('apps', page=page-1) }}">Anterior</a>
+                    <a href="{{ url_for('apps', page=1, search=request.args.get('search', '')) }}">Início</a>
+                    <a href="{{ url_for('apps', page=page-1, search=request.args.get('search', '')) }}">Anterior</a>
                 {% endif %}
                 {% for p in page_range %}
-                    <a href="{{ url_for('apps', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
+                    <a href="{{ url_for('apps', page=p, search=request.args.get('search', '')) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
                 {% if page < total_pages %}
-                    <a href="{{ url_for('apps', page=page+1) }}">Próximo</a>
-                    <a href="{{ url_for('apps', page=total_pages) }}">Último</a>
+                    <a href="{{ url_for('apps', page=page+1, search=request.args.get('search', '')) }}">Próximo</a>
+                    <a href="{{ url_for('apps', page=total_pages, search=request.args.get('search', '')) }}">Último</a>
                 {% endif %}
             </div>
         </div>
@@ -284,79 +285,27 @@
             modal.style.display = "none";
             document.body.style.overflow = "auto";
         }
-        document.querySelector(".search-button").addEventListener("click", function() {
-            var keyword = document.querySelector(".filter-bar input[type='text']").value;
-            fetch('/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ word: keyword })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Log the search results
-                displaySearchResults(data);
-            })
-            .catch(error => console.error('Error:', error));
-        });
-        
-        function displaySearchResults(results) {
-            var container = document.querySelector(".container");
-            container.innerHTML = '<p>Início > Aplicações</p>'; // Clear previous content and add breadcrumb
-        
-            results.forEach(app => {
-                var appElement = document.createElement('div');
-                appElement.className = 'rectangle';
-                appElement.innerHTML = `
-                    <img src="${app.image_url ? app.image_url : 'static/images/white.jpeg'}" alt="App Image">
-                    <div class="text">
-                        <h2>${app.title}</h2>
-                        <small class="small-text">${app.platform}</small>
-                    </div>
-                    <p class="short-description">${app.description.length > 100 ? app.description.slice(0, 100) + '...' : app.description}</p>
-                    <p class="full-description" style="display: none;">${app.description}</p>
-                    <button class="readmore">Ler mais</button>
-                    <div class="button-container">
-                        <button class="open-path" data-modal-id="openPathModal-${app.id}">Abrir endereço</button>
-                    </div>
-                    <div id="openPathModal-${app.id}" class="modal">
-                        <div class="modal-content">
-                            <span class="close" onclick="closeModal('openPathModal-${app.id}')">&times;</span>
-                            <h2>Abrir endereço</h2>
-                            <p>Ao abrir este endereço, você será redirecionado para uma página externa.</p>
-                            <div class="button-container">
-                                <a href="${app.link}" class="compreendi" target="_blank">Compreendi</a>
-                                <button class="close-modal" onclick="closeModal('openPathModal-${app.id}')">Não, obrigado</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(appElement);
-            });
-        
-            // Reattach event listeners for "Ler mais" buttons
-            attachReadMoreListeners();
-        }
-        
         function attachReadMoreListeners() {
             var readmoreButtons = document.getElementsByClassName("readmore");
-        
+
             for (var i = 0; i < readmoreButtons.length; i++) {
                 readmoreButtons[i].addEventListener("click", function(event) {
                     var parentRectangle = event.target.closest(".rectangle");
                     var modalTitle = parentRectangle.querySelector("h2").innerText;
                     var fullDescription = parentRectangle.querySelector(".full-description").innerText;
-                    
+
                     document.getElementById("modalTitle").innerText = modalTitle;
                     document.getElementById("modalDescription").innerText = fullDescription;
-        
+
                     // Display the modal
+                    var appModal = document.getElementById("appModal");
                     appModal.style.display = "block";
                     document.body.style.overflow = "hidden"; // Prevent background scrolling
                 });
             }
         }
+        
+        attachReadMoreListeners();
         
     </script>
 </body>

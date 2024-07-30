@@ -53,6 +53,43 @@
         height: 100%;
     }
 
+    .popup-container {
+        display: none; /* Hidden by default */
+        position: fixed;
+        z-index: 1000; /* Above other elements */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+    }
+
+    .popup-content {
+        background-color: #fff;
+        margin: 15% auto; /* 15% from top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+        max-width: 500px;
+        border-radius: 5px;
+    }
+
+    .close-button {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+
     
     
 </style>
@@ -242,7 +279,7 @@
                         {% for script_id, script in resource_details.scripts_by_id.items() %}
                             {% if script.approved or admin %}
                                 <div class="button-container">
-                                    <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }} {{script_id}}</button>
+                                    <button onclick="showProposta({{ loop.index }})">Proposta {{ loop.index }} </button>
                                     {% if admin and not script.approved %}
                                         <button onclick="aprovarProposta({{ script_id }})">Aprovar proposta de operacionalização</button>
                                     {% endif %}
@@ -331,6 +368,17 @@
             <button onclick="closeHideModal()">Não</button>
         </div>
     </div>
+
+    <!-- Popup container -->
+    <div id="approvePopup" class="popup-container">
+        <div class="popup-content">
+            <span class="close-button" onclick="closePopup()">&times;</span>
+            <h2>Confirmar Aprovação</h2>
+            <p>Tem certeza de que deseja aprovar esta proposta?</p>
+            <button id="confirmApproveButton">Aprovar</button>
+        </div>
+    </div>
+
 
 
      <!--Share resource modal -->
@@ -438,26 +486,44 @@
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
+        let currentScriptId = null;
+
         function aprovarProposta(script_id) {
-            fetch(`/approve_script/${script_id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Proposta de operacionalização atualizada.');
-                    location.reload(); // This will reload the page
-                } else {
-                    alert('Erro ao atualizar proposta.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+            currentScriptId = script_id;
+            document.getElementById('approvePopup').style.display = 'block';
         }
+
+        function closePopup() {
+            document.getElementById('approvePopup').style.display = 'none';
+            currentScriptId = null;
+        }
+
+        document.getElementById('confirmApproveButton').addEventListener('click', function() {
+            if (currentScriptId) {
+                fetch(`/approve_script/${currentScriptId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Proposta de operacionalização atualizada.');
+                        location.reload(); // This will reload the page
+                    } else {
+                        alert('Erro ao atualizar proposta.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    closePopup();
+                });
+            }
+        });
+
     </script>
     
     <script>

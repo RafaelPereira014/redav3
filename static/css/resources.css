@@ -84,6 +84,7 @@ button.resource:hover {
     padding: 10px;
     cursor: pointer;
     width: 20%;
+    margin-right: 5px;
     background-color: #aec03f;
     border-radius: 0%;
     color: white;

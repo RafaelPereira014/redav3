@@ -93,6 +93,10 @@
             color: #fff; /* White text color for contrast */
         }
 
+        
+
+        
+
        
 
         
@@ -142,10 +146,14 @@
                     {% endif %}
                 </ul>
             </nav>
-            <div class="search-container">
-                <input type="text" placeholder="Procurar recursos..." name="search" value="{{ request.args.get('search', '') }}">
+            <form action="{{ url_for('resources') }}" method="get" class="search-container">
+                <input type="text" name="search" placeholder="Procurar recursos..." value="{{ search_term }}">
                 <button type="submit"><i class="fa fa-search"></i> Pesquisar</button>
-            </div>
+                <!-- Clear Button -->
+                <button type="submit" id="clearSearch"><i class="fa fa-times"></i> Limpar</button>
+            </form>
+            
+            
             <button id="advancedSearchBtn" onclick="toggleAdvancedSearch()">Pesquisa Avançada <i class="fas fa-caret-down"></i></button>
             <div id="advancedSearchOptions" style="display: none;">
                 <hr></hr>
@@ -297,19 +305,20 @@
     
             <div class="pagination">
                 {% if page > 1 %}
-                    <a href="{{ url_for('resources', page=1) }}">Início</a>
-                    <a href="{{ url_for('resources', page=page-1) }}">Anterior</a>
+                    <a href="{{ url_for('resources', page=1, search=search_term) }}">Início</a>
+                    <a href="{{ url_for('resources', page=page-1, search=search_term) }}">Anterior</a>
                 {% endif %}
                 
                 {% for p in page_range %}
-                    <a href="{{ url_for('resources', page=p) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
+                    <a href="{{ url_for('resources', page=p, search=search_term) }}" {% if p == page %}class="active"{% endif %}>{{ p }}</a>
                 {% endfor %}
                 
                 {% if page < total_pages %}
-                    <a href="{{ url_for('resources', page=page+1) }}">Próximo</a>
-                    <a href="{{ url_for('resources', page=total_pages) }}">Último</a>
+                    <a href="{{ url_for('resources', page=page+1, search=search_term) }}">Próximo</a>
+                    <a href="{{ url_for('resources', page=total_pages, search=search_term) }}">Último</a>
                 {% endif %}
             </div>
+            
         </div>
     </main>
     
@@ -361,5 +370,15 @@
             }
         }
     </script>
+    <script>
+        document.getElementById('clearSearch').addEventListener('click', function() {
+            // Clear the search input field
+            document.querySelector('input[name="search"]').value = '';
+            
+            // Redirect to the resources page without the search query
+            window.location.href = "{{ url_for('resources') }}";
+        });
+    </script>
+    
 </body>
 </html>

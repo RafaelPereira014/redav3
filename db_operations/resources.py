@@ -729,21 +729,36 @@ def get_propostasOp(resource_id):
         return []
 
 def search_resources(search_term, page, per_page):
-    conn = connect_to_database()
-    cursor = conn.cursor(dictionary=True)
-    query = """
-        SELECT SQL_CALC_FOUND_ROWS * FROM Resources
-        WHERE title LIKE %s OR description LIKE %s ORDER BY id DESC
-        LIMIT %s OFFSET %s
-    """
     search_term = f"%{search_term}%"
     offset = (page - 1) * per_page
-    cursor.execute(query, (search_term, search_term, per_page, offset))
-    resources = cursor.fetchall()
-    cursor.execute("SELECT FOUND_ROWS()")
-    total_results = cursor.fetchone()["FOUND_ROWS()"]
-    cursor.close()
-    conn.close()
+
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+
+        # Execute search query
+        query = """
+            SELECT SQL_CALC_FOUND_ROWS * FROM Resources
+            WHERE title LIKE %s OR description LIKE %s
+            ORDER BY id DESC
+            LIMIT %s OFFSET %s
+        """
+        cursor.execute(query, (search_term, search_term, per_page, offset))
+        resources = cursor.fetchall()
+
+        # Execute query to get the total number of results
+        cursor.execute("SELECT FOUND_ROWS() AS total_count")
+        total_results = cursor.fetchone()["total_count"]
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        resources = []
+        total_results = 0
+
+    finally:
+        cursor.close()
+        conn.close()
+
     return resources, total_results
 
 
