@@ -337,7 +337,7 @@ nav ul li a:hover {
 }
 
 .proposta-op button {
-    background-color: #83ae03;
+    background-color: #aec03f;
     color: #fff;
     border: none;
     padding: 12px 24px;
@@ -349,7 +349,7 @@ nav ul li a:hover {
 }
 
 .proposta-op button:hover {
-    background-color: #6b8e03;
+    background-color: #afc03f95;
 }
 
 .proposta-op .proposta-content {
@@ -597,7 +597,7 @@ footer {
 }
 
 .rectangle .buttons button:hover {
-    background-color: #aec03f;
+    background-color: #afc03f80;
     color: #fff;
 }
 
@@ -661,5 +661,4 @@ footer {
 .warning span {
     font-size: 14px; /* Slightly larger font */
 }
-
 

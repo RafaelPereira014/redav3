@@ -156,14 +156,17 @@
                     <div id="counter"></div>
                     <small class="small-text">Deve ter no mínimo 20 caracteres e no máximo 2000</small>
                 </div>
-                <div class="input-group-lang ">
+                <div class="input-group-lang">
                     <h2>Idiomas:</h2>
                     {% for idioma in idiomas %}
-                        <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}" 
+                        <input type="checkbox" id="idioma{{ loop.index }}" name="idiomas" value="{{ idioma }}"
                             {% if idioma in idiomas_title %}checked{% endif %}>
                         <label for="idioma{{ loop.index }}">{{ idioma }}</label>
                     {% endfor %}
                 </div>
+                
+                
+                
                 <div class="input-group-fich">
                     <h2>Ficheiro:</h2>
                     <input type="file" id="ficheiro" name="ficheiro">

@@ -95,6 +95,12 @@ def register():
 def user_logged_in():
     return 'user_id' in session  # Modify this based on your session setup
 
+
+@app.route('/maintenance')
+def maintenance():
+    
+    return render_template('manutencao.html')
+
 @app.route('/')
 def homepage():
     recent_resources = get_recent_approved_resources()
@@ -210,13 +216,18 @@ def resource_details(resource_id):
 
     # Fetch and append additional details
     slug = get_resouce_slug(resource_id)
+    
     resource_details['image_url'] = get_resource_image_url(slug)
     resource_details['embed'] = get_resource_embed(resource_id)
     resource_details['files'] = get_resource_files(slug)
     resource_details['link'] = get_resource_link(resource_id)
     resource_details['operations'] = get_propostasOp(resource_id)  # Fetching operations
     resource_details['username'] = get_username(resource_details['user_id'])
-
+    resource_details['email']= get_user_email(resource_details['user_id'])
+    msg = request.form.get('message')
+    
+    
+    
     # Fetch related resources and append additional details
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:
@@ -234,7 +245,7 @@ def resource_details(resource_id):
     return render_template('resource_details.html', 
                            resource_details=resource_details, 
                            related_resources=related_resources, 
-                           admin=admin,slug=slug)
+                           admin=admin,slug=slug,resource_id=resource_id)
 
 
 
@@ -740,9 +751,6 @@ def tools():
     
 
     return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
-
-
-
 
 
 @app.route('/novaferramenta', methods=['GET', 'POST'])
