@@ -105,6 +105,68 @@
             font-weight: bold;
         }
 
+        /* Container for the input group */
+        .input-group-local {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid #ddd; /* Light gray border */
+            border-radius: 8px; /* Rounded corners */
+            background-color: #f9f9f9; /* Light background */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* Heading */
+        .input-group-local h2 {
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: #333; /* Darker text for better readability */
+        }
+
+        /* Radio buttons container */
+        .input-group-local label {
+            display: block;
+            margin: 5px 0;
+            font-size: 13px;
+            color: #333; /* Darker text for better readability */
+            cursor: pointer; /* Cursor changes to pointer for better UX */
+        }
+
+        /* Radio buttons */
+        .input-group-local input[type="radio"] {
+            margin-right: 10px; /* Space between radio button and label */
+            cursor: pointer; /* Cursor changes to pointer for better UX */
+        }
+
+        /* Text input fields */
+        .input-group-local input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc; /* Light border for the input field */
+            border-radius: 4px; /* Slightly rounded corners for the input field */
+            width: 80%; /* Full width of the container */
+            box-sizing: border-box; /* Ensure padding and border are included in the total width */
+            background-color: #fff; /* White background for the input field */
+            color: #333; /* Text color */
+            margin-top: 10px; /* Space above the input field */
+        }
+
+        /* File input field */
+        .input-group-local input[type="file"] {
+            margin-top: 10px; /* Space above the file input field */
+        }
+
+        /* Hidden inputs */
+        .input-group-local div {
+            display: none; /* Hide elements by default */
+        }
+
+        .input-group-local div.show {
+            display: block; /* Show elements when the 'show' class is applied */
+        }
+
+
     </style>
 </head>
 <body>
@@ -148,7 +210,7 @@
                 <h1>Detalhes</h1>
                 <div class="input-group required">
                     <h2>Título:</h2>
-                    <textarea id="titulo" name="titulo" rows="3" class="tinymce"></textarea>
+                    <textarea id="titulo" name="titulo" rows="2" class="tinymce"></textarea>
                 </div>
                 <div class="input-group-aut required">
                     <h2>Autor/fonte:</h2>

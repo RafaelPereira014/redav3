@@ -307,3 +307,43 @@ textarea::placeholder {
     font-style: italic;
     font-size: 12px;
 }
+
+/* CSS for duration-box */
+#duration-box {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #ddd; /* Light gray border */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+#duration-box.hidden {
+    display: none; /* Hide the box when the 'hidden' class is applied */
+}
+
+#duration-box h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333; /* Darker text for better readability */
+}
+
+#duration-box input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc; /* Light border for the input field */
+    border-radius: 4px; /* Slightly rounded corners for the input field */
+    width: 100%; /* Full width of the container */
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
+    background-color: #fff; /* White background for the input field */
+    color: #333; /* Text color */
+}
+
+#duration-box input[type="text"]::placeholder {
+    color: #888; /* Placeholder text color */
+    font-style: italic; /* Italicize placeholder text */
+}
+
