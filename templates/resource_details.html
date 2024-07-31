@@ -462,11 +462,25 @@
                                         <span class="label">Conceitos:</span>
                                         <span class="value">{{ script.hashtags | join(', ') }}</span>
                                     </div>
+                                    <div class="separator">
+                                        <span class="label">Ficheiros associados:</span>
+                                        <span class="value">
+                                            {% if script_id in resource_details.script_files %}
+                                                <ul>
+                                                    {% for file in resource_details.script_files[script_id] %}
+                                                        <li><a href="{{ url_for('static', filename=file.file_path) }}">{{ file.file_name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% else %}
+                                                Sem ficheiros associados.
+                                            {% endif %}
+                                        </span>
+                                    </div>
                                 </div>
                             {% endif %}
                         {% endfor %}
                     </div>
-                
+                    
                 </div>
                 
                 <div class="comments">

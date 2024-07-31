@@ -606,6 +606,20 @@ def get_resource_files(resource_slug):
     return files  # Return a list of file URLs
 
 
+def get_script_files(resource_slug):
+    file_extensions = ['pdf', 'docx', 'xlsx','doc']  # Add other file extensions as needed
+    directory_path = os.path.join(current_app.root_path, 'static', 'files', 'scripts', resource_slug)
+    files = []
+
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        for ext in file_extensions:
+            for filename in os.listdir(directory_path):
+                if filename.startswith(resource_slug) and filename.endswith('.' + ext):
+                    file_url = url_for('static', filename=f'/files/scripts/{resource_slug}/{filename}')
+                    files.append(file_url)
+
+    return files  # Return a list of file URLs
+
 def get_taxonomy_id_for_title(taxonomy_title):
     # Example function to get taxonomy ID from title
     conn = connect_to_database()

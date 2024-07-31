@@ -34,7 +34,7 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 def allowed_file(filename):
-    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif'}
+    allowed_extensions = {'png', 'jpg', 'jpeg', 'gif','pdf','doc','docx'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
 
 
@@ -238,6 +238,7 @@ def resource_details(resource_id):
             related['image_url'] = get_resource_image_url(related_slug)
             related['embed'] = get_resource_embed(related['id'])
             related['files'] = get_resource_files(related_slug)
+            related['script_files'] = get_script_files(related_slug)
             related['link'] = get_resource_link(related['id'])
             related['operations'] = get_propostasOp(related['id'])
             related['username'] = get_username(related_combined_details['user_id'])
@@ -1064,6 +1065,8 @@ def novo_recurso2():
     admin = is_admin(user_id)
     anos = get_unique_terms(level=1)
     resource_id = session.get('resource_id')
+    titulo = get_title(resource_id)
+    slug = generate_slug(titulo)
     
     ano = request.args.get('ano')
     dominios = []
@@ -1086,19 +1089,55 @@ def novo_recurso2():
         selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
         outros_conceitos = data.get('keywordInput')
-        print(outros_conceitos)
         descricao = data.get('descricao')
+        file = request.files.get('ficheiro')
         
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
         conn.commit()
-    
+        
+        # If there's a file and it's allowed, save it
+        if file and allowed_file(file.filename):
+            file_filename = file.filename
+            file_extension = file_filename.rsplit('.', 1)[1].lower()
+
+            # Generate new file name
+            random_int = random.randint(1000, 9999)
+            new_file_filename = f"{slug}_{random_int}.{file_extension}"
+            
+            # Create the directory /static/files/resources/slug/
+            slug_dir = os.path.join('static', 'files', 'scripts', slug)
+            if not os.path.exists(slug_dir):
+                os.makedirs(slug_dir)
+            
+            file_path = os.path.join(slug_dir, new_file_filename)
+
+            # Save the file
+            file.save(file_path)
+            print(f"File saved to {file_path}")
+
+            # Insert new record into the Files table
+            cursor.execute(
+                "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                (new_file_filename, file_extension, 1, datetime.now(), datetime.now())
+            )
+            file_id = cursor.lastrowid
+
+            # Insert record into ScriptFiles table
+            cursor.execute(
+                "INSERT INTO script_files (script_id, file_id, created_at, updated_at) VALUES (%s, %s, %s, %s)",
+                (resource_id, file_id, datetime.now(), datetime.now())
+            )
+            conn.commit()
+
+        cursor.close()
+        conn.close()
         return redirect(url_for('resource_details', resource_id=resource_id))  # Updated line
 
     conn.close()
     cursor.close()
     
-    
-    return render_template('new_resource2.html', anos=anos,admin=admin)
+    return render_template('new_resource2.html', anos=anos, admin=admin)
+
 
 @app.route('/fetch_disciplinas')
 def fetch_disciplinas():
