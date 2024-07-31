@@ -104,7 +104,6 @@
                 </div>
             </div>
     
-            <!-- Content Sections -->
             <section id="my-resources" class="content-section">
                 <h1>Os meus recursos</h1>
                 <p>{{ resources_count }} resultados</p>
@@ -115,20 +114,11 @@
                     <button class="clear-button" onclick="clearSearch()">Limpar Filtros</button>
                 </div>
                 
-                
                 {% for resource in my_resources %}
                     <div class="resource-card">
-                        <h2>
-                            {% if resource['title'] %}
-                                {{ resource['title'] | strip_html }}
-                            {% endif %}
-                        </h2>
+                        <h2>{{ resource['title'] | strip_html }}</h2>
                         <p>Criado a {{ resource['created_at'] }}</p>
-                        <p>
-                            {% if resource['description'] %}
-                                {{ resource['description'] | strip_html }}
-                            {% endif %}
-                        </p>
+                        <p>{{ resource['description'] | strip_html }}</p>
                         <div class="icon-bar">
                             <i class="fas fa-flag"></i>
                             <i class="fas fa-heart"></i>
@@ -138,82 +128,103 @@
                         <button class="Delete" onclick="openDeleteModal()">Eliminar</button>
                     </div>
                 {% endfor %}
+                
                 <div class="pagination">
-                    {% if page > 1 %}
-                        <a href="?page=1&search={{ search_term }}">&laquo; Inicio</a>
-                        <a href="?page={{ page - 1 }}&search={{ search_term }}">Anterior</a>
+                    {% if page_resources > 1 %}
+                        <a href="?page_resources=1&search={{ search_term }}">&laquo; Inicio</a>
+                        <a href="?page_resources={{ page_resources - 1 }}&search={{ search_term }}">Anterior</a>
                     {% endif %}
-                    <span class="current">Page {{ page }} of {{ total_pages }}</span>
-                    {% if page < total_pages %}
-                        <a href="?page={{ page + 1 }}&search={{ search_term }}">Próximo</a>
-                        <a href="?page={{ total_pages }}&search={{ search_term }}">Fim &raquo;</a>
+                    <span class="current">Page {{ page_resources }} of {{ total_pages_resources }}</span>
+                    {% if page_resources < total_pages_resources %}
+                        <a href="?page_resources={{ page_resources + 1 }}&search={{ search_term }}">Próximo</a>
+                        <a href="?page_resources={{ total_pages_resources }}&search={{ search_term }}">Fim &raquo;</a>
                     {% endif %}
                 </div>
             </section>
             
             <section id="my-proposals" class="content-section" style="display: none;">
-                <!-- Content for "Minhas Propostas" section -->
                 <h1>Recrusos com a minha contribuição</h1>
-                <h3>1739 resultados <h3>
+                <h3>{{ scripts_count }} resultados</h3>
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search...">
-                    <button onclick="searchResources()">Search</button>
+                    <input type="text" id="searchInputProposals" placeholder="Search...">
+                    <button onclick="searchProposals()">Search</button>
                 </div>
-                    
-                {% for script in scripts_user%}
+                
+                {% for script in scripts_user %}
                     <div class="proposta-card">
                         <h3> Proposta de operacionalização </h3>
-                        <p>{{script.created_at}}</p>
-                        <p>{{script.operation}}</p>
+                        <p>{{ script.created_at }}</p>
+                        <p>{{ script.operation }}</p>
                         <a href="/resources/details/{{ script.resource_id }}"><button>Ver</button></a>
                         <a href="/resources/edit2/{{ script.resource_id }}"><button>Editar proposta</button></a>
                     </div>
-                {%endfor%}
-
+                {% endfor %}
+                
                 <div class="pagination">
-                    {% if page > 1 %}
-                        <a href="?page=1">&laquo; Inicio</a>
-                        <a href="?page={{ page - 1 }}">Anterior</a>
+                    {% if page_proposals > 1 %}
+                        <a href="?page_proposals=1">&laquo; Inicio</a>
+                        <a href="?page_proposals={{ page_proposals - 1 }}">Anterior</a>
                     {% endif %}
                     
-                    <span class="current">Page {{ page }} of {{ total_pages_proposals }}</span>
+                    <span class="current">Page {{ page_proposals }} of {{ total_pages_proposals }}</span>
                     
-                    {% if page < total_pages_proposals %}
-                        <a href="?page={{ page + 1 }}">Próximo</a>
-                        <a href="?page={{ total_pages_proposals }}">Fim &raquo;</a>
+                    {% if page_proposals < total_pages_proposals %}
+                        <a href="?page_proposals={{ page_proposals + 1 }}">Próximo</a>
+                        <a href="?page_proposals={{ total_pages_proposals }}">Fim &raquo;</a>
                     {% endif %}
                 </div>
-
-                
-
             </section>
+
+            <!-- Apps Section -->
             <section id="my-apps" class="content-section" style="display: none;">
                 <h1>Aplicações</h1>
-                <h3>12 resultados <h3>
+                <h3>{{ apps_count }} resultados</h3>
                 {% for app in apps_user %}
                 <div class="tool-card">
-                    <h3>{{app.title | safe }}</h3>
-                    <p>{{app.description | safe}}</p>
+                    <h3>{{ app.title | safe }}</h3>
+                    <p>{{ app.description | safe }}</p>
                     <a href="/resources/edit_app/{{ app.id }}"><button>Editar</button></a>
                     <button class="eliminar">Eliminar</button>
                 </div>
-                {%endfor%}
-
+                {% endfor %}
+                
+                <div class="pagination">
+                    {% if page_apps > 1 %}
+                        <a href="?page_apps=1">&laquo; Inicio</a>
+                        <a href="?page_apps={{ page_apps - 1 }}">Anterior</a>
+                    {% endif %}
+                    <span class="current">Page {{ page_apps }} of {{ total_pages_apps }}</span>
+                    {% if page_apps < total_pages_apps %}
+                        <a href="?page_apps={{ page_apps + 1 }}">Próximo</a>
+                        <a href="?page_apps={{ total_pages_apps }}">Fim &raquo;</a>
+                    {% endif %}
+                </div>
             </section>
-            <section id="my-tools" class="content-section" style="display: none;">
-                <!-- Content for "Minhas Propostas" section -->
-                <h1>Ferramentas</h1>
-                <h3>12 resultados <h3>
 
+            <!-- Tools Section -->
+            <section id="my-tools" class="content-section" style="display: none;">
+                <h1>Ferramentas</h1>
+                <h3>{{ tools_count }} resultados</h3>
                 {% for tool in tools_user %}
                     <div class="tool-card">
-                        <h3>{{tool.title | safe}}</h3>
-                        <p>{{tool.description | safe}}</p>
+                        <h3>{{ tool.title | safe }}</h3>
+                        <p>{{ tool.description | safe }}</p>
                         <a href="/resources/edit_tool/{{ tool.id }}"><button>Editar</button></a>
                         <button class="eliminar">Eliminar</button>
                     </div>
-                {%endfor%}
+                {% endfor %}
                 
+                <div class="pagination">
+                    {% if page_tools > 1 %}
+                        <a href="?page_tools=1">&laquo; Inicio</a>
+                        <a href="?page_tools={{ page_tools - 1 }}">Anterior</a>
+                    {% endif %}
+                    <span class="current">Page {{ page_tools }} of {{ total_pages_tools }}</span>
+                    {% if page_tools < total_pages_tools %}
+                        <a href="?page_tools={{ page_tools + 1 }}">Próximo</a>
+                        <a href="?page_tools={{ total_pages_tools }}">Fim &raquo;</a>
+                    {% endif %}
+                </div>
             </section>
 
             <!-- Repeat similar content sections for other options -->
@@ -345,20 +356,60 @@
 
         var deleteModal = document.getElementById("deleteModal");
 
-        // Function to open the modal
+        function searchResources() {
+            const searchTerm = document.getElementById('searchInput').value;
+            const queryString = new URLSearchParams({ search: searchTerm }).toString();
+            window.location.href = `/myaccount?${queryString}`;
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            window.location.href = '/myaccount'; // Redirect to the account page without search term
+        }
+
         function openDeleteModal() {
             deleteModal.style.display = "block";
         }
 
-        // Function to close the modal
         function closeDeleteModal() {
             deleteModal.style.display = "none";
         }
 
-        // Function to hide the resource (replace this with your actual logic)
         function deleteResource() {
             alert("Recurso eliminado com sucesso!"); // Placeholder action
             deleteModal.style.display = "none"; // Close the modal
+        }
+
+        document.querySelectorAll('.delete').forEach(button => {
+            button.addEventListener('click', openDeleteModal);
+        });
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        document.querySelectorAll('.options-menu a').forEach(option => {
+            option.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevent default anchor behavior
+                const targetSectionId = option.getAttribute('href').substring(1); // Remove the # from the href
+                showSection(targetSectionId);
+            });
+        });
+
+        // Ensure the correct section is shown based on URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('page_proposals')) {
+            showSection('my-proposals');
+        } else if (urlParams.has('page_apps')) {
+            showSection('my-apps');
+        } else if (urlParams.has('page_tools')) {
+            showSection('my-tools');
+        } else {
+            showSection('my-resources');
         }
 
         // Event listener for the 'Ocultar' button

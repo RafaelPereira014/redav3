@@ -841,7 +841,6 @@ def edit_tool(resource_id):
     return render_template('edit_tool.html', admin=admin, slug=slug, resource_details=resource_details)
 
 
-# My Account
 @app.route('/myaccount')
 def my_account():
     user_id = session.get('user_id')  # Retrieve user ID from session
@@ -852,38 +851,56 @@ def my_account():
     tools_user, tools_count = get_tools_from_user(user_id)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
-    scripts_user,scripts_count = get_script_details_by_user(user_id)
+    scripts_user, scripts_count = get_script_details_by_user(user_id)
     
-    # Pagination
-    page = request.args.get('page', 1, type=int)
-    per_page = 10
-    #resources
+    per_page = 10  # Number of items per page
+
+    # Pagination for resources
+    page_resources = request.args.get('page_resources', 1, type=int)
     total_resources = len(my_resources)
-    total_pages = math.ceil(total_resources / per_page)
-    paginated_resources = my_resources[(page - 1) * per_page:page * per_page]
+    total_pages_resources = math.ceil(total_resources / per_page)
+    paginated_resources = my_resources[(page_resources - 1) * per_page:page_resources * per_page]
     
-    #proposals
+    # Pagination for proposals
+    page_proposals = request.args.get('page_proposals', 1, type=int)
     total_proposals = scripts_count
     total_pages_proposals = math.ceil(total_proposals / per_page)
-    paginated_proposals = scripts_user[(page - 1) * per_page:page * per_page]
+    paginated_proposals = scripts_user[(page_proposals - 1) * per_page:page_proposals * per_page]
+    
+    # Pagination for apps
+    page_apps = request.args.get('page_apps', 1, type=int)
+    total_apps = apps_count
+    total_pages_apps = math.ceil(total_apps / per_page)
+    paginated_apps = apps_user[(page_apps - 1) * per_page:page_apps * per_page]
+    
+    # Pagination for tools
+    page_tools = request.args.get('page_tools', 1, type=int)
+    total_tools = tools_count
+    total_pages_tools = math.ceil(total_tools / per_page)
+    paginated_tools = tools_user[(page_tools - 1) * per_page:page_tools * per_page]
     
     return render_template(
         'my_account.html',
         my_resources=paginated_resources,
-        apps_count=apps_count,
-        apps_user=apps_user,
-        tools_user=tools_user,
-        tools_count=tools_count,
+        apps_user=paginated_apps,
+        tools_user=paginated_tools,
         user_details=user_details,
         resources_count=resources_count,
-        scripts_user=scripts_user,
+        scripts_user=paginated_proposals,
+        apps_count=apps_count,
+        tools_count=tools_count,
         scripts_count=scripts_count,
-        page=page,
-        total_pages=total_pages,
-        admin=admin,
+        page_resources=page_resources,
+        total_pages_resources=total_pages_resources,
+        page_proposals=page_proposals,
         total_pages_proposals=total_pages_proposals,
-        paginated_proposals=paginated_proposals
+        page_apps=page_apps,
+        total_pages_apps=total_pages_apps,
+        page_tools=page_tools,
+        total_pages_tools=total_pages_tools,
+        admin=admin
     )
+
 
 
 @app.route('/novorecurso', methods=['GET', 'POST'])
