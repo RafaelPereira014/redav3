@@ -14,6 +14,20 @@ body {
     margin: auto;
 }
 
+button.resource {
+    padding: 10px 20px; /* Adjust padding for the button */
+    background-color: #aec03f; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove default border */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    font-size: 14px; /* Adjust font size */
+    margin-bottom: 10px; /* Space below the button */
+}
+
+button.resource:hover {
+    background-color: #a0af3b; /* Button background color on hover */
+}
+
 nav ul li button {
     background: none; /* Remove default background */
     border: none; /* Remove default border */
@@ -339,7 +353,7 @@ nav ul li a:hover {
 
 /* Header styles */
 .header-profile {
-    background-color: #afc03f95;
+    background-color: #afc03fb0;
     background-image: none;
     color: #fff;
     padding: 20px 0;

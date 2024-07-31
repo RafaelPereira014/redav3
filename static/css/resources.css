@@ -54,7 +54,7 @@ nav ul li a {
 
 button.resource {
     padding: 10px 20px; /* Adjust padding for the button */
-    background-color: #83ae03; /* Button background color */
+    background-color: #aec03f; /* Button background color */
     color: white; /* Button text color */
     border: none; /* Remove default border */
     cursor: pointer; /* Change cursor to pointer on hover */
@@ -63,7 +63,7 @@ button.resource {
 }
 
 button.resource:hover {
-    background-color: #6f9802; /* Button background color on hover */
+    background-color: #a0af3b; /* Button background color on hover */
 }
 .search-container {
     display: flex;

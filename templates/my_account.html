@@ -107,7 +107,7 @@
             <section id="my-resources" class="content-section">
                 <h1>Os meus recursos</h1>
                 <p>{{ resources_count }} resultados</p>
-                <a href="/novorecurso"><button>+ Novo recurso</button></a>
+                <button class="resource"><i class="fa fa-plus"></i> Introduzir recurso</button>
                 <div class="search-container">
                     <input type="text" id="searchInput" placeholder="Palavras-chave..." value="{{ search_term }}">
                     <button class="search-button" onclick="searchResources()">Filtrar palavras</button>
@@ -117,7 +117,7 @@
                 {% for resource in my_resources %}
                     <div class="resource-card">
                         <h2>{{ resource['title'] | strip_html }}</h2>
-                        <p>Criado a {{ resource['created_at'] }}</p>
+                        <p><em>Criado a {{ resource['created_at'] }}</em></p>
                         <p>{{ resource['description'] | strip_html }}</p>
                         <div class="icon-bar">
                             <i class="fas fa-flag"></i>
@@ -154,7 +154,7 @@
                     <div class="proposta-card">
                         <h3> Proposta de operacionalização </h3>
                         <p>{{ script.created_at }}</p>
-                        <p>{{ script.operation }}</p>
+                        <p>{{ script.operation | strip_html}}</p>
                         <a href="/resources/details/{{ script.resource_id }}"><button>Ver</button></a>
                         <a href="/resources/edit2/{{ script.resource_id }}"><button>Editar proposta</button></a>
                     </div>
