@@ -911,6 +911,7 @@ def novo_recurso():
         endereco = request.form.get('endereco')
         embebed = request.form.get('embebed')
         slug = generate_slug(title)
+        duration = request.form.get('duration')
 
         # Handle file upload if needed
         file = request.files.get('file')
@@ -987,7 +988,7 @@ def novo_recurso():
                 'techResources': None,
                 'email': None,
                 'organization': org,
-                'duration': None,
+                'duration': duration,
                 'highlight': 0,
                 'exclusive': 0,
                 'embed': embebed,
