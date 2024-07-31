@@ -35,6 +35,8 @@ def get_script_details():
     
     return scripts_user, scripts_count
 
+
+
 def get_script_details_by_user(user_id):
     """Get all tools from user and their count."""
     conn = connect_to_database()
@@ -83,5 +85,28 @@ def get_script_details_pendent():
         conn.close()
     
     return scripts_user, scripts_count
+
+
+def get_script_id_by_description(description):
+    conn = connect_to_database()  # Connect to the database
+    cursor = conn.cursor(dictionary=True)
+    
+    try:
+        # Execute the SQL query to find the script ID by description
+        query = "SELECT id FROM Scripts WHERE description = %s"
+        cursor.execute(query, (description,))
+        result = cursor.fetchone()
+        
+        # If a result is found, return the script ID
+        if result:
+            return result['script_id']
+        else:
+            return None  # Return None if no matching script is found
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
 
 

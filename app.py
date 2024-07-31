@@ -602,16 +602,12 @@ def novaapp():
     if request.method == 'POST':
         try:
             title = request.form.get('titulo')
-            print(title)
+           
             descricao = request.form.get('descricao')
-            print(descricao)
             imagem = request.files.get('ficheiro')
-            print(imagem)
             # Retrieving lists of selected items
             endereco = request.form.get('endereco')
-            print(endereco)
             embebed = request.form.get('sistema')
-            print(embebed)
             slug = generate_slug(title)
 
             # If there's an image and it's allowed, save it
@@ -697,7 +693,8 @@ def edit_app(resource_id):
         link = request.form.get('endereco')
         embebed = request.form.get('embed')
         
-        update_tool(resource_id, titulo, descricao, link, embebed)
+        update_app(resource_id, titulo, descricao, link, embebed)
+        
         
         return redirect(url_for('apps', resource_id=resource_id))
     
@@ -1100,34 +1097,38 @@ def novo_recurso2():
             file_filename = file.filename
             file_extension = file_filename.rsplit('.', 1)[1].lower()
 
-            # Generate new file name
-            random_int = random.randint(1000, 9999)
-            new_file_filename = f"{slug}_{random_int}.{file_extension}"
-            
-            # Create the directory /static/files/resources/slug/
-            slug_dir = os.path.join('static', 'files', 'scripts', slug)
-            if not os.path.exists(slug_dir):
-                os.makedirs(slug_dir)
-            
-            file_path = os.path.join(slug_dir, new_file_filename)
+            script_id = get_script_id_by_description(descricao)
 
-            # Save the file
-            file.save(file_path)
-            print(f"File saved to {file_path}")
+            if script_id is not None:
+                # Generate new file name
+                new_file_filename = f"{slug}_{script_id}.{file_extension}"
+                
+                # Create the directory /static/files/resources/slug/
+                slug_dir = os.path.join('static', 'files', 'scripts', str(script_id))
+                if not os.path.exists(slug_dir):
+                    os.makedirs(slug_dir)
+                
+                file_path = os.path.join(slug_dir, new_file_filename)
 
-            # Insert new record into the Files table
-            cursor.execute(
-                "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
-                (new_file_filename, file_extension, 1, datetime.now(), datetime.now())
-            )
-            file_id = cursor.lastrowid
+                # Save the file
+                file.save(file_path)
+                print(f"File saved to {file_path}")
 
-            # Insert record into ScriptFiles table
-            cursor.execute(
-                "INSERT INTO script_files (script_id, file_id, created_at, updated_at) VALUES (%s, %s, %s, %s)",
-                (resource_id, file_id, datetime.now(), datetime.now())
-            )
-            conn.commit()
+                # Insert new record into the Files table
+                cursor.execute(
+                    "INSERT INTO Files (name, extension, status, created_at, updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (new_file_filename, file_extension, 1, datetime.now(), datetime.now())
+                )
+                file_id = cursor.lastrowid
+
+                # Associate file with script
+                cursor.execute(
+                    "INSERT INTO script_files (script_id, file_id, created_at, updated_at) VALUES (%s, %s, %s, %s)",
+                    (script_id, file_id, datetime.now(), datetime.now())
+                )
+                conn.commit()
+            else:
+                print("No script found with the given description")
 
         cursor.close()
         conn.close()
