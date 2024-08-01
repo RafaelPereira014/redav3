@@ -65,63 +65,130 @@
             $('input[name="anos"]:checked').each(function() {
                 selectedAnos.push($(this).val());
             });
-
-            $.get('/fetch_disciplinas', {ano: selectedAnos.join(',')}, function(data) {
+        
+            if (selectedAnos.length === 0) {
+                $('#disciplinasContainer').empty();
+                $('#dominiosContainer').empty();
+                $('#subdominiosContainer').empty();
+                $('#conceitosContainer').empty();
+                return; // No anos selected, exit function
+            }
+        
+            $.get('/fetch_disciplinas', { ano: selectedAnos.join(',') }, function(data) {
                 let disciplinasContainer = $('#disciplinasContainer');
                 disciplinasContainer.empty();
+        
+                // Sort the disciplines alphabetically
+                data.sort();
+        
                 data.forEach(function(disciplina) {
-                    disciplinasContainer.append(`
-                        <input type="checkbox" id="disciplina${disciplina}" name="disciplinas" value="${disciplina}" onchange="fetchDominios('${disciplina}')">
-                        <label for="disciplina${disciplina}">${disciplina}</label>
-                    `);
+                    disciplinasContainer.append(
+                        `<div class="checkbox-item">
+                            <input type="checkbox" id="disciplina${disciplina}" name="disciplinas" value="${disciplina}" onchange="fetchDominios()">
+                            <label for="disciplina${disciplina}">${disciplina}</label>
+                        </div>`
+                    );
                 });
             });
         }
-
-        function fetchDominios(disciplina) {
-            $.get('/fetch_dominios', {disciplina: disciplina}, function(data) {
+        
+        function fetchDominios() {
+            let selectedDisciplinas = [];
+            $('input[name="disciplinas"]:checked').each(function() {
+                selectedDisciplinas.push($(this).val());
+            });
+        
+            if (selectedDisciplinas.length === 0) {
+                $('#dominiosContainer').empty();
+                $('#subdominiosContainer').empty();
+                $('#conceitosContainer').empty();
+                return; // No disciplinas selected, exit function
+            }
+        
+            $.get('/fetch_dominios', { disciplinas: selectedDisciplinas.join(',') }, function(data) {
                 let dominiosContainer = $('#dominiosContainer');
                 dominiosContainer.empty();
+        
+                // Sort the dominios alphabetically
+                data.sort();
+        
                 data.forEach(function(dominio) {
-                    dominiosContainer.append(`
-                        <input type="checkbox" id="dominio${dominio}" name="dominios" value="${dominio}" onchange="fetchSubdominios('${dominio}')">
-                        <label for="dominio${dominio}">${dominio}</label>
-                    `);
+                    dominiosContainer.append(
+                        `<div class="checkbox-item">
+                            <input type="checkbox" id="dominio${dominio}" name="dominios" value="${dominio}" onchange="fetchSubdominios()">
+                            <label for="dominio${dominio}">${dominio}</label>
+                        </div>`
+                    );
                 });
             });
         }
-
-        function fetchSubdominios(dominio) {
-            $.get('/fetch_subdominios', {dominio: dominio}, function(data) {
+        
+        function fetchSubdominios() {
+            let selectedDominios = [];
+            $('input[name="dominios"]:checked').each(function() {
+                selectedDominios.push($(this).val());
+            });
+        
+            if (selectedDominios.length === 0) {
+                $('#subdominiosContainer').empty();
+                $('#conceitosContainer').empty();
+                return; // No dominios selected, exit function
+            }
+        
+            $.get('/fetch_subdominios', { dominios: selectedDominios.join(',') }, function(data) {
                 let subdominiosContainer = $('#subdominiosContainer');
                 subdominiosContainer.empty();
+        
+                // Sort the subdominios alphabetically
+                data.sort();
+        
                 data.forEach(function(subdominio) {
-                    subdominiosContainer.append(`
-                        <input type="checkbox" id="subdominio${subdominio}" name="subdominios" value="${subdominio}" onchange="fetchConceitos('${subdominio}')">
-                        <label for="subdominio${subdominio}">${subdominio}</label>
-                    `);
+                    subdominiosContainer.append(
+                        `<div class="checkbox-item">
+                            <input type="checkbox" id="subdominio${subdominio}" name="subdominios" value="${subdominio}" onchange="fetchConceitos()">
+                            <label for="subdominio${subdominio}">${subdominio}</label>
+                        </div>`
+                    );
                 });
             });
         }
-
-        function fetchConceitos(subdominio) {
-            $.get('/fetch_conceitos', {subdominio: subdominio}, function(data) {
+        
+        function fetchConceitos() {
+            let selectedSubdominios = [];
+            $('input[name="subdominios"]:checked').each(function() {
+                selectedSubdominios.push($(this).val());
+            });
+        
+            if (selectedSubdominios.length === 0) {
+                $('#conceitosContainer').empty();
+                return; // No subdominios selected, exit function
+            }
+        
+            $.get('/fetch_conceitos', { subdominios: selectedSubdominios.join(',') }, function(data) {
                 let conceitosContainer = $('#conceitosContainer');
                 conceitosContainer.empty();
+        
+                // Sort the conceitos alphabetically
+                data.sort();
+        
                 data.forEach(function(conceito) {
-                    conceitosContainer.append(`
-                        <input type="checkbox" id="conceito${conceito}" name="conceitos" value="${conceito}" onchange="addKeyword('${conceito}')">
-                        <label for="conceito${conceito}">${conceito}</label>
-                    `);
+                    conceitosContainer.append(
+                        `<div class="checkbox-item">
+                            <input type="checkbox" id="conceito${conceito}" name="conceitos" value="${conceito}">
+                            <label for="conceito${conceito}">${conceito}</label>
+                        </div>`
+                    );
                 });
             });
         }
-
+        
         $(document).ready(function() {
             $('input[name="anos"]').change(function() {
                 fetchDisciplinas();
             });
         });
+        
+        
 
        
 
@@ -276,7 +343,7 @@
                         <!-- Disciplinas checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
-            
+                
                 <div class="input-group-domain required">
                     <h2>Dominios:</h2>
                     <div id="dominiosContainer">
@@ -287,16 +354,17 @@
                 <div class="input-group-domain required">
                     <h2>Subdominios:</h2>
                     <div id="subdominiosContainer">
-                        <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
+                        <!-- Subdominios checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
-            
+                
                 <div class="input-group-domain required">
                     <h2>Conceitos:</h2>
                     <div id="conceitosContainer">
-                        <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
+                        <!-- Conceitos checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
+                
                 <div class="input-group-conceitos">
                     <h2>Outros conceitos:</h2>
                     <div class="keyword-input-container">

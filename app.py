@@ -1139,7 +1139,6 @@ def novo_recurso2():
     
     return render_template('new_resource2.html', anos=anos, admin=admin)
 
-
 @app.route('/fetch_disciplinas')
 def fetch_disciplinas():
     anos = request.args.get('ano').split(',')
@@ -1150,23 +1149,34 @@ def fetch_disciplinas():
     return jsonify(disciplinas)
 
 
+
 @app.route('/fetch_dominios')
 def fetch_dominios():
-    disciplina = request.args.get('disciplina')
-    dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina)
+    disciplinas = request.args.get('disciplinas').split(',')
+    dominios_set = set()
+    for disciplina in disciplinas:
+        dominios_set.update(get_filtered_terms(level=3, parent_level=2, parent_term=disciplina))
+    dominios = list(dominios_set)
     return jsonify(dominios)
 
 @app.route('/fetch_subdominios')
 def fetch_subdominios():
-    dominio = request.args.get('dominio')
-    subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio)
+    dominios = request.args.get('dominios').split(',')
+    subdominios_set = set()
+    for dominio in dominios:
+        subdominios_set.update(get_filtered_terms(level=4, parent_level=3, parent_term=dominio))
+    subdominios = list(subdominios_set)
     return jsonify(subdominios)
 
 @app.route('/fetch_conceitos')
 def fetch_conceitos():
-    subdominio = request.args.get('subdominio')
-    conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio)
+    subdominios = request.args.get('subdominios').split(',')
+    conceitos_set = set()
+    for subdominio in subdominios:
+        conceitos_set.update(get_filtered_terms(level=5, parent_level=4, parent_term=subdominio))
+    conceitos = list(conceitos_set)
     return jsonify(conceitos)
+
 
 
 
