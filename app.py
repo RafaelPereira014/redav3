@@ -284,17 +284,20 @@ def nova_proposta(slug):
     resource_id = get_resouce_id(slug)
     
     ano = request.args.get('ano')
+    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
     dominios = []
     subdominios = []
     conceitos = []
     
-    disciplinas = get_filtered_terms(level=2, parent_level=1, parent_term=ano) if ano else []
     for disciplina in disciplinas:
-        dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
-        for dominio in dominios:
-            subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
-            for subdominio in subdominios:
-                conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio) if ano else []
+        current_dominios = get_filtered_terms(level=3, parent_level=2, parent_term=disciplina) if ano else []
+        for dominio in current_dominios:
+            current_subdominios = get_filtered_terms(level=4, parent_level=3, parent_term=dominio) if ano else []
+            for subdominio in current_subdominios:
+                current_conceitos = get_filtered_terms(level=5, parent_level=4, parent_term=subdominio) if ano else []
+                conceitos.extend(current_conceitos)
+            subdominios.extend(current_subdominios)
+        dominios.extend(current_dominios)
 
     if request.method == 'POST':
         data = request.form
@@ -309,13 +312,13 @@ def nova_proposta(slug):
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
         conn.commit()
     
-        # Optionally, you can return a JSON response indicating success
-        return jsonify({'message': 'Proposta adicionada com sucesso!'})
+        # Redirect to the resource details page
+        return redirect(url_for('resource_details', resource_id=resource_id))
 
     conn.close()
     cursor.close()
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug,resource_id=resource_id)
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug, resource_id=resource_id)
 
 
 @app.route('/approve_script/<int:script_id>', methods=['POST'])
