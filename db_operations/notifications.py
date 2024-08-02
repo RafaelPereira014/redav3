@@ -14,32 +14,35 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 
-def send_email(to_email, subject, message):
-    from_email = "noreply@azores.gov.pt"
+def send_email(to_emails, subject, message):
+    from_email = "no-reply@example.com"
+    password = "your_password_here"  # Use your actual password here
+    smtp_server = "smtp.example.com"
+    smtp_port = 587
+
     msg = MIMEMultipart()
     msg['From'] = from_email
-    msg['To'] = to_email
     msg['Subject'] = subject
-
     msg.attach(MIMEText(message, 'html'))
 
     try:
-        server = smtplib.SMTP('pegasus.azores.gov.pt', 587)
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        server.login(from_email, 'JMLpUW7tsA9bgkoq')
-        server.sendmail(from_email, to_email, msg.as_string())
+        server.login(from_email, password)
+        for to_email in to_emails:
+            msg['To'] = to_email
+            server.sendmail(from_email, to_email, msg.as_string())
         server.quit()
     except Exception as e:
         print(f"Failed to send email: {e}")
 
-def send_email_on_resource_create(resource_id):
-    to_email = "user@example.com"  # Fetch the user's email address from the database
-    subject = "Novo recurso criado #{resource_id}."
+def send_email_on_resource_create(resource_id, usernames, resource_link, recipient_emails):
+    subject = f"Novo recurso criado #{resource_id}."
     message = f"""
-    <p>Foi adicionado um novo recurso na plataforma REDA pelo utilizador {{username}}</p>
-    <p>Pode visualizar os seus detalhes em {{linkparaorecurso}}</p>
+    <p>Foi adicionado um novo recurso na plataforma REDA pelo utilizador {', '.join(usernames)}</p>
+    <p>Pode visualizar os seus detalhes em {resource_link}</p>
     """
-    send_email(to_email, subject, message)
+    send_email(recipient_emails, subject, message)
 
 def send_email_on_resource_update(resource_id):
     to_email = "user@example.com"  # Fetch the user's email address from the database

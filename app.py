@@ -17,6 +17,7 @@ from db_operations.admin import *
 from db_operations.new_resource import *
 from db_operations.user import *
 from db_operations.new_operations import *
+from db_operations.notifications import *
 
 
 
@@ -1038,6 +1039,10 @@ def novo_recurso():
             }
 
             insert_taxonomy_details(cursor, resource_id, taxonomy_details)
+            usernames=["rafaelpereira0808@gmail.com"]
+            resource_link="127.0.0.1/resources/details/{resource_id}"
+            #send_email_on_resource_create(resource_id,autor,resource_link,usernames)
+            
 
             conn.commit()
             # Store resource_id in session
