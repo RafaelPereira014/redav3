@@ -15,9 +15,10 @@ def connect_to_database():
 
 
 def send_email(to_emails, subject, message):
-    from_email = "no-reply@example.com"
-    password = "your_password_here"  # Use your actual password here
-    smtp_server = "smtp.example.com"
+    from_email = "noreply@azores.gov.pt"
+    password = "JMLpUW7tsA9bgkoq"  # Use your actual password here
+    smtp_server = "pegasus.azores.gov.pt"
+    user = "s0204redaproj"
     smtp_port = 587
 
     msg = MIMEMultipart()
@@ -28,7 +29,7 @@ def send_email(to_emails, subject, message):
     try:
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        server.login(from_email, password)
+        server.login(user, password)
         for to_email in to_emails:
             msg['To'] = to_email
             server.sendmail(from_email, to_email, msg.as_string())
@@ -36,10 +37,10 @@ def send_email(to_emails, subject, message):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
-def send_email_on_resource_create(resource_id, usernames, resource_link, recipient_emails):
+def send_email_on_resource_create(resource_id, username, resource_link, recipient_emails):
     subject = f"Novo recurso criado #{resource_id}."
     message = f"""
-    <p>Foi adicionado um novo recurso na plataforma REDA pelo utilizador {', '.join(usernames)}</p>
+    <p>Foi adicionado um novo recurso na plataforma REDA pelo utilizador {username}</p>
     <p>Pode visualizar os seus detalhes em {resource_link}</p>
     """
     send_email(recipient_emails, subject, message)

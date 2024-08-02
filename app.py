@@ -312,6 +312,10 @@ def nova_proposta(slug):
         
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
         conn.commit()
+        recipients=["rafaelpereira0808@gmail.com"]
+        username=get_username(user_id)
+        resource_link="127.0.0.1/resources/details/{{resource_id}}"
+        send_email_on_resource_create(resource_id,username,resource_link,recipients)
     
         # Redirect to the resource details page
         return redirect(url_for('resource_details', resource_id=resource_id))
@@ -331,6 +335,7 @@ def approve_script(script_id):
         query = """
             UPDATE Scripts SET approved = '1' WHERE id = %s
         """
+        
         cursor.execute(query, (script_id,))
         conn.commit()
         success = True
@@ -441,7 +446,13 @@ def resource_edit(resource_id):
             
             update_resource_details(cursor, resource_id, resource_details_update)
             update_taxonomy_details(cursor, resource_id, idiomas_selected, formatos_selected, use_mode_selected, requirements_selected)
+            
+            # recipients=["rafaelpereira0808@gmail.com"]
+            # resource_link="127.0.0.1/resources/details/{{resource_id}}"
+            # send_email_on_resource_update(resource_id,author,resource_link,recipients)
+            
             conn.commit()
+            
             print("Resource updated successfully")
             # Redirect to the details page upon success
             return redirect(url_for('resource_details', resource_id=resource_id))
@@ -1039,9 +1050,9 @@ def novo_recurso():
             }
 
             insert_taxonomy_details(cursor, resource_id, taxonomy_details)
-            usernames=["rafaelpereira0808@gmail.com"]
-            resource_link="127.0.0.1/resources/details/{resource_id}"
-            #send_email_on_resource_create(resource_id,autor,resource_link,usernames)
+            recipients=["rafaelpereira0808@gmail.com"]
+            resource_link="127.0.0.1/resources/details/{{resource_id}}"
+            send_email_on_resource_create(resource_id,autor,resource_link,recipients)
             
 
             conn.commit()
