@@ -1,80 +1,93 @@
 /* Styles for the footer */
 .footer {
-    background-color:#aec03f;
-    padding: 20px;
+    background-color: #aec03f;
+    padding: 20px 0;
+    color: #ffffff;
+    text-align: center;
 }
 
 /* Container for the footer content */
 .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    flex-wrap: wrap; /* Allow content to wrap on smaller screens */
-    text-align: center;
-}
-
-.footer-container span {
-    margin-top: 10px; /* Adjust the top margin as needed */
-    text-align: center;
-    font-size: 12px;
-    align-items: center;
-    color: white;
 }
 
 /* Navigation links */
 .footer-nav {
-    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.footer-nav a {
-    color: #ffffff;
-    text-decoration: none;
-    margin-right: 20px;
-}
+.footer-nav a,
 .footer-nav button {
     color: #ffffff;
-    background-color: #aec03f;
-    cursor: pointer;
+    text-decoration: none;
+    margin: 0 15px 10px;
     font-size: 16px;
-    border: 1px solid #ffffff; /* Add a 1px solid white border */
-    padding: 10px 20px; /* Increase padding to make the button bigger */
-
+    transition: background-color 0.3s, color 0.3s;
 }
 
+.footer-nav button {
+    background-color: transparent;
+    border: 1px solid #ffffff;
+    padding: 10px 20px;
+    cursor: pointer;
+}
 
-.footer-nav a:hover {
+.footer-nav a:hover,
+.footer-nav button:hover {
     text-decoration: underline;
+    color: #ffffff;
 }
 
 /* Social icons */
 .social-icons {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
 .social-icons a {
-    margin-right: 30px;
     color: #fdfdfd;
     font-size: 35px;
+    margin: 0 10px;
+    transition: transform 0.3s, color 0.3s;
 }
 
 .social-icons a:hover {
-    font-size: 300%;
+    color: #ffffff;
+    transform: scale(1.2);
 }
 
 /* Additional images */
 .additional-images {
     display: flex;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .additional-images img {
-    width: 100px; /* Increase the width of the images */
-    height: 100px; /* Increase the height of the images */
-    margin-right: 15px; /* Add some space between images */
-    transition: transform 0.3s ease; /* Add transition for hover effect */
+    width: 100px;
+    height: auto;
+    margin: 0 10px;
+    transition: transform 0.3s ease;
 }
 
 .additional-images img:hover {
-    transform: scale(1.1); /* Scale up the image on hover */
+    transform: scale(1.1);
+}
+
+/* Footer text */
+.footer-container span {
+    font-size: 12px;
+    margin-top: 10px;
+    line-height: 1.4;
+    max-width: 600px;
 }
