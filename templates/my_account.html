@@ -17,35 +17,49 @@
 
     <link href="https://cdn.jsdelivr.net/npm/gg-icons/compiled/icons.css" rel="stylesheet">
     <style>
-
-        .checked {
-            color: orange;
-        }
-        .rating {
-            color: #ffc107; /* Color of the stars */
-            font-size: 10px; /* Adjust the size of the stars */
-            margin-left: 170px;
-
+        .resource-status-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between icons */
+            margin-bottom: 10px; /* Space between icons and buttons */
         }
 
-        /* Default heart icon color */
-        .fas.fa-heart {
-            color: #ccc; /* Default color (e.g., light gray) */
-            transition: color 0.3s; /* Smooth color transition */
+        .resource-status-icons i {
+            font-size: 18px; /* Adjust size of icons */
         }
 
-        /* Highlighted heart icon color */
-        .fas.fa-heart.highlighted {
-            color: green; /* Change to the color you want for highlighted state */
+        .fa-flag {
+            margin-right: 5px; /* Space between flag and dot */
         }
 
-        /* Optional: Add hover effect if desired */
-        .fas.fa-heart:hover {
-            color: #0a0; /* Change to the hover color */
+        .fa-circle {
+            margin-left: 5px; /* Space between flag and dot */
         }
 
+        .resource-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-        
+        .resource-card button {
+            margin-right: 10px;
+        }
+
+        .resource-card .Delete {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .resource-card .Delete:hover {
+            background-color: #c0392b;
+        }
     </style>
     <!-- Add other necessary CSS links -->
    
@@ -138,10 +152,17 @@
                         <h2>{{ resource['title'] | strip_html }}</h2>
                         <p><em>Criado a {{ resource['created_at'] }}</em></p>
                         <p>{{ resource['description'] | strip_html }}</p>
-                        <div class="icon-bar">
-                            <i class="fas fa-flag"></i>
-                            <!-- Conditionally apply the 'highlighted' class based on resource highlight status -->
-                            <i class="fas fa-heart {% if resource['highlighted'] %} highlighted {% endif %}"></i>
+                        <div class="resource-status-icons">
+                            {% if resource.highlighted %}
+                                <i class="fas fa-flag" style="color: green;" title="Recurso do mês"></i> <!-- Green flag for highlighted resources -->
+                            {% else %}
+                                <i class="fas fa-flag" title="Destacar para recurso do mês"></i> <!-- Normal flag for non-highlighted resources -->
+                            {% endif %}
+                            {% if resource.approved %}
+                                <i class="fas fa-circle" style="color: green;" title="Aprovado" ></i> <!-- Green dot for approved resources -->
+                            {% else %}
+                                <i class="fas fa-circle" style="color: orange;" title="Aguarda aprovação"></i> <!-- Yellow dot for non-approved resources -->
+                            {% endif %}
                         </div>
                         <a href="/resources/details/{{ resource['id'] }}"><button>Ver recurso</button></a>
                         <a href="/resources/edit/{{ resource['id'] }}"><button>Editar recurso</button></a>

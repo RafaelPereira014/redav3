@@ -150,26 +150,65 @@ def get_highlighted_resources():
     conn.close()
     return highlighted_resources
 
-def is_highlighted(resource_id):
+def get_highlighted_status_for_resources(resource_ids):
+    if not resource_ids:
+        return {}
+
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    
-    # Query to check if the specific resource is highlighted
-    query = """
-    SELECT 1
+
+    # Convert list of IDs to a comma-separated string
+    formatted_ids = ','.join([str(id) for id in resource_ids])
+
+    # Query to get highlighted status for all provided resource IDs
+    query = f"""
+    SELECT id
     FROM Resources
-    WHERE id = %s AND highlight = '1'
+    WHERE id IN ({formatted_ids}) AND highlight = '1'
     """
-    cursor.execute(query, (resource_id,))
-    
-    # Fetch the result
-    result = cursor.fetchone()
-    
+    cursor.execute(query)
+
+    # Fetch all results
+    highlighted_ids = cursor.fetchall()
+
     cursor.close()
     conn.close()
-    
-    # Return True if a record was found, otherwise False
-    return result is not None
+
+    # Convert list of dictionaries to a set of highlighted IDs
+    highlighted_ids_set = {item['id'] for item in highlighted_ids}
+
+    # Return a dictionary mapping resource ID to its highlighted status
+    return {id: (id in highlighted_ids_set) for id in resource_ids}
+
+def get_approved_status_for_resources(resource_ids):
+    if not resource_ids:
+        return {}
+
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+
+    # Convert list of IDs to a comma-separated string
+    formatted_ids = ','.join([str(id) for id in resource_ids])
+
+    # Query to get highlighted status for all provided resource IDs
+    query = f"""
+    SELECT id
+    FROM Resources
+    WHERE id IN ({formatted_ids}) AND approved = '1'
+    """
+    cursor.execute(query)
+
+    # Fetch all results
+    approved_ids = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    # Convert list of dictionaries to a set of highlighted IDs
+    approved_ids_set = {item['id'] for item in approved_ids}
+
+    # Return a dictionary mapping resource ID to its highlighted status
+    return {id: (id in approved_ids_set) for id in resource_ids}
 
 
 def get_recent_approved_resources(limit=8):

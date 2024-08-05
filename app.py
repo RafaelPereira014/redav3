@@ -863,6 +863,13 @@ def my_account():
     search_term = request.args.get('search', '')
 
     my_resources = get_resources_from_user(user_id, search_term)
+    resource_ids = [resource['id'] for resource in my_resources]
+    highlighted_resources = get_highlighted_status_for_resources(resource_ids)
+    approved_resources = get_approved_status_for_resources(resource_ids)
+    
+    for resource in my_resources:
+        resource['highlighted'] = highlighted_resources.get(resource['id'], False)
+        resource['approved'] = approved_resources.get(resource['id'], False)
     apps_user, apps_count = get_apps_from_user(user_id, search_term)
     tools_user, tools_count = get_tools_from_user(user_id, search_term)
     user_details = get_details(user_id)
@@ -917,6 +924,8 @@ def my_account():
         admin=admin,
         search_term=search_term
     )
+
+
 
 
 
