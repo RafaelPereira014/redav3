@@ -136,7 +136,7 @@
                 </ul>
             </nav>
             <form action="{{ url_for('resources') }}" method="get" class="search-container">
-                <input type="text" name="search" placeholder="Procurar recursos ou palavras-chave..." value="{{ search_query }}">
+                <input type="text" name="search" placeholder="Procurar recursos ou palavras-chave..." value="{{ search_term }}">
                 <button type="submit"><i class="fa fa-search"></i> Pesquisar</button>
                 <button type="submit" id="clearSearch"><i class="fa fa-times"></i> Limpar</button>
             </form>

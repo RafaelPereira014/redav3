@@ -278,6 +278,30 @@ def taxonomies_relations(filters=None):
     conn.close()
     return result
 
+# def insert_terms_relationships(term_relationship_id, terms):
+#     """
+#     Insert titles and slugs into the termsRelationships table.
+    
+#     Args:
+#         term_relationship_id (int): The ID of the term relationship.
+#         terms (list of dict): A list of dictionaries, each containing 'level', 'title', and 'slug'.
+#     """
+#     conn = connect_to_database()
+#     cursor = conn.cursor()
+
+#     insert_query = """
+#     INSERT INTO terms_relations (term_relationship_id, term_id, level)
+#     VALUES (%s, (SELECT id FROM Terms WHERE title = %s AND slug = %s), %s)
+#     """
+
+#     for term in terms:
+#         cursor.execute(insert_query, (term_relationship_id, term['title'], term['slug'], term['level']))
+    
+#     conn.commit()
+#     cursor.close()
+#     conn.close()
+
+
 
 def fetch_users_with_acceptance():
     # Establish connection to the database

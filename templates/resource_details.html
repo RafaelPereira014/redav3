@@ -371,7 +371,7 @@
                             <span>
                                 {% for script_id, script in resource_details.scripts_by_id.items() %}
                                     {% for hashtag in script.hashtags %}
-                                        <a href="/search?hashtag={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
+                                        <a href="/resources?search={{ hashtag }}">{{ hashtag }}</a>{% if not loop.last %}, {% endif %}
                                     {% endfor %}
                                 {% endfor %}
                             </span>

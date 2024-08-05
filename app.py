@@ -197,10 +197,11 @@ def resources():
         page=page,
         total_pages=total_pages,
         page_range=page_range,
-        search_term=search_term,
+        search_term=search_term,  # pass the search term to the template
         admin=admin,
         total_resources=total_resources
     )
+
     
 @app.route('/resources/details/<int:resource_id>')
 def resource_details(resource_id):
