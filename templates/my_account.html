@@ -167,11 +167,12 @@
             <section id="my-proposals" class="content-section" style="display: none;">
                 <h1>Recrusos com a minha contribuição</h1>
                 <h3>{{ scripts_count }} resultados</h3>
+                <!--
                 <div class="search-container">
                     <input type="text" id="searchInputProposals" placeholder="Search...">
                     <button onclick="searchProposals()">Search</button>
                 </div>
-                
+                -->
                 {% for script in scripts_user %}
                     <div class="proposta-card">
                         <h3> Proposta de operacionalização </h3>
@@ -200,7 +201,7 @@
             <!-- Apps Section -->
             <section id="my-apps" class="content-section" style="display: none;">
                 <h1>Aplicações</h1>
-                <!-- Search Container -->
+                <!-- Search Container 
                 <div class="search-container">
                     <form id="searchForm" method="GET" action="/myaccount">
                         <input type="text" id="searchInput" name="search" placeholder="Buscar apps..." value="{{ search_term }}">
@@ -209,7 +210,7 @@
                         <input type="hidden" name="page_apps" value="1">
                     </form>
                 </div>
-
+                -->
                 <h3>{{ apps_count }} resultados</h3>
                 {% for app in apps_user %}
                 <div class="tool-card">
@@ -236,11 +237,13 @@
             <!-- Tools Section -->
             <section id="my-tools" class="content-section" style="display: none;">
                 <h1>Ferramentas</h1>
+                <!--
                 <form method="GET" action="/myaccount">
                     <input type="text" name="search" placeholder="Buscar ferramentas..." value="{{ search_term }}">
                     <button type="submit">Buscar</button>
                     <input type="hidden" name="page_tools" value="1">
                 </form>
+                -->
                 <h3>{{ tools_count }} resultados</h3>
                 {% for tool in tools_user %}
                     <div class="tool-card">

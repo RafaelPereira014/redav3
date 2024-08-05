@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/sidenav.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         .pagination {
             display: flex;
@@ -142,22 +144,27 @@
         <h2>Resumo da REDA - {{current_month}}</h2>
         <div class="panels">
             <div class="panel panel-resources">
-                <h2>novos recursos</h2>
+                <i class="fas fa-book"></i> <!-- Icon for resources -->
+                <h2>Novos recursos</h2>
                 <p>{{monthly_resources}}</p>
             </div>
             <div class="panel panel-apps">
-                <h2>novas aplicações</h2>
+                <i class="fas fa-cogs"></i> <!-- Icon for apps -->
+                <h2>Novas aplicações</h2>
                 <p>{{monthly_apps}}</p>
             </div>
             <div class="panel panel-tools">
-                <h2>novas ferramentas</h2>
+                <i class="fas fa-tools"></i> <!-- Icon for tools -->
+                <h2>Novas ferramentas</h2>
                 <p>{{monthly_tools}}</p>
             </div>
             <div class="panel panel-users">
-                <h2>novos utilizadores</h2>
+                <i class="fas fa-users"></i> <!-- Icon for users -->
+                <h2>Novos utilizadores</h2>
                 <p>{{monthly_users}}</p>
             </div>
         </div>
+
 
         <h2>Utilizadores mais ativos - {{current_month}}</h2>
 
