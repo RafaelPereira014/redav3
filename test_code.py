@@ -23,28 +23,21 @@ try:
 
     if connection.is_connected():
         print("Connected to MySQL database")
+        
+        # Create a cursor object
+        cursor = connection.cursor()
+        
+        # Define the change term
+        change = "1º,educação artistica - artes visuais, apropriacao e reflexao,universos visuais,pintura"
+        
+        # Call the insert_term function
+        insert_term(change, cursor)  # Ensure insert_term takes a cursor argument
 
-        # Create a cursor object to execute SQL queries
-        cursor = connection.cursor(dictionary=True)
+        # Commit changes
+        connection.commit()
         
-        
-        combined_details = get_combined_details(4017)
-        if combined_details:
-            resource_details = combined_details
-            for script_id, script_data in resource_details.get('scripts_by_id', {}).items():
-                print(f"Script ID: {script_id}, Areas Resources: {script_data.get('areas_resources')}")
-        else:
-            print("No details returned.")
-
-        
-        
-
-
-        # Print the formatted string
-        
-    
-    # Close the cursor
-    cursor.close()
+        # Close the cursor
+        cursor.close()
 
     # Close the database connection
     connection.close()

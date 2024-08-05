@@ -27,6 +27,25 @@
             margin-left: 170px;
 
         }
+
+        /* Default heart icon color */
+        .fas.fa-heart {
+            color: #ccc; /* Default color (e.g., light gray) */
+            transition: color 0.3s; /* Smooth color transition */
+        }
+
+        /* Highlighted heart icon color */
+        .fas.fa-heart.highlighted {
+            color: green; /* Change to the color you want for highlighted state */
+        }
+
+        /* Optional: Add hover effect if desired */
+        .fas.fa-heart:hover {
+            color: #0a0; /* Change to the hover color */
+        }
+
+
+        
     </style>
     <!-- Add other necessary CSS links -->
    
@@ -121,7 +140,8 @@
                         <p>{{ resource['description'] | strip_html }}</p>
                         <div class="icon-bar">
                             <i class="fas fa-flag"></i>
-                            <i class="fas fa-heart"></i>
+                            <!-- Conditionally apply the 'highlighted' class based on resource highlight status -->
+                            <i class="fas fa-heart {% if resource['highlighted'] %} highlighted {% endif %}"></i>
                         </div>
                         <a href="/resources/details/{{ resource['id'] }}"><button>Ver recurso</button></a>
                         <a href="/resources/edit/{{ resource['id'] }}"><button>Editar recurso</button></a>
@@ -141,6 +161,8 @@
                     {% endif %}
                 </div>
             </section>
+            
+            
             
             <section id="my-proposals" class="content-section" style="display: none;">
                 <h1>Recrusos com a minha contribuição</h1>
@@ -178,6 +200,16 @@
             <!-- Apps Section -->
             <section id="my-apps" class="content-section" style="display: none;">
                 <h1>Aplicações</h1>
+                <!-- Search Container -->
+                <div class="search-container">
+                    <form id="searchForm" method="GET" action="/myaccount">
+                        <input type="text" id="searchInput" name="search" placeholder="Buscar apps..." value="{{ search_term }}">
+                        <button type="submit" class="search-button">Buscar</button>
+                        <button type="button" class="clear-button" onclick="clearSearch()">Limpar Filtros</button>
+                        <input type="hidden" name="page_apps" value="1">
+                    </form>
+                </div>
+
                 <h3>{{ apps_count }} resultados</h3>
                 {% for app in apps_user %}
                 <div class="tool-card">
@@ -204,6 +236,11 @@
             <!-- Tools Section -->
             <section id="my-tools" class="content-section" style="display: none;">
                 <h1>Ferramentas</h1>
+                <form method="GET" action="/myaccount">
+                    <input type="text" name="search" placeholder="Buscar ferramentas..." value="{{ search_term }}">
+                    <button type="submit">Buscar</button>
+                    <input type="hidden" name="page_tools" value="1">
+                </form>
                 <h3>{{ tools_count }} resultados</h3>
                 {% for tool in tools_user %}
                     <div class="tool-card">
@@ -297,125 +334,107 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    
     <script>
-        function searchResources() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const queryString = new URLSearchParams({ search: searchTerm }).toString();
-            window.location.href = `/myaccount?${queryString}`;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get modals
+            const loginModal = document.getElementById("loginModal");
+            const deleteModal = document.getElementById("deleteModal");
         
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            window.location.href = '/myaccount'; // Redirect to the account page without search term
-        }
+            // Function to open the login modal
+            function openLoginModal() {
+                loginModal.style.display = "block";
+            }
         
+            // Function to close the login modal
+            function closeLoginModal() {
+                loginModal.style.display = "none";
+            }
         
-       
-    </script>
-    <script>
-        // Get the login modal
-        var loginModal = document.getElementById("loginModal");
-
-        // When the user clicks the button, open the login modal
-        function openLoginModal() {
-            loginModal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the login modal
-        function closeLoginModal() {
-            loginModal.style.display = "none";
-        }
-
-        // Toggle hamburger menu
-        function toggleMenu() {
-            var menuItems = document.querySelector('.menu-items');
-            menuItems.classList.toggle('active');
-        }
-
-        // Get all menu options
-        const menuOptions = document.querySelectorAll('.options-menu a');
-
-        // Add click event listeners to menu options
-        menuOptions.forEach(option => {
-            option.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default anchor behavior
-                console.log("Menu option clicked"); // Log a message to the console
-                // Get the target section from the href attribute
-                const targetSectionId = option.getAttribute('href').substring(1); // Remove the # from the href
-                console.log("Target section:", targetSectionId); // Log the target section ID
-                // Get all content sections inside the event listener function
-                const contentSections = document.querySelectorAll('.content-section');
-                // Hide all content sections
-                contentSections.forEach(section => {
+            // Function to open the delete modal
+            function openDeleteModal() {
+                deleteModal.style.display = "block";
+            }
+        
+            // Function to close the delete modal
+            function closeDeleteModal() {
+                deleteModal.style.display = "none";
+            }
+        
+            // Function to delete the resource
+            function deleteResource() {
+                alert("Recurso eliminado com sucesso!"); // Placeholder action
+                deleteModal.style.display = "none"; // Close the modal
+            }
+        
+            // Function to show a specific section
+            function showSection(sectionId) {
+                const sections = document.querySelectorAll('.content-section');
+                sections.forEach(section => {
                     section.style.display = 'none';
                 });
-                // Show the target section
-                document.getElementById(targetSectionId).style.display = 'block';
+                const sectionToShow = document.getElementById(sectionId);
+                if (sectionToShow) {
+                    sectionToShow.style.display = 'block';
+                }
+            }
+        
+            // Add click event listeners to menu options
+            document.querySelectorAll('.options-menu a').forEach(option => {
+                option.addEventListener('click', (event) => {
+                    event.preventDefault(); // Prevent default anchor behavior
+                    const targetSectionId = option.getAttribute('href').substring(1); // Remove the # from the href
+                    showSection(targetSectionId);
+                });
             });
-        });
-
-        var deleteModal = document.getElementById("deleteModal");
-
-        function searchResources() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const queryString = new URLSearchParams({ search: searchTerm }).toString();
-            window.location.href = `/myaccount?${queryString}`;
-        }
-
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            window.location.href = '/myaccount'; // Redirect to the account page without search term
-        }
-
-        function openDeleteModal() {
-            deleteModal.style.display = "block";
-        }
-
-        function closeDeleteModal() {
-            deleteModal.style.display = "none";
-        }
-
-        function deleteResource() {
-            alert("Recurso eliminado com sucesso!"); // Placeholder action
-            deleteModal.style.display = "none"; // Close the modal
-        }
-
-        document.querySelectorAll('.delete').forEach(button => {
-            button.addEventListener('click', openDeleteModal);
-        });
-
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => {
-                section.style.display = 'none';
+        
+            // Handle section visibility based on URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('page_proposals')) {
+                showSection('my-proposals');
+            } else if (urlParams.has('page_apps')) {
+                showSection('my-apps');
+            } else if (urlParams.has('page_tools')) {
+                showSection('my-tools');
+            } else {
+                showSection('my-resources');
+            }
+        
+            // Event listeners for modals
+            document.querySelectorAll('.delete').forEach(button => {
+                button.addEventListener('click', openDeleteModal);
             });
-            document.getElementById(sectionId).style.display = 'block';
-        }
-
-        document.querySelectorAll('.options-menu a').forEach(option => {
-            option.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevent default anchor behavior
-                const targetSectionId = option.getAttribute('href').substring(1); // Remove the # from the href
-                showSection(targetSectionId);
+        
+            document.querySelectorAll('.close').forEach(span => {
+                span.addEventListener('click', closeDeleteModal);
             });
+        
+            // Search functionality
+            function searchResources() {
+                const searchTerm = document.getElementById('searchInput').value;
+                const queryString = new URLSearchParams({ search: searchTerm }).toString();
+                window.location.href = `/myaccount?${queryString}`;
+            }
+        
+            function clearSearch() {
+                document.getElementById('searchInput').value = '';
+                window.location.href = '/myaccount'; // Redirect to the account page without search term
+            }
+        
+            document.querySelector('.search-button').addEventListener('click', searchResources);
+            document.querySelector('.clear-button').addEventListener('click', clearSearch);
+        
+            // Event listener for the hamburger menu
+            function toggleMenu() {
+                var menuItems = document.querySelector('.menu-items');
+                if (menuItems) {
+                    menuItems.classList.toggle('active');
+                }
+            }
+        
+            document.querySelector('.menu-button').addEventListener('click', toggleMenu);
         });
-
-        // Ensure the correct section is shown based on URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('page_proposals')) {
-            showSection('my-proposals');
-        } else if (urlParams.has('page_apps')) {
-            showSection('my-apps');
-        } else if (urlParams.has('page_tools')) {
-            showSection('my-tools');
-        } else {
-            showSection('my-resources');
-        }
-
-        // Event listener for the 'Ocultar' button
-        document.querySelector('.delete').addEventListener('click', openDeleteModal);
-
-
+        
 
     </script>
 </body>

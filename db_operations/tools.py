@@ -18,8 +18,8 @@ def get_all_tools():
     conn.close()
     return tools
 
-def get_tools_from_user(userid):
-    """Get all tools from user and their count."""
+def get_tools_from_user(userid, search_term=''):
+    """Get all tools from user with optional search term filtering and their count."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
@@ -27,13 +27,41 @@ def get_tools_from_user(userid):
     tools_count = 0
     
     try:
-        # Query to fetch all tools
-        cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id=%s ORDER BY id DESC", (userid, 1))
+        if search_term:
+            query = """
+            SELECT * FROM Resources
+            WHERE user_id=%s AND type_id=%s
+            AND (title LIKE %s OR description LIKE %s)
+            ORDER BY id DESC
+            """
+            search_term = f"%{search_term}%"
+            cursor.execute(query, (userid, 1, search_term, search_term))
+        else:
+            query = """
+            SELECT * FROM Resources
+            WHERE user_id=%s AND type_id=%s
+            ORDER BY id DESC
+            """
+            cursor.execute(query, (userid, 1))
+        
         tools_user = cursor.fetchall()
         
-        # Query to count the tools
-        cursor.execute("SELECT COUNT(*) AS count FROM Resources WHERE user_id=%s AND type_id=%s", (userid, 1))
+        if search_term:
+            query_count = """
+            SELECT COUNT(*) AS count FROM Resources
+            WHERE user_id=%s AND type_id=%s
+            AND (title LIKE %s OR description LIKE %s)
+            """
+            cursor.execute(query_count, (userid, 1, search_term, search_term))
+        else:
+            query_count = """
+            SELECT COUNT(*) AS count FROM Resources
+            WHERE user_id=%s AND type_id=%s
+            """
+            cursor.execute(query_count, (userid, 1))
+        
         tools_count = cursor.fetchone()['count']
+    
     except Exception as e:
         print(f"Error: {e}")
     finally:
@@ -41,6 +69,7 @@ def get_tools_from_user(userid):
         conn.close()
     
     return tools_user, tools_count
+
 
 
 

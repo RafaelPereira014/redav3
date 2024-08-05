@@ -150,6 +150,28 @@ def get_highlighted_resources():
     conn.close()
     return highlighted_resources
 
+def is_highlighted(resource_id):
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Query to check if the specific resource is highlighted
+    query = """
+    SELECT 1
+    FROM Resources
+    WHERE id = %s AND highlight = '1'
+    """
+    cursor.execute(query, (resource_id,))
+    
+    # Fetch the result
+    result = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    
+    # Return True if a record was found, otherwise False
+    return result is not None
+
+
 def get_recent_approved_resources(limit=8):
     """Get the most recent approved resources from the DB."""
     conn = connect_to_database()
@@ -161,13 +183,29 @@ def get_recent_approved_resources(limit=8):
     return resources
 
 
-def get_resources_from_user(userid):
-    """Get all resources from user."""
+def get_resources_from_user(userid, search_term=''):
+    """Get all resources from user with optional search term filtering."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
     try:
-        cursor.execute("SELECT * FROM Resources WHERE user_id=%s AND type_id='2' ORDER BY id DESC", (userid,))
+        if search_term:
+            query = """
+            SELECT * FROM Resources
+            WHERE user_id=%s AND type_id='2'
+            AND (title LIKE %s OR description LIKE %s)
+            ORDER BY id DESC
+            """
+            search_term = f"%{search_term}%"
+            cursor.execute(query, (userid, search_term, search_term))
+        else:
+            query = """
+            SELECT * FROM Resources
+            WHERE user_id=%s AND type_id='2'
+            ORDER BY id DESC
+            """
+            cursor.execute(query, (userid,))
+        
         resources_user = cursor.fetchall()
     except Exception as e:
         print(f"Error: {e}")
@@ -177,6 +215,7 @@ def get_resources_from_user(userid):
         conn.close()
     
     return resources_user
+
 
 def get_combined_details(resource_id):
     conn = connect_to_database()

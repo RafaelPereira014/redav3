@@ -860,9 +860,11 @@ def my_account():
     user_id = session.get('user_id')  # Retrieve user ID from session
     admin = is_admin(user_id)
     
-    my_resources = get_resources_from_user(user_id)
-    apps_user, apps_count = get_apps_from_user(user_id)
-    tools_user, tools_count = get_tools_from_user(user_id)
+    search_term = request.args.get('search', '')
+
+    my_resources = get_resources_from_user(user_id, search_term)
+    apps_user, apps_count = get_apps_from_user(user_id, search_term)
+    tools_user, tools_count = get_tools_from_user(user_id, search_term)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
     scripts_user, scripts_count = get_script_details_by_user(user_id)
@@ -912,7 +914,8 @@ def my_account():
         total_pages_apps=total_pages_apps,
         page_tools=page_tools,
         total_pages_tools=total_pages_tools,
-        admin=admin
+        admin=admin,
+        search_term=search_term
     )
 
 

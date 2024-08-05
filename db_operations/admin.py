@@ -136,7 +136,7 @@ def update_term(term_id, new_title, new_slug):
         if conn.is_connected():
             conn.close()
             
-def insert_term(taxon, term_title, term_slug, term_parent_id=None):
+def insert_terms(taxon, term_title, term_slug, term_parent_id=None):
     conn = connect_to_database()
     if conn is None:
         return False
@@ -277,6 +277,38 @@ def taxonomies_relations(filters=None):
     
     conn.close()
     return result
+
+def insert_term(term_string, cursor):
+    # Define levels and split terms
+    terms = [term.strip() for term in term_string.split(',')]
+    levels = {1: "ano", 2: "disciplina", 3: "dominio", 4: "subdominio", 5: "conceito"}
+    
+    # Insert terms into the Terms table
+    for level in levels:
+        for term in terms:
+            # Convert term for use as a slug (simple example)
+            slug = term.replace(" ", "-").lower()
+            
+            # Insert term into Terms table (assuming it exists)
+            cursor.execute("""
+                INSERT IGNORE INTO Terms (title, slug)
+                VALUES (%s, %s)
+            """, (term, slug))
+    
+            # Retrieve term_id
+            cursor.execute("""
+                SELECT id FROM Terms WHERE slug = %s
+            """, (slug,))
+            result = cursor.fetchone()
+            if result:
+                term_id = result['id']
+                
+                # Insert into TermRelationships
+                cursor.execute("""
+                    INSERT IGNORE INTO TermRelationships (term_id, level)
+                    VALUES (%s, %s)
+                """, (term_id, level))
+
 
 # def insert_terms_relationships(term_relationship_id, terms):
 #     """
