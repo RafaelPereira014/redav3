@@ -440,8 +440,7 @@ def resource_edit(resource_id):
                 'updated_at': datetime.now(),
                 'type_id': '2',
                 'image_id': new_image_id,
-                'hidden': '0',
-                'user_id': user_id,
+                'user_id': user_id
             }
 
             
