@@ -313,10 +313,10 @@ def nova_proposta(slug):
         
         insert_script(resource_id, user_id, selected_anos, selected_disciplinas, selected_dominios, selected_subdominios, selected_conceitos, descricao)
         conn.commit()
-        recipients=["rafaelpereira0808@gmail.com"]
-        username=get_username(user_id)
-        resource_link="127.0.0.1/resources/details/{{resource_id}}"
-        send_email_on_resource_create(resource_id,username,resource_link,recipients)
+        # recipients=["rafaelpereira0808@gmail.com"]
+        # username=get_username(user_id)
+        # resource_link="127.0.0.1/resources/details/{{resource_id}}"
+        # send_email_on_resource_create(resource_id,username,resource_link,recipients)
     
         # Redirect to the resource details page
         return redirect(url_for('resource_details', resource_id=resource_id))
