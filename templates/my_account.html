@@ -196,7 +196,7 @@
                 -->
                 {% for script in scripts_user %}
                     <div class="proposta-card">
-                        <h3> {{script.title | strip_html}}</h3>
+                        <h3> {{script.title}}</h3>
                         <p>{{ script.created_at }}</p>
                         <p>{{ script.operation | strip_html}}</p>
                         <a href="/resources/details/{{ script.resource_id }}"><button>Ver</button></a>
@@ -375,52 +375,21 @@
                 loginModal.style.display = "none";
             }
         
-            // Function to open the modal
-        function openDeleteModal() {
-            deleteModal.style.display = "block";
-        }
-
-        // Function to close the modal
-        function closeDeleteModal() {
-            deleteModal.style.display = "none";
-            
-        }
-
-        // Function to hide the resource (replace this with your actual logic)
-        function deleteResource(resourceId) {
-            // Make an AJAX request to delete the resource
-            fetch(`/delete_resource/${resourceId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json().then(data => ({
-                status: response.status,
-                body: data
-            })))
-            .then(response => {
-                if (response.status === 200) {
-                    alert(response.body.message);
-                    // Redirect to the main page after deletion
-                    window.location.href = '/';
-                } else {
-                    alert("Error deleting the resource: " + response.body.message);
-                }
+            // Function to open the delete modal
+            function openDeleteModal() {
+                deleteModal.style.display = "block";
+            }
+        
+            // Function to close the delete modal
+            function closeDeleteModal() {
+                deleteModal.style.display = "none";
+            }
+        
+            // Function to delete the resource
+            function deleteResource() {
+                alert("Recurso eliminado com sucesso!"); // Placeholder action
                 deleteModal.style.display = "none"; // Close the modal
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("Error deleting the resource: " + error.message);
-                deleteModal.style.display = "none"; // Close the modal in case of error
-            });
-        }
-
-        
-        
-
-        // Event listener for the 'Ocultar' button
-        document.querySelector('.delete').addEventListener('click', openDeleteModal);
+            }
         
             // Function to show a specific section
             function showSection(sectionId) {
