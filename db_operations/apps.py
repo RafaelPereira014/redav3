@@ -10,10 +10,16 @@ def connect_to_database():
     return mysql.connector.connect(**DB_CONFIG)
 
 def get_all_apps(page, apps_per_page):
-    query = "CALL GetApprovedApps(%s, %s)"
+    offset = (page - 1) * apps_per_page
+    query = """
+        SELECT * FROM Resources
+        WHERE type_id='3' AND approvedScientific = 1 AND approvedLinguistic = 1
+        ORDER BY id DESC
+        LIMIT %s OFFSET %s
+    """
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute(query, (page, apps_per_page))
+    cursor.execute(query, (apps_per_page, offset))
     apps = cursor.fetchall()
     cursor.close()
     conn.close()
