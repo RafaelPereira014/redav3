@@ -848,23 +848,27 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (response.ok) {
-                    alert(data.message);
+            .then(response => response.json().then(data => ({
+                status: response.status,
+                body: data
+            })))
+            .then(response => {
+                if (response.status === 200) {
+                    alert(response.body.message);
                     // Redirect to the main page after deletion
                     window.location.href = '/';
                 } else {
-                    alert("Erro ao eliminar o recurso: " + data.message);
+                    alert("Error deleting the resource: " + response.body.message);
                 }
                 deleteModal.style.display = "none"; // Close the modal
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert("Erro ao eliminar o recurso: " + error.message);
+                alert("Error deleting the resource: " + error.message);
                 deleteModal.style.display = "none"; // Close the modal in case of error
             });
         }
+
         
         
 

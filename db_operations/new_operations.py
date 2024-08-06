@@ -156,27 +156,23 @@ def update_script(resource_id, user_id, selected_anos, selected_disciplinas, sel
 
 
 def delete_resource_and_scripts(resource_id):
-    conn = None
+    conn = connect_to_database()
+    cursor = conn.cursor()
     try:
-        conn = connect_to_database()
-        cursor = conn.cursor()
+        # Delete associated scripts first if there's a foreign key constraint
+        delete_scripts_query = "DELETE FROM Scripts WHERE resource_id = %s"
+        cursor.execute(delete_scripts_query, (resource_id,))
 
-        # Call the stored procedure
-        cursor.callproc('DeleteResourceAndScripts', (resource_id,))
+        # Delete the resource
+        delete_resource_query = "DELETE FROM Resources WHERE id = %s"
+        cursor.execute(delete_resource_query, (resource_id,))
         
         # Commit the transaction
         conn.commit()
-
-        print(f"Resource and associated scripts with ID {resource_id} have been deleted.")
-        
     except Exception as e:
-        if conn:
-            conn.rollback()  # Rollback the transaction on error
-        print(f"Error occurred: {str(e)}")
-        raise e  # Re-raise the exception to be caught in the route function
-
+        conn.rollback()
+        print(f"Error deleting resource: {e}")
+        raise e  # Re-raise the exception to be caught in the route handler
     finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
+        cursor.close()
+        conn.close()
