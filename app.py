@@ -436,7 +436,6 @@ def resource_edit(resource_id):
                 'author': author,
                 'operation': 'update',
                 'operation_author': user,
-                'link': 'www.google.com',  # Update with actual link
                 'updated_at': datetime.now(),
                 'type_id': '2',
                 'image_id': new_image_id,
@@ -869,11 +868,15 @@ def my_account():
     for resource in my_resources:
         resource['highlighted'] = highlighted_resources.get(resource['id'], False)
         resource['approved'] = approved_resources.get(resource['id'], False)
+        
     apps_user, apps_count = get_apps_from_user(user_id, search_term)
     tools_user, tools_count = get_tools_from_user(user_id, search_term)
     user_details = get_details(user_id)
     resources_count = no_resources(user_id)
     scripts_user, scripts_count = get_script_details_by_user(user_id)
+    scripts_user_with_titles = add_titles_to_scripts(scripts_user)
+
+
     
     per_page = 10  # Number of items per page
 
@@ -1116,7 +1119,9 @@ def novo_recurso2():
         selected_dominios = list(set(data.getlist('dominios')))  # Use set to remove duplicates
         selected_subdominios = list(set(data.getlist('subdominios')))  # Use set to remove duplicates
         selected_conceitos = list(set(data.getlist('conceitos')))  # Use set to remove duplicates
-        outros_conceitos = data.get('keywordInput')
+        outros_conceitos = data.get('keywords').split(',')  # Get the keywords from the hidden input
+        selected_conceitos.extend(outros_conceitos)
+       
         descricao = data.get('descricao')
         file = request.files.get('ficheiro')
         
@@ -1169,6 +1174,7 @@ def novo_recurso2():
     cursor.close()
     
     return render_template('new_resource2.html', anos=anos, admin=admin)
+
 
 @app.route('/fetch_disciplinas')
 def fetch_disciplinas():

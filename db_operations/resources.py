@@ -499,7 +499,6 @@ def update_resource_details(cursor, resource_id, resource_details):
         resource_details['operation'],
         resource_details['operation_author'],
         resource_details['organization'],
-        resource_details['link'],
         resource_details['author'],
         resource_details['updated_at'],
         resource_details['user_id'],

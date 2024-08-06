@@ -203,21 +203,45 @@
 
         let keywords = [];  // Initialize the keywords array
 
-        function addKeyword(keyword) {
-            if (typeof keyword === 'undefined') {
-                const keywordInput = document.getElementById('keywordInput');
-                keyword = keywordInput.value.trim();
-                keywordInput.value = '';
+        function addKeyword() {
+            const keywordInput = document.getElementById('keywordInput');
+            const keywordsContainer = document.getElementById('keywordsContainer');
+            const keywordsInput = document.getElementById('keywords');
+        
+            if (keywordInput.value.trim() === '') {
+                return;
             }
-
-            if (keyword && !keywords.includes(keyword) && keywords.length < 5) {
-                keywords.push(keyword);
-                updateKeywordsContainer();
-            } else if (keywords.length >= 5) {
-                alert('Você só pode adicionar até 5 palavras-chave.');
-            } else if (keywords.includes(keyword)) {
-                alert('Essa palavra-chave já foi adicionada.');
+        
+            const keyword = keywordInput.value.trim();
+            keywordInput.value = '';
+        
+            const keywordSpan = document.createElement('span');
+            keywordSpan.className = 'keyword';
+            keywordSpan.textContent = keyword;
+            
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'x';
+            removeButton.onclick = function() {
+                keywordsContainer.removeChild(keywordSpan);
+                updateKeywords();
+            };
+        
+            keywordSpan.appendChild(removeButton);
+            keywordsContainer.appendChild(keywordSpan);
+        
+            updateKeywords();
+        }
+        function updateKeywords() {
+            const keywordsContainer = document.getElementById('keywordsContainer');
+            const keywordsInput = document.getElementById('keywords');
+        
+            const keywords = [];
+            const keywordSpans = keywordsContainer.getElementsByClassName('keyword');
+            for (let span of keywordSpans) {
+                keywords.push(span.childNodes[0].nodeValue);
             }
+        
+            keywordsInput.value = keywords.join(',');
         }
 
         function removeKeyword(keyword) {
@@ -336,27 +360,31 @@
                         <label for="ano{{ loop.index }}">{{ ano }}</label>
                     {% endfor %}
                 </div>
-            
+                <hr></hr>
+
                 <div class="input-group-disci required">
                     <h2>Disciplinas:</h2>
                     <div id="disciplinasContainer">
                         <!-- Disciplinas checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
-                
+                <hr></hr>
                 <div class="input-group-domain required">
                     <h2>Dominios:</h2>
                     <div id="dominiosContainer">
                         <!-- Dominios checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
-                
+                <hr></hr>
+
                 <div class="input-group-domain required">
                     <h2>Subdominios:</h2>
                     <div id="subdominiosContainer">
                         <!-- Subdominios checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
+                <hr></hr>
+
                 
                 <div class="input-group-domain required">
                     <h2>Conceitos:</h2>
@@ -364,7 +392,8 @@
                         <!-- Conceitos checkboxes will be populated dynamically by JavaScript -->
                     </div>
                 </div>
-                
+                <hr></hr>
+
                 <div class="input-group-conceitos">
                     <h2>Outros conceitos:</h2>
                     <div class="keyword-input-container">
@@ -372,9 +401,11 @@
                         <button type="button" onclick="addKeyword()">Adicionar</button>
                     </div>
                     <div id="keywordsContainer"></div>
+                    <input type="hidden" name="keywords" id="keywords">
                     <small class="small-text">Pode adicionar até 5 palavras-chave.</small>
                 </div>
                 
+
                 
                 <div class="input-group-descricao-proposta required">
                     <h2>Descrição da proposta de operacionalização:</h2>

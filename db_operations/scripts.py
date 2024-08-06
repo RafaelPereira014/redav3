@@ -36,9 +36,8 @@ def get_script_details():
     return scripts_user, scripts_count
 
 
-
 def get_script_details_by_user(user_id):
-    """Get all tools from user and their count."""
+    """Get all scripts from user and their count."""
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     
@@ -46,12 +45,12 @@ def get_script_details_by_user(user_id):
     scripts_count = 0
     
     try:
-        # Query to fetch all tools
-        cursor.execute("SELECT * FROM Scripts WHERE user_id=%s  ORDER BY id DESC",(user_id,))
+        # Query to fetch all scripts for the user
+        cursor.execute("SELECT * FROM Scripts WHERE user_id=%s ORDER BY id DESC", (user_id,))
         scripts_user = cursor.fetchall()
         
-        # Query to count the tools
-        cursor.execute("SELECT COUNT(*) AS count FROM Scripts ")
+        # Query to count the scripts
+        cursor.execute("SELECT COUNT(*) AS count FROM Scripts WHERE user_id=%s", (user_id,))
         scripts_count = cursor.fetchone()['count']
     except Exception as e:
         print(f"Error: {e}")
@@ -60,6 +59,41 @@ def get_script_details_by_user(user_id):
         conn.close()
     
     return scripts_user, scripts_count
+
+
+def get_titles_for_resource_ids(resource_ids):
+    """Get titles for the given resource IDs."""
+    conn = connect_to_database()
+    cursor = conn.cursor(dictionary=True)
+    
+    resource_titles = {}
+    
+    try:
+        # Query to fetch titles for the given resource IDs
+        format_strings = ','.join(['%s'] * len(resource_ids))
+        cursor.execute(f"SELECT id, title FROM Resources WHERE id IN ({format_strings})", tuple(resource_ids))
+        rows = cursor.fetchall()
+        
+        for row in rows:
+            resource_titles[row['id']] = row['title']
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        conn.close()
+    
+    return resource_titles
+
+def add_titles_to_scripts(scripts):
+    resource_ids = [script['resource_id'] for script in scripts]
+    titles = get_titles_for_resource_ids(resource_ids)
+    
+    for script in scripts:
+        resource_id = script['resource_id']
+        script['title'] = titles.get(resource_id, 'Unknown Title')
+    
+    return scripts
+
 
 
 def get_script_details_pendent():
