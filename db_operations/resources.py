@@ -828,12 +828,19 @@ def search_resources(search_term, page, per_page):
 
         # Execute search query
         query = """
-            SELECT SQL_CALC_FOUND_ROWS * FROM Resources
-            WHERE title LIKE %s OR description LIKE %s
-            ORDER BY id DESC
+            SELECT SQL_CALC_FOUND_ROWS DISTINCT r.*
+            FROM Resources r
+            LEFT JOIN Scripts s ON r.id = s.resource_id
+            LEFT JOIN script_terms st ON s.id = st.script_id
+            LEFT JOIN Terms t ON st.term_id = t.id
+            LEFT JOIN Taxonomies tx ON t.taxonomy_id = tx.id
+            WHERE (r.title LIKE %s OR r.description LIKE %s OR (tx.slug = 'hashtags' AND t.title LIKE %s))
+            AND r.approvedScientific = 1
+            AND r.approvedLinguistic = 1
+            ORDER BY r.id DESC
             LIMIT %s OFFSET %s
         """
-        cursor.execute(query, (search_term, search_term, per_page, offset))
+        cursor.execute(query, (search_term, search_term, search_term, per_page, offset))
         resources = cursor.fetchall()
 
         # Execute query to get the total number of results
@@ -850,6 +857,9 @@ def search_resources(search_term, page, per_page):
         conn.close()
 
     return resources, total_results
+
+
+
 
 
 def get_current_month_resources():
