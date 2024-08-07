@@ -27,11 +27,15 @@ try:
         # Create a cursor object
         cursor = connection.cursor()
         
-        # Define the change term
-        change = "1º,educação artistica - artes visuais, apropriacao e reflexao,universos visuais,pintura"
-        
-        # Call the insert_term function
-        insert_term(change, cursor)  # Ensure insert_term takes a cursor argument
+        levels_with_titles = {
+            1: "1o",
+            2: "Desenho",
+            3: "apropriacao e reflexao",
+            4: "universos visuais",
+            5: "pintura"
+        }
+
+        insert_term_relationships_and_relations(levels_with_titles)
 
         # Commit changes
         connection.commit()

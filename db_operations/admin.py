@@ -283,33 +283,35 @@ def insert_term(term_string, cursor):
     terms = [term.strip() for term in term_string.split(',')]
     levels = {1: "ano", 2: "disciplina", 3: "dominio", 4: "subdominio", 5: "conceito"}
     
+    current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
+    # Insert into TermRelationships and get the generated id
+    cursor.execute("""
+        INSERT INTO TermRelationships (created_at, updated_at)
+        VALUES (%s, %s)
+    """, (current_datetime, current_datetime))
+    term_relationship_id = cursor.lastrowid
+
     # Insert terms into the Terms table
     for level in levels:
         for term in terms:
             # Convert term for use as a slug (simple example)
             slug = term.replace(" ", "-").lower()
             
-            # Insert term into Terms table (assuming it exists)
-            cursor.execute("""
-                INSERT IGNORE INTO Terms (title, slug)
-                VALUES (%s, %s)
-            """, (term, slug))
-    
             # Retrieve term_id
             cursor.execute("""
                 SELECT id FROM Terms WHERE slug = %s
             """, (slug,))
             result = cursor.fetchone()
             if result:
-                term_id = result['id']
+                term_id = result[0]  # Access using tuple index
                 
-                # Insert into TermRelationships
+                # Insert into terms_relations
                 cursor.execute("""
-                    INSERT IGNORE INTO TermRelationships (term_id, level)
-                    VALUES (%s, %s)
-                """, (term_id, level))
-
-
+                    INSERT INTO terms_relations (term_relationship_id, term_id, level, created_at, updated_at)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (term_relationship_id, term_id, level, current_datetime, current_datetime))
+                
 # def insert_terms_relationships(term_relationship_id, terms):
 #     """
 #     Insert titles and slugs into the termsRelationships table.

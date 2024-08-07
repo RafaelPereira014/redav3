@@ -20,10 +20,6 @@ from db_operations.new_operations import *
 from db_operations.notifications import *
 
 
-
-
-
-
 app = Flask(__name__)
 
 app.secret_key = 'your_secret_key'  # Needed for session management
