@@ -1370,21 +1370,23 @@ def admin_edit_taxonomies(slug):
     if request.method == 'GET':
         taxonomy_title = get_taxonomy_title(slug)
         taxonomies = edit_taxonomie(slug)
-        print(slug)
         return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
     
     elif request.method == 'POST':
         action = request.form.get('action')  # Retrieve action value
-        print(slug)
+        taxonomy_slug = request.form.get('taxonomy_slug')  # Ensure slug is retrieved correctly from the form
+        print(f"Action: {action}")
+        print(f"Received Slug from form: {taxonomy_slug}")  # This should print the correct slug
+        
         if action == 'add':
             term_title = request.form.get('title')
             term_slug = term_title.lower().replace(" ", "-")
             
-            success = insert_term(slug, term_title, term_slug)
+            success = insert_term(taxonomy_slug, term_title, term_slug)
             if success:
-                return jsonify({'success': True, 'message': 'Termo criado com sucesso!'})
+                return redirect(request.url)  # Reload the page
             else:
-                return jsonify({'success': False, 'message': 'Falha ao adicionar o termo.'}), 500
+                return "Failed to add term", 500
         
         elif action == 'update':
             term_id = request.form.get('term_id')
@@ -1393,11 +1395,13 @@ def admin_edit_taxonomies(slug):
             
             success = update_term(term_id, term_title, term_slug)
             if success:
-                return jsonify({'success': True, 'message': 'Termo atualizado com sucesso!'})
+                return redirect(request.url)  # Reload the page
             else:
-                return jsonify({'success': False, 'message': 'Falha ao atualizar o termo.'}), 500
-    
+                return "Failed to update term", 500
+
     return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
+
+
 
 
 

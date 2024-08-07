@@ -136,14 +136,14 @@ def update_term(term_id, new_title, new_slug):
         if conn.is_connected():
             conn.close()
             
-def insert_terms(taxon, term_title, term_slug, term_parent_id=None):
+def insert_term(taxonomy_slug, term_title, term_slug, term_parent_id=None):
     conn = connect_to_database()
     if conn is None:
         return False
 
     cursor = conn.cursor()
 
-    # First, retrieve the taxonomy_id based on the taxonomy_slug
+    # Retrieve the taxonomy_id based on the taxonomy_slug
     taxonomy_query = "SELECT id FROM Taxonomies WHERE slug = %s AND (deleted_at > NOW() OR deleted_at IS NULL)"
     
     try:
@@ -169,6 +169,7 @@ def insert_terms(taxon, term_title, term_slug, term_parent_id=None):
         cursor.close()
         if conn.is_connected():
             conn.close()
+
 
 
 
@@ -277,64 +278,6 @@ def taxonomies_relations(filters=None):
     
     conn.close()
     return result
-
-def insert_term(term_string, cursor):
-    # Define levels and split terms
-    terms = [term.strip() for term in term_string.split(',')]
-    levels = {1: "ano", 2: "disciplina", 3: "dominio", 4: "subdominio", 5: "conceito"}
-    
-    current_datetime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
-    # Insert into TermRelationships and get the generated id
-    cursor.execute("""
-        INSERT INTO TermRelationships (created_at, updated_at)
-        VALUES (%s, %s)
-    """, (current_datetime, current_datetime))
-    term_relationship_id = cursor.lastrowid
-
-    # Insert terms into the Terms table
-    for level in levels:
-        for term in terms:
-            # Convert term for use as a slug (simple example)
-            slug = term.replace(" ", "-").lower()
-            
-            # Retrieve term_id
-            cursor.execute("""
-                SELECT id FROM Terms WHERE slug = %s
-            """, (slug,))
-            result = cursor.fetchone()
-            if result:
-                term_id = result[0]  # Access using tuple index
-                
-                # Insert into terms_relations
-                cursor.execute("""
-                    INSERT INTO terms_relations (term_relationship_id, term_id, level, created_at, updated_at)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (term_relationship_id, term_id, level, current_datetime, current_datetime))
-                
-# def insert_terms_relationships(term_relationship_id, terms):
-#     """
-#     Insert titles and slugs into the termsRelationships table.
-    
-#     Args:
-#         term_relationship_id (int): The ID of the term relationship.
-#         terms (list of dict): A list of dictionaries, each containing 'level', 'title', and 'slug'.
-#     """
-#     conn = connect_to_database()
-#     cursor = conn.cursor()
-
-#     insert_query = """
-#     INSERT INTO terms_relations (term_relationship_id, term_id, level)
-#     VALUES (%s, (SELECT id FROM Terms WHERE title = %s AND slug = %s), %s)
-#     """
-
-#     for term in terms:
-#         cursor.execute(insert_query, (term_relationship_id, term['title'], term['slug'], term['level']))
-    
-#     conn.commit()
-#     cursor.close()
-#     conn.close()
-
 
 
 def fetch_users_with_acceptance():

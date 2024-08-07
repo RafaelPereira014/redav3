@@ -200,12 +200,14 @@
                 <h3>Adicionar novo termo</h3>
                 <form action="/dashboard/taxonomias/{{ taxonomy_slug }}" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add"> <!-- Hidden input for action -->
+                    <input type="hidden" name="taxonomy_slug" value="{{ taxonomy_slug }}"> <!-- Hidden input for taxonomy_slug -->
                     <label for="title">Título</label>
                     <input type="text" id="title" name="title" placeholder="Nome do termo" required>
                     <button type="submit">Criar termo</button>
                     <button type="reset">Limpar</button>
                 </form>
             </div>
+            
             <div class="edit-container" id="edit-term-container" style="display: none;">
                 <h3>Editar termo</h3>
                 <form action="/dashboard/taxonomias/{{ taxonomy_slug }}" method="POST" enctype="multipart/form-data">
@@ -290,10 +292,9 @@
             addEditForm.forEach(form => {
                 form.addEventListener('submit', function(event) {
                     event.preventDefault(); // Prevent default form submission
-
+        
                     const formData = new FormData(form);
-                    const action = formData.get('action');
-
+        
                     fetch(form.action, {
                         method: 'POST',
                         body: formData
@@ -301,7 +302,8 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            showPopup(data.message);
+                            // Optionally show a success message or reload the page
+                            window.location.reload();  // Reload the page
                         } else {
                             alert('Operation failed: ' + data.message);
                         }
