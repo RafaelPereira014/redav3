@@ -150,6 +150,35 @@ def get_highlighted_resources():
     conn.close()
     return highlighted_resources
 
+def set_on_highlight_resources(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources SET highlight='1' WHERE id=%s", (resource_id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Error in set_on_highlight_resources: {e}")
+        return False
+
+def set_off_highlight_resources(resource_id):
+    try:
+        conn = connect_to_database()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("UPDATE Resources SET highlight='0' WHERE id=%s", (resource_id,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+    except Exception as e:
+        print(f"Error in set_off_highlight_resources: {e}")
+        return False
+
+
+    
+
 def get_highlighted_status_for_resources(resource_ids):
     if not resource_ids:
         return {}

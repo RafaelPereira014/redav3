@@ -923,6 +923,22 @@ def my_account():
         search_term=search_term
     )
 
+@app.route('/resources/highlight_on/<int:resource_id>', methods=['POST'])
+def highlight_on_resource(resource_id):
+    success = set_on_highlight_resources(resource_id)
+    if success:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "message": "Failed to highlight resource"}), 500
+
+@app.route('/resources/highlight_off/<int:resource_id>', methods=['POST'])
+def highlight_off_resource(resource_id):
+    success = set_off_highlight_resources(resource_id)
+    if success:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "message": "Failed to remove highlight from resource"}), 500
+
 
 
 

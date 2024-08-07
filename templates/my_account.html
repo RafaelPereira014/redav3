@@ -146,30 +146,25 @@
                     <button class="search-button" onclick="searchResources()">Filtrar palavras</button>
                     <button class="clear-button" onclick="clearSearch()">Limpar Filtros</button>
                 </div>
-                
+            
                 {% for resource in my_resources %}
                     <div class="resource-card">
                         <h2>{{ resource['title'] | strip_html }}</h2>
                         <p><em>Criado a {{ resource['created_at'] }}</em></p>
                         <p>{{ resource['description'] | strip_html }}</p>
                         <div class="resource-status-icons">
-                            {% if resource.highlighted %}
-                                <i class="fas fa-flag" style="color: green;" title="Recurso do mês"></i> <!-- Green flag for highlighted resources -->
-                            {% else %}
-                                <i class="fas fa-flag" title="Destacar para recurso do mês"></i> <!-- Normal flag for non-highlighted resources -->
-                            {% endif %}
-                            {% if resource.approved %}
-                                <i class="fas fa-circle" style="color: green;" title="Aprovado" ></i> <!-- Green dot for approved resources -->
-                            {% else %}
-                                <i class="fas fa-circle" style="color: orange;" title="Aguarda aprovação"></i> <!-- Yellow dot for non-approved resources -->
-                            {% endif %}
+                            <i class="fas fa-flag highlight-flag" style="color: {{ 'green' if resource.highlighted else 'black' }};"
+                               title="{{ 'Recurso do mês' if resource.highlighted else 'Destacar para recurso do mês' }}"
+                               data-id="{{ resource.id }}" data-highlighted="{{ 'true' if resource.highlighted else 'false' }}"></i>
+                            <i class="fas fa-circle" style="color: {{ 'green' if resource.approved else 'orange' }};"
+                               title="{{ 'Aprovado' if resource.approved else 'Aguarda aprovação' }}"></i>
                         </div>
-                        <a href="/resources/details/{{ resource['id'] }}"><button>Ver recurso</button></a>
-                        <a href="/resources/edit/{{ resource['id'] }}"><button>Editar recurso</button></a>
+                        <a href="/resources/details/{{ resource.id }}"><button>Ver recurso</button></a>
+                        <a href="/resources/edit/{{ resource.id }}"><button>Editar recurso</button></a>
                         <button class="Delete" onclick="openDeleteModal()">Eliminar</button>
                     </div>
                 {% endfor %}
-                
+            
                 <div class="pagination">
                     {% if page_resources > 1 %}
                         <a href="?page_resources=1&search={{ search_term }}">&laquo; Inicio</a>
@@ -444,6 +439,42 @@
                 document.getElementById('searchInput').value = '';
                 window.location.href = '/myaccount'; // Redirect to the account page without search term
             }
+
+            const highlightFlags = document.querySelectorAll('.highlight-flag');
+
+            highlightFlags.forEach(flag => {
+                flag.addEventListener('click', function() {
+                    const resourceId = this.getAttribute('data-id');
+                    const isHighlighted = this.getAttribute('data-highlighted') === 'true';
+                    toggleHighlight(this, resourceId, isHighlighted);
+                });
+            });
+
+            function toggleHighlight(flagElement, resourceId, isHighlighted) {
+                const action = isHighlighted ? 'highlight_off' : 'highlight_on';
+                console.log(`Toggling highlight for resource ${resourceId}. Current highlight status: ${isHighlighted}`);
+                fetch(`/resources/${action}/${resourceId}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Highlight toggled successfully');
+                        // Update the data attribute and style to reflect the new state
+                        flagElement.setAttribute('data-highlighted', !isHighlighted);
+                        flagElement.style.color = !isHighlighted ? 'green' : 'black';
+                        flagElement.title = !isHighlighted ? 'Recurso do mês' : 'Destacar para recurso do mês';
+                    } else {
+                        alert('Failed to toggle highlight: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Something went wrong. Please try again later.');
+                });
+            }
+
+            
         
             document.querySelector('.search-button').addEventListener('click', searchResources);
             document.querySelector('.clear-button').addEventListener('click', clearSearch);
