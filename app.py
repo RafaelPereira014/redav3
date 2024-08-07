@@ -84,13 +84,42 @@ def logout():
     return redirect('/')
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        # Handle POST request
+        data = request.get_json()
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        confirmPassword = data.get('confirmPassword')
+        userType = data.get('userType')
+        
+        print(userType)  # For debugging purposes
+        
+        # Map userType to role_id
+        role_id = 3
+        if userType == 'colaborador':
+            role_id = 4
+        elif userType == 'docente':
+            role_id = 2
+        elif userType == 'outro':
+            role_id = 3
+        
+        if not username or not email or not password or not confirmPassword:
+            return jsonify({'success': False, 'message': 'Please fill in all fields'})
+        
+        if password != confirmPassword:
+            return jsonify({'success': False, 'message': 'Passwords do not match'})
+        
+        success, message = create_user(username, email, password, role_id)
+        if success:
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'message': message})
     
+    # Handle GET request
     return render_template('register.html')
-
-def user_logged_in():
-    return 'user_id' in session  # Modify this based on your session setup
 
 
 @app.route('/maintenance')
@@ -502,7 +531,7 @@ def resource_edit2(resource_id):
     resource_details = get_combined_details(resource_id)
 
     # Debug print to see what resource_details contains
-    print("Resource Details:", resource_details)
+    #print("Resource Details:", resource_details)
 
     # Extract 'ano' from scripts_by_id if available
     anos = []

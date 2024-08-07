@@ -1,6 +1,8 @@
 from aifc import Error
 from datetime import datetime
 import os
+
+import bcrypt
 from config import DB_CONFIG  # Import the database configuration
 from flask import current_app, logging, session, url_for
 import mysql.connector  # Import MySQL Connector Python module
@@ -9,6 +11,43 @@ import logging
 def connect_to_database():
     """Establishes a connection to the MySQL database."""
     return mysql.connector.connect(**DB_CONFIG)
+
+
+def create_user(name, email, password, role_id):
+    conn = None
+    cursor = None
+    try:
+        # Hash the password with bcrypt
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        
+        # Connect to the database
+        conn = connect_to_database()
+        cursor = conn.cursor()
+        
+        # SQL query to insert the new user
+        insert_query = """
+        INSERT INTO users (name, email, password, role_id, created_at, updated_at)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        current_time = datetime.now()
+        values = (name, email, hashed_password.decode('utf-8'), role_id, current_time, current_time)
+        
+        cursor.execute(insert_query, values)
+        conn.commit()
+        
+        return True, None  # Success
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return False, str(e)  # Failure
+    
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+
 
 
 
