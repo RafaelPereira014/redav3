@@ -1365,42 +1365,39 @@ def admin_taxonomies():
 def admin_edit_taxonomies(slug):
     conn = connect_to_database()
     if conn is None:
-        return "Database connection error", 500
-    
+        return jsonify({"success": False, "message": "Database connection error"}), 500
+
     if request.method == 'GET':
         taxonomy_title = get_taxonomy_title(slug)
         taxonomies = edit_taxonomie(slug)
         return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
-    
+
     elif request.method == 'POST':
-        action = request.form.get('action')  # Retrieve action value
-        taxonomy_slug = request.form.get('taxonomy_slug')  # Ensure slug is retrieved correctly from the form
-        print(f"Action: {action}")
-        print(f"Received Slug from form: {taxonomy_slug}")  # This should print the correct slug
-        
+        action = request.form.get('action')
+        taxonomy_slug = request.form.get('taxonomy_slug')
+
+        term_title = request.form.get('title')
+        term_slug = term_title.lower().replace(" ", "-")
+
         if action == 'add':
-            term_title = request.form.get('title')
-            term_slug = term_title.lower().replace(" ", "-")
-            
             success = insert_term(taxonomy_slug, term_title, term_slug)
             if success:
-                return redirect(request.url)  # Reload the page
+                return jsonify({"success": True, "message": "Term added successfully"}), 200
             else:
-                return "Failed to add term", 500
+                return jsonify({"success": False, "message": "Failed to add term"}), 500
         
         elif action == 'update':
             term_id = request.form.get('term_id')
-            term_title = request.form.get('title')
-            term_slug = term_title.lower().replace(" ", "-")
-            
             success = update_term(term_id, term_title, term_slug)
-            if success:
-                return redirect(request.url)  # Reload the page
-            else:
-                return "Failed to update term", 500
+            
+            return redirect(url_for('admin_edit_taxonomies',slug=slug))
+            # if success:
+            #     return jsonify({"success": True, "message": "Term updated successfully"}), 200
+            # else:
+            #     return jsonify({"success": False, "message": "Failed to update term"}), 500
 
-    return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
-
+    # This line can be removed, as the only GET request would have already returned.
+    # return render_template('admin/taxonomias/edit_taxonomia.html', taxonomy_title=taxonomy_title, taxonomies=taxonomies, taxonomy_slug=slug)
 
 
 
