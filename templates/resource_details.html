@@ -792,35 +792,35 @@
 
        // Function to hide the resource
        function hideResource(resourceId) {
-        // Make an AJAX request to hide the resource
-        fetch(`/hide_resource/${resourceId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            if (data.includes("Resource hidden successfully")) {
-                alert("Recurso ocultado com sucesso!");
-                // Reload the page after hiding the resource
-                location.reload();
-            } else {
-                alert("Erro ao ocultar o recurso: " + data);
-            }
-            hideModal.style.display = "none"; // Close the modal
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Erro ao ocultar o recurso: " + error.message);
-            hideModal.style.display = "none"; // Close the modal in case of error
-        });
-    }
+            // Make an AJAX request to hide the resource
+            fetch(`/hide_resource/${resourceId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                if (data.includes("Resource hidden successfully")) {
+                    alert("Recurso ocultado com sucesso!");
+                    // Reload the page after hiding the resource
+                    location.reload();
+                } else {
+                    alert("Erro ao ocultar o recurso: " + data);
+                }
+                hideModal.style.display = "none"; // Close the modal
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Erro ao ocultar o recurso: " + error.message);
+                hideModal.style.display = "none"; // Close the modal in case of error
+            });
+        }
     
 
         // Event listener for the 'Ocultar' button

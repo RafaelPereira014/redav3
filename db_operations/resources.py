@@ -866,6 +866,7 @@ def search_resources(search_term, page, per_page):
             WHERE (r.title LIKE %s OR r.description LIKE %s OR (tx.slug = 'hashtags' AND t.title LIKE %s))
             AND r.approvedScientific = 1
             AND r.approvedLinguistic = 1
+            AND r.hidden = 0
             ORDER BY r.id DESC
             LIMIT %s OFFSET %s
         """

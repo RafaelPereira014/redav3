@@ -251,8 +251,15 @@ def resource_details(resource_id):
 
 @app.route('/hide_resource/<int:resource_id>', methods=['POST'])
 def hide_resource_route(resource_id):
-    result = hide_resource(resource_id)
-    return result
+    try:
+        # Call the function that hides the resource
+        hide_resource(resource_id)
+        return "Resource hidden successfully", 200
+    except Exception as e:
+        # Log the error if necessary
+        app.logger.error(f"Error hiding resource {resource_id}: {e}")
+        return f"Error hiding resource: {e}", 500
+
 
 @app.route('/delete_resource/<int:resource_id>', methods=['POST'])
 def delete_resource(resource_id):
