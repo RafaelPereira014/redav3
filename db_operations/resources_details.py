@@ -67,7 +67,7 @@ def add_comment(resource_id, user_id, text, approved=0, status=1, level=0):
         
         # Prepare the SQL query to insert a new comment
         query = """
-            INSERT INTO comments (text, approved, status, level, created_at, updated_at, user_id, resource_id) 
+            INSERT INTO Comments (text, approved, status, level, created_at, updated_at, user_id, resource_id) 
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
         
@@ -136,7 +136,7 @@ def get_pending_comments():
             SELECT c.*, u.name AS user_name, r.title AS resource_title
             FROM Comments c
             JOIN Users u ON c.user_id = u.id
-            JOIN resources r ON c.resource_id = r.id
+            JOIN Resources r ON c.resource_id = r.id
             WHERE c.approved = 0
             ORDER BY c.created_at DESC
         """)
