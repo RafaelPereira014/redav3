@@ -127,12 +127,11 @@
                 
                 <div class="input-group-fich">
                     <h2>Imagem de destaque:</h2>
-                    <input type="file" id="ficheiro" name="ficheiro" >
-                    <small class="small-text">
-                        Tamanho máximo do ficheiro é de 716KB.
-                    </small>
-                   
-                    <!-- Add more radio options as needed -->
+                    <label class="file-label" for="ficheiro">
+                        <input type="file" id="ficheiro" name="ficheiro" class="file-input" onchange="updateFileName()">
+                        <span class="file-custom-text">Escolha um arquivo</span>
+                        <span class="file-name">Nenhum arquivo selecionado</span>
+                    </label>
                 </div>
                 <small class="small-text">
                     <span class="text-danger">*</span>
@@ -176,6 +175,20 @@
 
         </div>
     </footer>
+
+    <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('ficheiro');
+            const fileNameSpan = document.querySelector('.file-name');
+            const file = fileInput.files[0];
+        
+            if (file) {
+                fileNameSpan.textContent = file.name;
+            } else {
+                fileNameSpan.textContent = 'Nenhum arquivo selecionado';
+            }
+        }
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
