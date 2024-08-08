@@ -94,9 +94,7 @@ def register():
         password = data.get('password')
         confirmPassword = data.get('confirmPassword')
         userType = data.get('userType')
-        
-        print(userType)  # For debugging purposes
-        
+
         # Map userType to role_id
         role_id = 3
         if userType == 'colaborador':
@@ -112,7 +110,7 @@ def register():
         if password != confirmPassword:
             return jsonify({'success': False, 'message': 'Passwords do not match'})
         
-        success, message = create_user(username, email, password, role_id)
+        success, message = create_user(email, password, username, role_id)
         if success:
             return jsonify({'success': True})
         else:
@@ -120,6 +118,7 @@ def register():
     
     # Handle GET request
     return render_template('register.html')
+
 
 
 @app.route('/maintenance')
