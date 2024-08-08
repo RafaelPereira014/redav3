@@ -110,7 +110,7 @@ def get_comments_by_resource(resource_id):
         # Fetch comments for the given resource ID
         cursor.execute("""
             SELECT c.*, u.name AS user_name
-            FROM comments c
+            FROM Comments c
             JOIN Users u ON c.user_id = u.id
             WHERE c.resource_id = %s AND c.approved = 1
             ORDER BY c.created_at DESC
@@ -134,7 +134,7 @@ def get_pending_comments():
         # Fetch comments where `approved` = 0 (pending comments)
         cursor.execute("""
             SELECT c.*, u.name AS user_name, r.title AS resource_title
-            FROM comments c
+            FROM Comments c
             JOIN Users u ON c.user_id = u.id
             JOIN resources r ON c.resource_id = r.id
             WHERE c.approved = 0
@@ -163,7 +163,7 @@ def approve_comment(comment_id):
         cursor = conn.cursor()
 
         # Update the comment's approved state to 1 (approved)
-        cursor.execute("UPDATE comments SET approved = 1 WHERE id = %s", (comment_id,))
+        cursor.execute("UPDATE Comments SET approved = 1 WHERE id = %s", (comment_id,))
         
         conn.commit()
         return True
