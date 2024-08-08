@@ -244,37 +244,42 @@ def resources():
     )
 
     
-@app.route('/resources/details/<int:resource_id>')
+@app.route('/resources/details/<int:resource_id>', methods=['GET', 'POST'])
 def resource_details(resource_id):
+    # Retrieve resource details
     combined_details = get_combined_details(resource_id)
-    slug= get_resouce_slug(resource_id)
-
-   
+    slug = get_resouce_slug(resource_id)
     user_id = session.get('user_id')  # Retrieve user ID from session
-    # Check if the user is logged in
     is_logged_in = user_id is not None
-
-    # Determine if the user is an admin
     admin = is_admin(user_id) if is_logged_in else False
-   
+
+    # Handle comment submission
+    if request.method == 'POST' and is_logged_in:
+        comment_text = request.form.get('comment')
+        if comment_text:
+            success, error = add_comment(resource_id=resource_id, user_id=user_id, text=comment_text)
+            if success:
+                flash('Comentário adicionado com sucesso!', 'success')
+            else:
+                flash(f'Ocorreu um erro ao adicionar o comentário: {error}', 'danger')
+        else:
+            flash('O comentário não pode estar vazio.', 'warning')
 
     # Extract combined details
     resource_details = combined_details
 
     # Fetch and append additional details
-    slug = get_resouce_slug(resource_id)
-    
     resource_details['image_url'] = get_resource_image_url(slug)
     resource_details['embed'] = get_resource_embed(resource_id)
     resource_details['files'] = get_resource_files(slug)
     resource_details['link'] = get_resource_link(resource_id)
-    resource_details['operations'] = get_propostasOp(resource_id)  # Fetching operations
+    resource_details['operations'] = get_propostasOp(resource_id)
     resource_details['username'] = get_username(resource_details['user_id'])
-    resource_details['email']= get_user_email(resource_details['user_id'])
-    msg = request.form.get('message')
-    
-    
-    
+    resource_details['email'] = get_user_email(resource_details['user_id'])
+
+    # Fetch existing comments for the resource
+    comments = get_comments_by_resource(resource_id)
+
     # Fetch related resources and append additional details
     related_resources = get_related_resources(resource_details['title'])
     for related in related_resources:
@@ -293,7 +298,12 @@ def resource_details(resource_id):
     return render_template('resource_details.html', 
                            resource_details=resource_details, 
                            related_resources=related_resources, 
-                           admin=admin,slug=slug,resource_id=resource_id,is_logged_in=is_logged_in)
+                           comments=comments,
+                           admin=admin,
+                           slug=slug,
+                           resource_id=resource_id,
+                           is_logged_in=is_logged_in)
+
 
 
 
@@ -1419,6 +1429,25 @@ def update_approved_linguistic(resource_id):
     result = update_approvedLinguistic(resource_id)
     return jsonify(result)
 
+@app.route('/approve-comment/<int:comment_id>', methods=['POST'])
+def approve_comment_route(comment_id):
+    """
+    Flask route to approve a comment.
+    
+    :param comment_id: The ID of the comment to approve.
+    :return: JSON response indicating success or failure.
+    """
+    if 'user_id' not in session or not is_admin(session['user_id']):
+        return jsonify({'success': False, 'error': 'Unauthorized'}), 403
+
+    success = approve_comment(comment_id)
+    
+    if success:
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, 'error': 'Failed to approve comment'}), 500
+
+
 @app.route('/dashboard/recursos/po/pendentes')
 def po_pendentes():
     scripts, scripts_count = get_script_details_pendent()
@@ -1469,7 +1498,8 @@ def admin_tools_pendentes():
 
 @app.route('/dashboard/comentarios/pendentes')
 def admin_comments():
-    return render_template('admin/comentarios/pendentes.html')
+    pendent_comments = get_pending_comments()
+    return render_template('admin/comentarios/pendentes.html',pendent_comments=pendent_comments)
 
 @app.route('/dashboard/comentarios/palavras-proibidas')
 def admin_comments_prohi():

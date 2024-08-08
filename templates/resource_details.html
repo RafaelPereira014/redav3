@@ -493,21 +493,33 @@
                 
                 <div class="comments">
                     <h3>Comentários</h3>
+                    
+                    {% if is_logged_in %}
                     <div class="comment-form">
-                        <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
-                        <button>Submeter comentário</button>
+                        <form action="" method="POST">
+                            <textarea name="comment" id="comment" cols="30" rows="5" placeholder="Escreva o seu comentário aqui..."></textarea>
+                            <button type="submit">Submeter comentário</button>
+                        </form>
                     </div>
+                    {% else %}
+                    <p>Por favor, <a href="/login">faça login</a> para deixar um comentário.</p>
+                    {% endif %}
+                    
                     <div class="comment-list">
+                        {% for comment in comments %}
                         <div class="comment">
                             <div class="comment-info">
-                                <span class="comment-author">John Doe:</span>
-                                <span class="comment-date">April 25, 2024</span>
+                                <span class="comment-author">{{ comment.user_name }}:</span>
+                                <span class="comment-date">{{ comment.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
                             </div>
-                            <p>This is a comment. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p>{{ comment.text }}</p>
                         </div>
-                        
+                        {% else %}
+                        <p>Não há comentários ainda. Seja o primeiro a comentar!</p>
+                        {% endfor %}
                     </div>
                 </div>
+                
             </div>
         </div>
     </main>
