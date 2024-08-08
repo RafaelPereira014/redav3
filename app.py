@@ -1111,7 +1111,7 @@ def novo_recurso():
                 'created_at': datetime.now()
             }
 
-            # insert_taxonomy_details(cursor, resource_id, taxonomy_details)
+            insert_taxonomy_details(cursor, resource_id, taxonomy_details)
             # recipients=["rafaelpereira0808@gmail.com"]
             # resource_link="127.0.0.1/resources/details/{{resource_id}}"
             # send_email_on_resource_create(resource_id,autor,resource_link,recipients)
