@@ -59,14 +59,25 @@
             </div>
             <nav class="top-nav">
                 <ul>
-                    {% if admin %}
-                    <li><a href="/myaccount">Minha Conta</a></li>
-                    <li><a href="/dashboard" target="_blank">Administração</a></li>
-                    <li><a href="/logout">Sair</a></li>
-                    {% else %}
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/register">Registar</a></li>
+                    {% if admin and is_logged_in %}
+                        <!-- Render admin-specific links or buttons -->
+                        <li><a href="/myaccount">Minha Conta</a></li>
+
+                        <li><a href="/dashboard" target="_blank">Administração</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                    {% elif not admin and is_logged_in %}
+                        <li><a href="/myaccount">Minha Conta</a></li>
+                        <li><a href="/logout">Sair</a></li>
+                        
+                    {%else%}
+                        <!-- Render non-admin links or buttons -->
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="/register">Registar</a></li>
+
                     {% endif %}
+
+
+                    
                 </ul>
             </nav>
         </div>

@@ -130,7 +130,12 @@ def maintenance():
 def homepage():
     recent_resources = get_recent_approved_resources()
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
 
     # Modify recent_resources to include image_url and embed
     for resource in recent_resources:
@@ -155,10 +160,16 @@ def homepage():
         else:
             resource['areas_resources_display'] = 'No area resources available'
 
-
     highlighted_resources = get_highlighted_resources()
 
-    return render_template('index.html', recent_resources=recent_resources, highlighted_resources=highlighted_resources, admin=admin)
+    return render_template(
+        'index.html', 
+        recent_resources=recent_resources, 
+        highlighted_resources=highlighted_resources, 
+        admin=admin, 
+        is_logged_in=is_logged_in  # Pass the login status to the template
+    )
+
 
 
 @app.template_filter('strip_html')
@@ -175,8 +186,13 @@ def resources():
     page = request.args.get('page', 1, type=int)
     per_page = 12
     
+    
     user_id = session.get('user_id')
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
 
     if search_term:
         paginated_resources, total_resources = search_resources(search_term, page, per_page)
@@ -223,7 +239,8 @@ def resources():
         page_range=page_range,
         search_term=search_term,  # pass the search term to the template
         admin=admin,
-        total_resources=total_resources
+        total_resources=total_resources,
+        is_logged_in=is_logged_in
     )
 
     
@@ -234,7 +251,11 @@ def resource_details(resource_id):
 
    
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
    
 
     # Extract combined details
@@ -272,7 +293,7 @@ def resource_details(resource_id):
     return render_template('resource_details.html', 
                            resource_details=resource_details, 
                            related_resources=related_resources, 
-                           admin=admin,slug=slug,resource_id=resource_id)
+                           admin=admin,slug=slug,resource_id=resource_id,is_logged_in=is_logged_in)
 
 
 
@@ -312,7 +333,11 @@ def nova_proposta(slug):
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     anos = get_unique_terms(level=1)
     resource_id = get_resouce_id(slug)
     
@@ -355,7 +380,7 @@ def nova_proposta(slug):
     conn.close()
     cursor.close()
 
-    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug, resource_id=resource_id)
+    return render_template('novaproposta.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, admin=admin, conceitos=conceitos, slug=slug, resource_id=resource_id,is_logged_in=is_logged_in)
 
 
 @app.route('/approve_script/<int:script_id>', methods=['POST'])
@@ -387,7 +412,11 @@ def approve_script(script_id):
 @app.route('/resources/edit/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit(resource_id):
     user_id = session.get('user_id')
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     user = get_username(user_id)
     
     resource_details = get_combined_details(resource_id)
@@ -519,14 +548,19 @@ def resource_edit(resource_id):
         modo_utilizacao_title=modo_utilizacao_title,
         req_tecnicos_title=req_tecnicos_title,
         idiomas_title=idiomas_title,
-        admin=admin
+        admin=admin,
+        is_logged_in=is_logged_in
     )
 
     
 @app.route('/resources/edit2/<int:resource_id>', methods=['GET', 'POST'])
 def resource_edit2(resource_id):
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     resource_details = get_combined_details(resource_id)
 
     # Debug print to see what resource_details contains
@@ -574,14 +608,18 @@ def resource_edit2(resource_id):
         conn.close()
         return redirect(url_for('resource_details', resource_id=resource_id))
 
-    return render_template('edit_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, conceitos=conceitos, resource_details=resource_details, admin=admin)
+    return render_template('edit_resource2.html', anos=anos, disciplinas=disciplinas, dominios=dominios, subdominios=subdominios, conceitos=conceitos, resource_details=resource_details, admin=admin,is_logged_in=is_logged_in)
 
 
 
 @app.route('/apps', methods=['GET'])
 def apps():
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     page = request.args.get('page', default=1, type=int)
     apps_per_page = 12
     search_query = request.args.get('search', '')
@@ -624,7 +662,8 @@ def apps():
         total_pages=total_pages,
         page_range=page_range,
         admin=admin,
-        search_query=search_query
+        search_query=search_query,
+        is_logged_in=is_logged_in
     )
 
 
@@ -642,7 +681,11 @@ def novaapp():
     conn = connect_to_database()
     cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+   # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
 
     if request.method == 'POST':
         try:
@@ -719,14 +762,18 @@ def novaapp():
             cursor.close()
             conn.close()
 
-    return render_template('novaapp.html', admin=admin)
+    return render_template('novaapp.html', admin=admin,is_logged_in=is_logged_in)
 
 @app.route('/resources/edit_app/<int:resource_id>', methods=['GET', 'POST'])
 def edit_app(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     title = get_title(resource_id)
     slug = generate_slug(title)
     
@@ -743,7 +790,7 @@ def edit_app(resource_id):
         
         return redirect(url_for('apps', resource_id=resource_id))
     
-    return render_template('edit_app.html', admin=admin, slug=slug, resource_details=resource_details)
+    return render_template('edit_app.html', admin=admin, slug=slug, resource_details=resource_details,is_logged_in=is_logged_in)
 
 
 
@@ -752,7 +799,11 @@ def edit_app(resource_id):
 @app.route('/tools')
 def tools():
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     page = request.args.get('page', 1, type=int)
     per_page = 8
     offset = (page - 1) * per_page
@@ -793,7 +844,7 @@ def tools():
             
     
 
-    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range,admin=admin)
+    return render_template('tools.html', all_tools=all_tools, page=page, total_pages=total_pages, page_range=page_range,admin=admin,is_logged_in=is_logged_in)
 
 
 @app.route('/novaferramenta', methods=['GET', 'POST'])
@@ -801,7 +852,11 @@ def newtool():
     conn = connect_to_database()
     cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
 
     if request.method == 'POST':
         try:
@@ -857,7 +912,7 @@ def newtool():
             cursor.close()
             conn.close()
 
-    return render_template('novaferramenta.html', admin=admin)
+    return render_template('novaferramenta.html', admin=admin,is_logged_in=is_logged_in)
 
 
 @app.route('/resources/edit_tool/<int:resource_id>', methods=['GET', 'POST'])
@@ -865,7 +920,11 @@ def edit_tool(resource_id):
     conn = connect_to_database()
     cursor = conn.cursor()
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     title = get_title(resource_id)
     slug = generate_slug(title)
     
@@ -881,13 +940,17 @@ def edit_tool(resource_id):
         
         return redirect(url_for('tools', resource_id=resource_id))
     
-    return render_template('edit_tool.html', admin=admin, slug=slug, resource_details=resource_details)
+    return render_template('edit_tool.html', admin=admin, slug=slug, resource_details=resource_details,is_logged_in=is_logged_in)
 
 
 @app.route('/myaccount')
 def my_account():
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     
     search_term = request.args.get('search', '')
 
@@ -955,7 +1018,8 @@ def my_account():
         page_tools=page_tools,
         total_pages_tools=total_pages_tools,
         admin=admin,
-        search_term=search_term
+        search_term=search_term,
+        is_logged_in=is_logged_in
     )
 
 @app.route('/resources/highlight_on/<int:resource_id>', methods=['POST'])
@@ -981,7 +1045,11 @@ def highlight_off_resource(resource_id):
 @app.route('/novorecurso', methods=['GET', 'POST'])
 def novo_recurso():
     user_id = session.get('user_id')
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     formatos = get_formatos()
     use_mode = get_modos_utilizacao()
     requirements = get_requisitos_tecnicos()
@@ -1131,7 +1199,7 @@ def novo_recurso():
             cursor.close()
             conn.close()
 
-    return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin)
+    return render_template('new_resource.html', formatos=formatos, use_mode=use_mode, requirements=requirements, idiomas=idiomas, anos=anos, admin=admin,is_logged_in=is_logged_in)
 
 
 
@@ -1140,7 +1208,11 @@ def novo_recurso2():
     conn = connect_to_database()
     cursor = conn.cursor(dictionary=True)
     user_id = session.get('user_id')  # Retrieve user ID from session
-    admin = is_admin(user_id)
+    # Check if the user is logged in
+    is_logged_in = user_id is not None
+
+    # Determine if the user is an admin
+    admin = is_admin(user_id) if is_logged_in else False
     anos = get_unique_terms(level=1)
     resource_id = session.get('resource_id')
     titulo = get_title(resource_id)
@@ -1220,7 +1292,7 @@ def novo_recurso2():
     conn.close()
     cursor.close()
     
-    return render_template('new_resource2.html', anos=anos, admin=admin)
+    return render_template('new_resource2.html', anos=anos, admin=admin,is_logged_in=is_logged_in)
 
 
 @app.route('/fetch_disciplinas')
